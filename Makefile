@@ -6,7 +6,7 @@
 #    By: rpet <marvin@codam.nl>                       +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/30 13:04:14 by rpet          #+#    #+#                  #
-#    Updated: 2021/05/24 07:33:47 by rpet          ########   odam.nl          #
+#    Updated: 2021/05/25 10:44:12 by rpet          ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ SRCS = main.cpp
 OBJS = $(SRCS:.cpp=.o)
 FLAGS = -Wall -Werror -Wextra -std=c++98 -pedantic
 CC = clang++
-INC = list.hpp vector.hpp map.hpp stack.hpp queue.hpp
+INC = list.hpp vector.hpp map.hpp stack.hpp queue.hpp ListNode.hpp
 
 .PHONY: all clean fclean re
 
