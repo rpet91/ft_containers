@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/05/25 14:48:58 by rpet          ########   odam.nl         */
+/*   Updated: 2021/05/26 14:50:15 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,50 +46,45 @@ namespace ft
 		////////////////////////////////////////////////////
 		// CONSTRUCTORS, DESTRUCTOR & ASSIGNMENT OPERATOR //
 		////////////////////////////////////////////////////
+
 		public:
+
 			// Default constructor
 			explicit list(const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0), _head(0), _tail(0)
 			{
 			}
+
 			// Fill constructor
 			explicit list(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0) 
 			{
-				this->_head = new ListNode<T>(val);
-				this->_tail = new ListNode<T>(val);
+				assign(n, val);
 				std::cout << "Head: " << this->_head << " & Tail: " << this->_tail << std::endl;
-				for (size_t i = 0; i < n; i++)
-				{
-					push_back(val);
-				}
 			}
+
 			// Range constructor
 //			template <class InputIterator>
 //				list (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type())
 //				{
 //				}
+
 			// Copy constructor
-			list(const list &x) : _allocator(x._alllocator), _size(x._size)
+			list(const list &x) : _allocator(x._allocator), _size(0)
 			{
-				this->_head = new ListNode<T>(0);
-				this->_tail = new ListNode<T>(0);
-				this->_head->next = this->_tail;
-				this->_tail->prev = this->_head;
+				*this = x;
 			}
+
 			// Destructor
 			~list()
 			{
-				delete this->_head;
-				delete this->_tail;
+				clear();
 			}
+
 			// Assignment operator
 			list	&operator=(const list &x)
 			{
-				delete this->_head;
-				delete this->_tail;
+				clear();
 				this->_allocator = x._allocator;
 				this->_size = x._size;
-				this->_head = new ListNode<T>(0);
-				this->_tail = new ListNode<T>(0);
 				return (*this);
 			}
 
@@ -101,24 +96,72 @@ namespace ft
 		//////////////
 		// CAPACITY //
 		//////////////
+
+		public:
+
+			// Empty
+			bool		empty() const
+			{
+				return (this->_size == 0);
+			}
+
+			// Size
+			size_type	size() const
+			{
+				return (this->_size);
+			}
+
+			// Max size
+			size_type	max_size() const
+			{
+				return (this->_allocator.max_size());
+			}
 		
 		///////////////////
 		// ELEMENT ACCES //
 		///////////////////
+		
+		public:
+			// Front
+			reference		front()
+			{
+				return (this->_head->data);
+			}
+
+			const_reference	front() const
+			{
+				return (this->_head->data);
+			}
+
+			// Back
+			reference		back()
+			{
+				return (this->_tail->data);
+			}
+
+			const_reference	back() const
+			{
+				return (this->_tail->data);
+			}
 	
 		///////////////
 		// MODIFIERS //
 		///////////////
+
 		public:
 			// Assign
 /*			template <class InputIterator>
 			void	assign(InputIterator first, InputIterator last)
 			{
 			}
+*/
 			void	assign(size_type n, const value_type &val)
 			{
+				clear();
+				for (size_t i = 0; i < n; i++)
+					push_back(val);
 			}
-*/
+
 			// Push front
 			void	push_front(const value_type &val)
 			{
@@ -138,7 +181,16 @@ namespace ft
 			// Pop front
 			void	pop_front()
 			{
+				if (this->_size == 0)
+					return ;
 
+				ListNode<T>		*newHead = this->_head->next;
+
+				if (this->_size > 1)
+					newHead->prev = this->_head->prev;
+				delete this->_head;
+				this->_head = newHead;
+				this->_size--;
 			}
 
 			// Push back
@@ -164,10 +216,45 @@ namespace ft
 				if (this->_size == 0)
 					return ;
 
-				ListNode<T>		*tmp = this->_tail->prev;
-				
-				this->_tail = tmp;
+				ListNode<T>		*newTail = this->_tail->prev;
+
+				if (this->_size > 1)
+					newTail->next = this->_tail->next;
+				delete this->_tail;
+				this->_tail = newTail;
 				this->_size--;
+			}
+
+			// Insert
+
+			// Erase
+			
+			// Swap
+		/*	void	swap(list &x)
+			{
+				list	tmp = x;
+
+				x = *this;
+				*this = tmp;
+			}*/
+			
+			// Resize
+			void	resize(size_type n, value_type val = value_type())
+			{
+				while (this->_size != n)
+				{
+					if (this->_size < n)
+						push_back(val);
+					else
+						pop_back();
+				}
+			}
+
+			// Clear
+			void	clear()
+			{
+				while (this->_size)
+					pop_back();
 			}
 
 		////////////////
@@ -178,15 +265,28 @@ namespace ft
 		// OBSERVERS //
 		///////////////
 
+		public:
+		//Get allocator
+		allocator_type	get_allocator() const
+		{
+			return (this->_allocator);
+		}
+
 		///////////////////////////////////
 		// NON-MEMBER FUNCTION OVERLOADS //
 		///////////////////////////////////
+
+		////////////////////////////////////
+		// EXTRA PRIVATE MEMBER FUNCTIONS //
+		////////////////////////////////////
 
 			//DEBUGGER
 
 		public:
 			void	nodeInfo(ListNode<T> *info)
 			{
+				if (!info)
+					return ;
 				std::cout << "Address: " << info << std::endl;
 				std::cout << "Value: " << info->data << std::endl;
 				std::cout << "Prev: " << info->prev << " & Next: " << info->next << std::endl;
@@ -201,7 +301,8 @@ namespace ft
 				for (size_t i = 0; i < this->_size; i++)
 				{
 					nodeInfo(tmp);
-					tmp = tmp->next;
+					if (tmp->next)
+						tmp = tmp->next;
 				}
 			}
 			//DEBUGGER
