@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/25 09:47:50 by rpet          #+#    #+#                 */
-/*   Updated: 2021/05/25 13:56:47 by rpet          ########   odam.nl         */
+/*   Updated: 2021/05/27 09:06:29 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ namespace ft
 			ListNode(T const &data) : data(data), next(0), prev(0)
 			{
 			}
-			~ListNode()
+			virtual ~ListNode()
 			{
 			}
 			ListNode(ListNode const &src)

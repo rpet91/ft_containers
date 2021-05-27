@@ -6,13 +6,14 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/05/26 14:50:15 by rpet          ########   odam.nl         */
+/*   Updated: 2021/05/27 09:17:26 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_HPP
 # define LIST_HPP
 # include "ListNode.hpp"
+# include "ListIterator.hpp"
 # include <memory>
 # include <iostream> //mogelijkweeg
 
@@ -20,9 +21,11 @@ namespace ft
 {
 	template < class T, class Alloc = std::allocator<T> >
 	class list {
+
 		//////////////////
 		// MEMBER TYPES //
 		//////////////////
+
 		public:
 			typedef T											value_type;
 			typedef Alloc										allocator_type;
@@ -30,7 +33,7 @@ namespace ft
 			typedef typename allocator_type::const_reference	const_reference;
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
-			typedef T											iterator;
+			typedef ListIterator<T>								iterator;
 			typedef T											const_iterator;
 			typedef T											reverse_iterator;
 			typedef T											const_reverse_iterator;
@@ -48,7 +51,6 @@ namespace ft
 		////////////////////////////////////////////////////
 
 		public:
-
 			// Default constructor
 			explicit list(const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0), _head(0), _tail(0)
 			{
@@ -93,12 +95,18 @@ namespace ft
 		// ITERATORS //
 		///////////////
 
+		public:
+			// Begin
+			iterator	begin()
+			{
+				return (iterator(this->_head));
+			}
+
 		//////////////
 		// CAPACITY //
 		//////////////
 
 		public:
-
 			// Empty
 			bool		empty() const
 			{
@@ -281,7 +289,6 @@ namespace ft
 		////////////////////////////////////
 
 			//DEBUGGER
-
 		public:
 			void	nodeInfo(ListNode<T> *info)
 			{
