@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/05/27 13:08:01 by rpet          ########   odam.nl         */
+/*   Updated: 2021/05/27 14:32:15 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ namespace ft
 	template < typename T >
 	class ListIterator : public BidirectionalIterator {
 		public:
-			ListIterator(ListNode<T> *node) : _current(node)
+			ListIterator(ListNode<T> *node) : Iterator(node)
 			{
 			}
 			virtual ~ListIterator()
@@ -39,23 +39,11 @@ namespace ft
 			{
 				return (this->_current->data);
 			}
-			ListIterator	&operator++()
-			{
-				this->_current = this->_current->next;
-				return (*this);
-			}
-			ListIterator	&operator--()
-			{
-				this->_current = this->_current->prev;
-				return (*this);
-			}
 
 		private:
 			ListIterator()
 			{
 			}
-
-			ListNode<T>		*_current;
 	};
 }
 

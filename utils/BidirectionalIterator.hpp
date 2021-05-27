@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/05/27 13:07:12 by rpet          ########   odam.nl         */
+/*   Updated: 2021/05/27 14:23:45 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,16 @@ namespace ft
 				(void) src;
 				return (*this);
 			}
-
-		private:
+			BidirectionalIterator	&operator++()
+			{
+				this->_current = this->_current->next;
+				return (*this);
+			}
+			BidirectionalIterator	&operator--()
+			{
+				this->_current = this->_current->prev;
+				return (*this);
+			}
 	};
 }
 

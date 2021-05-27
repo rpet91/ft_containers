@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:37:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/05/27 13:22:34 by rpet          ########   odam.nl         */
+/*   Updated: 2021/05/27 14:31:51 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ namespace ft
 		typedef Reference	reference;
 		typedef Category	iterator_category;
 	};
+
 	class Iterator {
 		public:
-			Iterator()
+			Iterator(T const *node) : _node(current)
 			{
 			}
 			virtual ~Iterator()
@@ -38,8 +39,15 @@ namespace ft
 			}
 			Iterator    &operator=(ListIterator const &src)
 			{
-				(void) src;
+				this->_current = src._current;
 				return (*this);
+			}
+
+			T		*_current;
+
+		private:
+			Iterator()
+			{
 			}
 	};
 }
