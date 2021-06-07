@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/05/27 13:48:11 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/07 11:01:19 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "ListNode.hpp"
 # include "ListIterator.hpp"
 # include <memory>
+# include <cstddef>
 # include <iostream> //mogelijkweeg
 
 namespace ft
@@ -34,7 +35,7 @@ namespace ft
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef ListIterator<T>								iterator;
-			typedef T											const_iterator;
+			typedef ListIterator<T>								const_iterator;
 			typedef T											reverse_iterator;
 			typedef T											const_reverse_iterator;
 			typedef ptrdiff_t									difference_type;
@@ -43,8 +44,7 @@ namespace ft
 		private:
 			allocator_type	_allocator;
 			size_type		_size;
-			ListNode<T>		*_head;
-			ListNode<T>		*_tail;
+			ListNode<T>		_sentinel;
 
 		////////////////////////////////////////////////////
 		// CONSTRUCTORS, DESTRUCTOR & ASSIGNMENT OPERATOR //
@@ -52,15 +52,20 @@ namespace ft
 
 		public:
 			// Default constructor
-			explicit list(const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0), _head(0), _tail(0)
+			explicit list(const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
 			{
+				this->_sentinel.next = &this->_sentinel;
+				this->_sentinel.prev = &this->_sentinel;
+				this->_sentinel.data = T();
 			}
 
 			// Fill constructor
 			explicit list(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0) 
 			{
+				this->_sentinel.next = &this->_sentinel;
+				this->_sentinel.prev = &this->_sentinel;
+				this->_sentinel.data = T();
 				assign(n, val);
-				std::cout << "Head: " << this->_head << " & Tail: " << this->_tail << std::endl;
 			}
 
 			// Range constructor
@@ -87,6 +92,7 @@ namespace ft
 				clear();
 				this->_allocator = x._allocator;
 				this->_size = x._size;
+				this->_sentinel = x._sentinel;
 				return (*this);
 			}
 
@@ -97,9 +103,25 @@ namespace ft
 
 		public:
 			// Begin
-			iterator	begin()
+			iterator		begin()
 			{
-				return (iterator(this->_head));
+				return (iterator(this->_sentinel.next));
+			}
+
+			const_iterator	begin() const
+			{
+				return (const_iterator(this->_sentinel.next));
+			}
+
+			// End
+			iterator		end()
+			{
+				return (iterator(&this->_sentinel));
+			}
+
+			const_iterator	end() const
+			{
+				return (iterator(&this->_sentinel));
 			}
 
 		//////////////
@@ -133,23 +155,23 @@ namespace ft
 			// Front
 			reference		front()
 			{
-				return (this->_head->data);
+				return (this->_sentinel.next->data);
 			}
 
 			const_reference	front() const
 			{
-				return (this->_head->data);
+				return (this->_sentinel.next->data);
 			}
 
 			// Back
 			reference		back()
 			{
-				return (this->_tail->data);
+				return (this->_sentinel.prev->data);
 			}
 
 			const_reference	back() const
 			{
-				return (this->_tail->data);
+				return (this->_sentinel.prev->data);
 			}
 	
 		///////////////
@@ -161,6 +183,12 @@ namespace ft
 /*			template <class InputIterator>
 			void	assign(InputIterator first, InputIterator last)
 			{
+				clear();
+				while (first != last)
+				{
+					push_back(*first);
+					first++;
+				}
 			}
 */
 			void	assign(size_type n, const value_type &val)
@@ -174,15 +202,12 @@ namespace ft
 			void	push_front(const value_type &val)
 			{
 				ListNode<T>		*newNode = new ListNode<T>(val);
-				if (this->_size == 0)
-				{
-					this->_head = newNode;
-					this->_tail = newNode;
-				}
-				else
-					newNode->next = this->_head;
-				this->_head->prev = newNode;
-				this->_head = newNode;
+				ListNode<T>		*next = this->_sentinel.next;
+				
+				next->prev = newNode;
+				newNode->next = next;
+				this->_sentinel.next = newNode;
+				newNode->prev = &this->_sentinel;
 				this->_size++;
 			}
 
@@ -192,12 +217,11 @@ namespace ft
 				if (this->_size == 0)
 					return ;
 
-				ListNode<T>		*newHead = this->_head->next;
+				ListNode<T>		*newHead = this->_sentinel.next->next;
 
-				if (this->_size > 1)
-					newHead->prev = this->_head->prev;
-				delete this->_head;
-				this->_head = newHead;
+				newHead->prev = &this->_sentinel;
+				delete this->_sentinel.next;
+				this->_sentinel.next = newHead;
 				this->_size--;
 			}
 
@@ -205,16 +229,12 @@ namespace ft
 			void	push_back(const value_type &val)
 			{
 				ListNode<T>		*newNode = new ListNode<T>(val);
+				ListNode<T>		*prev = this->_sentinel.prev;
 
-				if (this->_size == 0)
-				{
-					this->_head = newNode;
-					this->_tail = newNode;
-				}
-				else
-					newNode->prev = this->_tail;
-				this->_tail->next = newNode;
-				this->_tail = newNode;
+				prev->next = newNode;
+				newNode->prev = prev;
+				this->_sentinel.prev = newNode;
+				newNode->next = &this->_sentinel;
 				this->_size++;
 			}
 
@@ -224,12 +244,11 @@ namespace ft
 				if (this->_size == 0)
 					return ;
 
-				ListNode<T>		*newTail = this->_tail->prev;
+				ListNode<T>		*newTail = this->_sentinel.prev->prev;
 
-				if (this->_size > 1)
-					newTail->next = this->_tail->next;
-				delete this->_tail;
-				this->_tail = newTail;
+				newTail->next = &this->_sentinel;
+				delete this->_sentinel.prev;
+				this->_sentinel.prev = newTail;
 				this->_size--;
 			}
 
@@ -302,9 +321,9 @@ namespace ft
 
 			void	debug()
 			{
-				ListNode<T>		*tmp = this->_head;
+				ListNode<T>		*tmp = this->_sentinel.next;
 
-				std::cout << "Size: " << this->_size << std::endl << std::endl;
+				std::cout << "Sentinel address: " << &this->_sentinel << std::endl << std::endl;
 				for (size_t i = 0; i < this->_size; i++)
 				{
 					nodeInfo(tmp);
