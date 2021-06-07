@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/07 11:01:19 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/07 13:32:41 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 namespace ft
 {
 	template < class T, class Alloc = std::allocator<T> >
-	class list {
+	class list
+	{
 
 		//////////////////
 		// MEMBER TYPES //
@@ -36,8 +37,8 @@ namespace ft
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef ListIterator<T>								iterator;
 			typedef ListIterator<T>								const_iterator;
-			typedef T											reverse_iterator;
-			typedef T											const_reverse_iterator;
+			typedef ListIterator<T>								reverse_iterator;
+			typedef ListIterator<T>								const_reverse_iterator;
 			typedef ptrdiff_t									difference_type;
 			typedef size_t										size_type;
 
@@ -103,25 +104,31 @@ namespace ft
 
 		public:
 			// Begin
-			iterator		begin()
+			iterator			begin()
 			{
 				return (iterator(this->_sentinel.next));
 			}
 
-			const_iterator	begin() const
+			const_iterator		begin() const
 			{
 				return (const_iterator(this->_sentinel.next));
 			}
 
 			// End
-			iterator		end()
+			iterator			end()
 			{
 				return (iterator(&this->_sentinel));
 			}
 
-			const_iterator	end() const
+			const_iterator		end() const
 			{
 				return (iterator(&this->_sentinel));
+			}
+
+			// Rbegin
+			reverse_iterator	rbegin()
+			{
+				return (reverse_iterator(this->_sentinel.prev));
 			}
 
 		//////////////
