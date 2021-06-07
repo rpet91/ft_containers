@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/25 09:47:50 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/07 09:28:57 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/07 13:08:21 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 namespace ft
 {
 	template < typename T >
-	class ListNode {
+	class ListNode
+	{
 		public:
 			ListNode()
 			{

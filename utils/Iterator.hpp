@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:37:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/03 13:57:57 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/07 13:03:44 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,21 @@ namespace ft
 {
 	template < class Category, class T, class Distance = ptrdiff_t,
 			 class Pointer = T*, class Reference = T& >
-	struct iterator {
-		typedef T			value_type;
-		typedef Distance	difference_type;
-		typedef Pointer		pointer;
-		typedef Reference	reference;
-		typedef Category	iterator_category;
-	};
 
-	class Iterator {
+	class Iterator
+	{
+
 		public:
-			Iterator(T const *node) : _current(node)
+			typedef T			value_type;
+			typedef Distance	difference_type;
+			typedef Pointer		pointer;
+			typedef Reference	reference;
+			typedef Category	iterator_category;
+
+			Iterator() : _ptr(0)
+			{
+			}
+			Iterator(pointer ptr) : _ptr(ptr)
 			{
 			}
 			virtual ~Iterator()
@@ -40,16 +44,12 @@ namespace ft
 			}
 			Iterator    &operator=(Iterator const &src)
 			{
-				this->_current = src._current;
+				this->_ptr = src._ptr;
 				return (*this);
 			}
 
-			T		*_current;
-
-		private:
-			Iterator()
-			{
-			}
+		protected:
+			pointer		_ptr;
 	};
 }
 

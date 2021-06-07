@@ -6,21 +6,26 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/07 10:50:07 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/07 13:41:43 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LISTITERATOR_HPP
 # define LISTITERATOR_HPP
-//# include "BidirectionalIterator.hpp"
 # include "ListNode.hpp"
+# include "BidirectionalIterator.hpp"
+# include "Category.hpp"
 # include <iostream> //joejoe
 
 namespace ft
 {
 	template < typename T >
-	class ListIterator {
+	class ListIterator : public BidirectionalIterator< ft::bidirectional_iterator_tag >
+	{
 		public:
+			ListIterator() : _current(0)
+			{
+			}
 			ListIterator(ListNode<T> *node) : _current(node)
 			{
 			}
@@ -70,11 +75,6 @@ namespace ft
 			}
 
 			ListNode<T>		*_current;
-
-		private:
-			ListIterator()
-			{
-			}
 	};
 }
 
