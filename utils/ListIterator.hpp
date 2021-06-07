@@ -6,21 +6,22 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/05/27 14:32:15 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/07 10:50:07 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LISTITERATOR_HPP
 # define LISTITERATOR_HPP
-# include "BidirectionalIterator.hpp"
+//# include "BidirectionalIterator.hpp"
 # include "ListNode.hpp"
+# include <iostream> //joejoe
 
 namespace ft
 {
 	template < typename T >
-	class ListIterator : public BidirectionalIterator {
+	class ListIterator {
 		public:
-			ListIterator(ListNode<T> *node) : Iterator(node)
+			ListIterator(ListNode<T> *node) : _current(node)
 			{
 			}
 			virtual ~ListIterator()
@@ -39,6 +40,36 @@ namespace ft
 			{
 				return (this->_current->data);
 			}
+			ListIterator	&operator++()
+			{
+				this->_current = this->_current->next;
+				return (*this);
+			}
+			ListIterator	operator++(int)
+			{
+				this->_current = this->_current->next;
+				return (*this);
+			}
+			ListIterator	&operator--()
+			{
+				this->_current = this->_current->prev;
+				return (*this);
+			}
+			ListIterator	operator--(int)
+			{
+				this->_current = this->_current->prev;
+				return (*this);
+			}
+			bool			operator==(ListIterator const &src) const
+			{
+				return (this->_current == src._current);
+			}
+			bool			operator!=(ListIterator const &src) const
+			{
+				return (this->_current != src._current);
+			}
+
+			ListNode<T>		*_current;
 
 		private:
 			ListIterator()
