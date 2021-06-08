@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/07 13:32:41 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/08 13:36:49 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,18 @@ namespace ft
 			typedef typename allocator_type::const_reference	const_reference;
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
-			typedef ListIterator<T>								iterator;
-			typedef ListIterator<T>								const_iterator;
-			typedef ListIterator<T>								reverse_iterator;
-			typedef ListIterator<T>								const_reverse_iterator;
+			typedef ListNode<T>									node;
+			typedef ListIterator<ListNode<T>, T>				iterator;
+//			typedef ListIterator<ListNode, T>					const_iterator;
+//			typedef ReverseListIterator<T>						reverse_iterator;
+//			typedef ReverseListIterator<T>						const_reverse_iterator;
 			typedef ptrdiff_t									difference_type;
 			typedef size_t										size_type;
 
 		private:
 			allocator_type	_allocator;
 			size_type		_size;
-			ListNode<T>		_sentinel;
+			node			_sentinel;
 
 		////////////////////////////////////////////////////
 		// CONSTRUCTORS, DESTRUCTOR & ASSIGNMENT OPERATOR //
@@ -97,7 +98,6 @@ namespace ft
 				return (*this);
 			}
 
-	
 		///////////////
 		// ITERATORS //
 		///////////////
@@ -109,10 +109,10 @@ namespace ft
 				return (iterator(this->_sentinel.next));
 			}
 
-			const_iterator		begin() const
-			{
-				return (const_iterator(this->_sentinel.next));
-			}
+//			const_iterator		begin() const
+//			{
+//				return (const_iterator(this->_sentinel.next));
+//			}
 
 			// End
 			iterator			end()
@@ -120,16 +120,16 @@ namespace ft
 				return (iterator(&this->_sentinel));
 			}
 
-			const_iterator		end() const
-			{
-				return (iterator(&this->_sentinel));
-			}
+//			const_iterator		end() const
+//			{
+//				return (iterator(&this->_sentinel));
+//			}
 
 			// Rbegin
-			reverse_iterator	rbegin()
-			{
-				return (reverse_iterator(this->_sentinel.prev));
-			}
+		//	reverse_iterator	rbegin()
+		//	{
+		//		return (reverse_iterator(this->_sentinel.prev));
+		//	}
 
 		//////////////
 		// CAPACITY //
