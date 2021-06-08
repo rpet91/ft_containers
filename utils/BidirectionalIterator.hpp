@@ -6,22 +6,28 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/07 13:07:40 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/08 12:51:49 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BIDIRECTIONALITERATOR_HPP
 # define BIDIRECTIONALITERATOR_HPP
 # include "Iterator.hpp"
-# include "Category.hpp"
+# include "TypeTraits.hpp"
 
 namespace ft
 {
 	template < typename T >
 	class BidirectionalIterator : public Iterator< ft::bidirectional_iterator_tag, T >
 	{
+		typedef Iterator< ft::bidirectional_iterator_tag, T >	base_iterator;
+		typedef BidirectionalIterator							iterator;
+
 		public:
-			BidirectionalIterator()
+			BidirectionalIterator() : base_iterator()
+			{
+			}
+			BidirectionalIterator(T *ptr) : base_iterator(ptr)
 			{
 			}
 			virtual ~BidirectionalIterator()
@@ -31,30 +37,34 @@ namespace ft
 			{
 				*this = src;
 			}
-			BidirectionalIterator	&operator=(BidirectionalIterator const &src)
+			iterator	&operator=(iterator const &src)
 			{
 				this->_ptr = src._ptr;
 				return (*this);
 			}
-			BidirectionalIterator	&operator++()
+			iterator	&operator++()
 			{
-				this->_current = this->_current->next;
+				++*this;
 				return (*this);
 			}
-			BidirectionalIterator	operator++(int)
+			iterator	operator++(int)
 			{
-				this->_current = this->_current->prev;
+				iterator	old = *this;
+			
+				++*this;
+				return (old);
+			}
+			iterator	&operator--()
+			{
+				--*this;
 				return (*this);
 			}
-			BidirectionalIterator	&operator--()
+			iterator	operator--(int)
 			{
-				this->_current = this->_current->next;
-				return (*this);
-			}
-			BidirectionalIterator	operator--(int)
-			{
-				this->_current = this->_current->prev;
-				return (*this);
+				iterator	old = *this;
+
+				--*this;
+				return (old);
 			}
 	};
 }

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:37:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/07 13:03:44 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/08 10:45:27 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ namespace ft
 {
 	template < class Category, class T, class Distance = ptrdiff_t,
 			 class Pointer = T*, class Reference = T& >
-
 	class Iterator
 	{
 

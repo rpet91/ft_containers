@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/07 13:41:43 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/08 11:35:36 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,20 @@
 # define LISTITERATOR_HPP
 # include "ListNode.hpp"
 # include "BidirectionalIterator.hpp"
-# include "Category.hpp"
-# include <iostream> //joejoe
 
 namespace ft
 {
-	template < typename T >
-	class ListIterator : public BidirectionalIterator< ft::bidirectional_iterator_tag >
+	template < typename Node, typename T >
+	class ListIterator : public BidirectionalIterator< Node >
 	{
+		typedef ListIterator					iterator;
+		typedef	BidirectionalIterator< Node > 	bidirectional_iterator;
+
 		public:
-			ListIterator() : _current(0)
+			ListIterator() : bidirectional_iterator()
 			{
 			}
-			ListIterator(ListNode<T> *node) : _current(node)
+			ListIterator(Node *ptr) : bidirectional_iterator(ptr)
 			{
 			}
 			virtual ~ListIterator()
@@ -36,45 +37,47 @@ namespace ft
 			{
 				*this = src;
 			}
-			ListIterator	&operator=(ListIterator const &src)
+			iterator	&operator=(iterator const &src)
 			{
-				this->_current = src._current;
+				this->_ptr = src._ptr;
 				return (*this);
 			}
 			T				&operator*()
 			{
-				return (this->_current->data);
+				return (this->_ptr->data);
 			}
-			ListIterator	&operator++()
+			iterator	&operator++()
 			{
-				this->_current = this->_current->next;
+				this->_ptr = this->_ptr->next;
 				return (*this);
 			}
-			ListIterator	operator++(int)
+			iterator	operator++(int)
 			{
-				this->_current = this->_current->next;
-				return (*this);
-			}
-			ListIterator	&operator--()
-			{
-				this->_current = this->_current->prev;
-				return (*this);
-			}
-			ListIterator	operator--(int)
-			{
-				this->_current = this->_current->prev;
-				return (*this);
-			}
-			bool			operator==(ListIterator const &src) const
-			{
-				return (this->_current == src._current);
-			}
-			bool			operator!=(ListIterator const &src) const
-			{
-				return (this->_current != src._current);
-			}
+				iterator	old = *this;
 
-			ListNode<T>		*_current;
+				this->_ptr = this->_ptr->next;
+				return (old);
+			}
+			iterator	&operator--()
+			{
+				this->_ptr = this->_ptr->prev;
+				return (*this);
+			}
+			iterator	operator--(int)
+			{
+				iterator	old = *this;
+
+				this->_ptr = this->_ptr->prev;
+				return (old);
+			}
+			bool			operator==(iterator const &src) const
+			{
+				return (this->_ptr == src._ptr);
+			}
+			bool			operator!=(iterator const &src) const
+			{
+				return (this->_ptr != src._ptr);
+			}
 	};
 }
 
