@@ -6,7 +6,7 @@
 #    By: rpet <marvin@codam.nl>                       +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/30 13:04:14 by rpet          #+#    #+#                  #
-#    Updated: 2021/06/07 13:07:11 by rpet          ########   odam.nl          #
+#    Updated: 2021/06/08 12:52:03 by rpet          ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ _UTILS = ListNode.hpp \
 		 RandomAccessIterator.hpp \
 		 BidirectionalIterator.hpp \
 		 Iterator.hpp \
-		 Category.hpp
+		 TypeTraits.hpp
 CONTAINERS = $(addprefix $(DIRCONTAINERS), $(_CONTAINERS))
 UTILS = $(addprefix $(DIRUTILS), $(_UTILS))
 INC = $(CONTAINERS) $(UTILS)
