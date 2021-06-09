@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/08 13:36:49 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/09 13:10:27 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIST_HPP
 # include "ListNode.hpp"
 # include "ListIterator.hpp"
+# include "TypeTraits.hpp"
 # include <memory>
 # include <cstddef>
 # include <iostream> //mogelijkweeg
@@ -71,10 +72,16 @@ namespace ft
 			}
 
 			// Range constructor
-//			template <class InputIterator>
-//				list (InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type())
-//				{
-//				}
+			template <class InputIterator>
+			list(InputIterator first, InputIterator last,
+				typename ft::iterator_traits<InputIterator>::type* = 0,
+				const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
+			{
+				this->_sentinel.next = &this->_sentinel;
+				this->_sentinel.prev = &this->_sentinel;
+				this->_sentinel.data = T();
+				assign(first, last);
+			}
 
 			// Copy constructor
 			list(const list &x) : _allocator(x._allocator), _size(0)
@@ -187,8 +194,9 @@ namespace ft
 
 		public:
 			// Assign
-/*			template <class InputIterator>
-			void	assign(InputIterator first, InputIterator last)
+			template <class InputIterator>
+			void	assign(InputIterator first, InputIterator last,
+				typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
 				clear();
 				while (first != last)
@@ -197,7 +205,7 @@ namespace ft
 					first++;
 				}
 			}
-*/
+
 			void	assign(size_type n, const value_type &val)
 			{
 				clear();
