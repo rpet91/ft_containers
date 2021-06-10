@@ -1,39 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ListIterator.hpp                                   :+:    :+:            */
+/*   ReverseIterator.hpp                                :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/10 14:10:46 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/10 14:43:25 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LISTITERATOR_HPP
-# define LISTITERATOR_HPP
-# include "ListNode.hpp"
-# include "BidirectionalIterator.hpp"
+#ifndef REVERSEITERATOR_HPP
+# define REVERSEITERATOR_HPP
 
 namespace ft
 {
-	template < typename Node, typename T >
-	class ListIterator : public BidirectionalIterator< Node >
+	template < typename Node<T>, typename T >
+	class ReverseIterator 
 	{
-		typedef ListIterator					iterator;
-		typedef	BidirectionalIterator< Node > 	bidirectional_iterator;
+		typedef ReverseIterator					iterator;
 
 		public:
-			ListIterator() : bidirectional_iterator()
+			ReverseIterator()
 			{
 			}
-			ListIterator(Node *ptr) : bidirectional_iterator(ptr)
+			ReverseIterator(Node *ptr)
 			{
 			}
-			virtual ~ListIterator()
+			virtual ~ReverseIterator()
 			{
 			}
-			ListIterator(ListIterator const &src)
+			ReverseIterator(ReverseIterator const &src)
 			{
 				*this = src;
 			}
@@ -78,6 +75,9 @@ namespace ft
 			{
 				return (this->_ptr != src._ptr);
 			}
+		
+		private:
+i			iterator	_
 	};
 }
 

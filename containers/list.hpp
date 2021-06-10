@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/09 13:10:27 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/10 14:43:26 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ namespace ft
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef ListNode<T>									node;
-			typedef ListIterator<ListNode<T>, T>				iterator;
-//			typedef ListIterator<ListNode, T>					const_iterator;
-//			typedef ReverseListIterator<T>						reverse_iterator;
-//			typedef ReverseListIterator<T>						const_reverse_iterator;
+			typedef ListIterator<node, T>						iterator;
+			typedef ListIterator<const node, const T>			const_iterator;
+//			typedef ReverseIterator<iterator>					reverse_iterator;
+//			typedef ReverseIterator<const_iterator>				const_reverse_iterator;
 			typedef ptrdiff_t									difference_type;
 			typedef size_t										size_type;
 
@@ -111,31 +111,47 @@ namespace ft
 
 		public:
 			// Begin
-			iterator			begin()
+			iterator				begin()
 			{
 				return (iterator(this->_sentinel.next));
 			}
 
-//			const_iterator		begin() const
-//			{
-//				return (const_iterator(this->_sentinel.next));
-//			}
+			const_iterator			begin() const
+			{
+				return (const_iterator(this->_sentinel.next));
+			}
 
 			// End
-			iterator			end()
+			iterator				end()
 			{
 				return (iterator(&this->_sentinel));
 			}
 
-//			const_iterator		end() const
-//			{
-//				return (iterator(&this->_sentinel));
-//			}
+			const_iterator			end() const
+			{
+				return (iterator(&this->_sentinel));
+			}
 
 			// Rbegin
-		//	reverse_iterator	rbegin()
+		//	reverse_iterator		rbegin()
 		//	{
 		//		return (reverse_iterator(this->_sentinel.prev));
+		//	}
+			
+		//	const_reverse_iterator	rbegin() const
+		//	{
+		//		return (reverse_iterator(this->_sentinel.prev));
+		//	}
+		
+			// Rend
+		//	reverse_iterator		rend()
+		//	{
+		//		return (reverse_iterator(&this->_sentinel));
+		//	}
+
+		//	const_reverse_iterator	rend() const
+		//	{
+		//		return (reverse_iterator(&this->_sentinel));
 		//	}
 
 		//////////////
