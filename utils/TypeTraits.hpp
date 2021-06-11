@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 13:06:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/09 14:30:27 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/11 11:24:58 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,34 +68,3 @@ namespace ft
 	};
 }
 #endif
-
-
-
-
-
-
-
-
-
-/*	// InputIterator
-	template < typename T >
-	struct is_iterator
-	{
-		public:
-			bool	value = (sizeof(;
-	};
-
-	template < typename T >
-	struct check_iterator : public enable_if<is_iterator<T>::value, T>
-	{
-	};
-
-	template < typename T >
-	struct check_iterator<T*>
-	{
-		typedef	random_access_iterator_tag	type;
-	};
-	
-}
-
-#endif*/

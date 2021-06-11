@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/10 14:43:26 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/11 10:00:18 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIST_HPP
 # include "ListNode.hpp"
 # include "ListIterator.hpp"
+# include "ReverseIterator.hpp"
 # include "TypeTraits.hpp"
 # include <memory>
 # include <cstddef>
@@ -39,7 +40,7 @@ namespace ft
 			typedef ListNode<T>									node;
 			typedef ListIterator<node, T>						iterator;
 			typedef ListIterator<const node, const T>			const_iterator;
-//			typedef ReverseIterator<iterator>					reverse_iterator;
+			typedef ReverseIterator<iterator>					reverse_iterator;
 //			typedef ReverseIterator<const_iterator>				const_reverse_iterator;
 			typedef ptrdiff_t									difference_type;
 			typedef size_t										size_type;
@@ -133,10 +134,10 @@ namespace ft
 			}
 
 			// Rbegin
-		//	reverse_iterator		rbegin()
-		//	{
-		//		return (reverse_iterator(this->_sentinel.prev));
-		//	}
+			reverse_iterator		rbegin()
+			{
+				return (reverse_iterator(this->_sentinel.prev));
+			}
 			
 		//	const_reverse_iterator	rbegin() const
 		//	{

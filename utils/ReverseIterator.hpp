@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/10 14:43:25 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/11 11:43:52 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,21 @@
 
 namespace ft
 {
-	template < typename Node<T>, typename T >
-	class ReverseIterator 
+	template < class Iterator >
+	class ReverseIterator
 	{
-		typedef ReverseIterator					iterator;
+		typedef ReverseIterator							iterator;
+		typedef typename Iterator::pointer				pointer;
+		typedef typename Iterator::reference			reference;
+		typedef typename Iterator::size_type			size_type;
+		typedef typename Iterator::difference_type		difference_type;
+		typedef typename Iterator::iterator_category	iterator_category;
 
 		public:
-			ReverseIterator()
+			ReverseIterator() : _current()
 			{
 			}
-			ReverseIterator(Node *ptr)
+			ReverseIterator(Iterator iterator_type) : _current(iterator_type)
 			{
 			}
 			virtual ~ReverseIterator()
@@ -36,48 +41,70 @@ namespace ft
 			}
 			iterator	&operator=(iterator const &src)
 			{
-				this->_ptr = src._ptr;
+				this->_current = src._current;
 				return (*this);
 			}
-			T				&operator*()
+			iterator	&operator*() const
 			{
-				return (this->_ptr->data);
+				iterator	tmp = this->_current;
+
+				return (*--tmp);
+			}
+			iterator	*operator->() const
+			{
+				iterator	tmp = this->_current;
+
+				return (&--tmp);
 			}
 			iterator	&operator++()
 			{
-				this->_ptr = this->_ptr->next;
+				--this->_current;
 				return (*this);
 			}
 			iterator	operator++(int)
 			{
 				iterator	old = *this;
 
-				this->_ptr = this->_ptr->next;
+				--this->_current;
 				return (old);
 			}
 			iterator	&operator--()
 			{
-				this->_ptr = this->_ptr->prev;
+				++this->_current;
 				return (*this);
 			}
 			iterator	operator--(int)
 			{
 				iterator	old = *this;
 
-				this->_ptr = this->_ptr->prev;
+				++this->_current;
 				return (old);
 			}
-			bool			operator==(iterator const &src) const
+			iterator	operator[](difference_type n) const
 			{
-				return (this->_ptr == src._ptr);
+				return (*(*this + n));
 			}
-			bool			operator!=(iterator const &src) const
+			iterator	operator+(difference_type n) const
 			{
-				return (this->_ptr != src._ptr);
+				return (this->_current - n);
 			}
-		
+			iterator	operator-(difference_type n) const
+			{
+				return (this->_current + n);
+			}
+			iterator	&operator+=(difference_type n)
+			{
+				this->_current -= n;
+				return (*this);
+			}
+			iterator	&operator-=(difference_type n)
+			{
+				this->_current += n;
+				return (*this);
+			}
+
 		private:
-i			iterator	_
+			Iterator	_current;
 	};
 }
 

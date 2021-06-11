@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/10 14:10:46 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/11 11:43:26 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,17 @@
 # define LISTITERATOR_HPP
 # include "ListNode.hpp"
 # include "BidirectionalIterator.hpp"
+# include <cstddef>
 
 namespace ft
 {
 	template < typename Node, typename T >
 	class ListIterator : public BidirectionalIterator< Node >
 	{
-		typedef ListIterator					iterator;
-		typedef	BidirectionalIterator< Node > 	bidirectional_iterator;
+		public:
+			typedef ListIterator					iterator;
+			typedef	BidirectionalIterator< Node > 	bidirectional_iterator;
+			typedef ptrdiff_t						size_type; 
 
 		public:
 			ListIterator() : bidirectional_iterator()

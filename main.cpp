@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:26:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/10 14:07:59 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/11 11:24:45 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,11 @@ int		main()
 	real.push_back(42);
 	//lst1.debug();
 	
-	ft::list<int>				test(13, 22);
-	ft::list<int>::iterator		it1 = lst1.begin();
-	ft::list<int>::iterator		it2 = lst1.end();
-
-	test.assign(it1, it2);
-
-	test.debug();
+	ft::list<int>::iterator			it1 = lst1.begin();
+	ft::list<int>::iterator			it2 = lst1.end();
+	ft::list<int>::reverse_iterator	rit1 = lst1.begin();
 	
+	std::cout << *rit1 << std::endl;
 
 // Testing for leaks and calling destructor manually
 //	lst1.~list();
