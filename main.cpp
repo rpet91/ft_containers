@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:26:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/11 11:24:45 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/16 14:39:46 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,39 @@
 
 int		main()
 {
-	ft::list<int>		lst1(5, 10);
-	std::list<int>		real(5, 10);
-	lst1.push_front(16);
-	lst1.push_back(42);
-	real.push_front(16);
-	real.push_back(42);
-	//lst1.debug();
-	
+	ft::list<int>		lst1;
+	std::list<int>		real;
+
+	for (size_t i = 0; i <= 20; i+=5)
+	{
+		lst1.push_back(i);
+		real.push_back(i);
+	}
+
 	ft::list<int>::iterator			it1 = lst1.begin();
-	ft::list<int>::iterator			it2 = lst1.end();
-	ft::list<int>::reverse_iterator	rit1 = lst1.begin();
-	
-	std::cout << *rit1 << std::endl;
+	ft::list<int>::iterator			it2 = it1;
+	std::list<int>::iterator		realit1 = real.begin();
+	std::list<int>::iterator		realit2 = realit1;
+
+	for (int i = 0; i < 2; i++)
+	{
+		it2++;
+		realit2++;
+	}
+	std::cout << *lst1.insert(it2, 1337) << std::endl;
+	std::cout << *real.insert(realit2, 1337) << std::endl;
+	std::cout << *lst1.insert(it2, 1337) << std::endl;
+	std::cout << *real.insert(realit2, 1337) << std::endl;
+
+	std::cout << std::endl;
+	for (size_t i = 0; i < real.size(); i++)
+	{
+		std::cout << *realit1 << std::endl;
+		realit1++;
+	}
+	lst1.push_back(69);
+
+	lst1.debug();
 
 // Testing for leaks and calling destructor manually
 //	lst1.~list();
