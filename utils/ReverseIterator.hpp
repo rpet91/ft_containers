@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/11 11:43:52 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/16 09:36:53 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ namespace ft
 	class ReverseIterator
 	{
 		typedef ReverseIterator							iterator;
+		typedef Iterator								iterator_type;
 		typedef typename Iterator::pointer				pointer;
 		typedef typename Iterator::reference			reference;
 		typedef typename Iterator::size_type			size_type;
@@ -29,7 +30,7 @@ namespace ft
 			ReverseIterator() : _current()
 			{
 			}
-			ReverseIterator(Iterator iterator_type) : _current(iterator_type)
+			ReverseIterator(iterator_type iter) : _current(iter)
 			{
 			}
 			virtual ~ReverseIterator()
@@ -44,17 +45,15 @@ namespace ft
 				this->_current = src._current;
 				return (*this);
 			}
-			iterator	&operator*() const
+			reference	operator*() const
 			{
-				iterator	tmp = this->_current;
+				iterator_type	tmp = this->_current;
 
 				return (*--tmp);
 			}
-			iterator	*operator->() const
+			pointer		operator->() const
 			{
-				iterator	tmp = this->_current;
-
-				return (&--tmp);
+				return (&(this->operator*()));
 			}
 			iterator	&operator++()
 			{
@@ -104,7 +103,7 @@ namespace ft
 			}
 
 		private:
-			Iterator	_current;
+			iterator_type	_current;
 	};
 }
 
