@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/11 10:00:18 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/17 12:00:06 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ namespace ft
 			typedef ListIterator<node, T>						iterator;
 			typedef ListIterator<const node, const T>			const_iterator;
 			typedef ReverseIterator<iterator>					reverse_iterator;
-//			typedef ReverseIterator<const_iterator>				const_reverse_iterator;
+			typedef ReverseIterator<const_iterator>				const_reverse_iterator;
 			typedef ptrdiff_t									difference_type;
 			typedef size_t										size_type;
 
@@ -136,24 +136,24 @@ namespace ft
 			// Rbegin
 			reverse_iterator		rbegin()
 			{
-				return (reverse_iterator(this->_sentinel.prev));
+				return (reverse_iterator(&this->_sentinel));
 			}
 			
-		//	const_reverse_iterator	rbegin() const
-		//	{
-		//		return (reverse_iterator(this->_sentinel.prev));
-		//	}
+			const_reverse_iterator	rbegin() const
+			{
+				return (reverse_iterator(&this->_sentinel));
+			}
 		
 			// Rend
-		//	reverse_iterator		rend()
-		//	{
-		//		return (reverse_iterator(&this->_sentinel));
-		//	}
+			reverse_iterator		rend()
+			{
+				return (reverse_iterator(this->_sentinel.next));
+			}
 
-		//	const_reverse_iterator	rend() const
-		//	{
-		//		return (reverse_iterator(&this->_sentinel));
-		//	}
+			const_reverse_iterator	rend() const
+			{
+				return (reverse_iterator(this->_sentinel.next));
+			}
 
 		//////////////
 		// CAPACITY //
@@ -213,7 +213,7 @@ namespace ft
 			// Assign
 			template <class InputIterator>
 			void	assign(InputIterator first, InputIterator last,
-				typename ft::iterator_traits<InputIterator>::type* = 0)
+						typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
 				clear();
 				while (first != last)
@@ -233,14 +233,7 @@ namespace ft
 			// Push front
 			void	push_front(const value_type &val)
 			{
-				ListNode<T>		*newNode = new ListNode<T>(val);
-				ListNode<T>		*next = this->_sentinel.next;
-				
-				next->prev = newNode;
-				newNode->next = next;
-				this->_sentinel.next = newNode;
-				newNode->prev = &this->_sentinel;
-				this->_size++;
+				addNode(val, 0);
 			}
 
 			// Pop front
@@ -260,14 +253,7 @@ namespace ft
 			// Push back
 			void	push_back(const value_type &val)
 			{
-				ListNode<T>		*newNode = new ListNode<T>(val);
-				ListNode<T>		*prev = this->_sentinel.prev;
-
-				prev->next = newNode;
-				newNode->prev = prev;
-				this->_sentinel.prev = newNode;
-				newNode->next = &this->_sentinel;
-				this->_size++;
+				addNode(val, size());
 			}
 
 			// Pop back
@@ -285,8 +271,51 @@ namespace ft
 			}
 
 			// Insert
+			iterator	insert(iterator position, value_type const &val)
+			{
+				insert(position, 1, val);
+				return (--position);
+			}
+
+			void		insert(iterator position, size_type n, value_type const &val)
+			{
+				size_t	insertPosition = findPosition(begin(), position);
+
+				for (size_type i = 0; i < n; i++)
+					addNode(val, insertPosition + i);
+			}
+
+			template <class InputIterator>
+			void		insert(iterator position, InputIterator first, InputIterator last,
+							typename ft::iterator_traits<InputIterator>::type* = 0)
+			{
+				size_t	insertPosition = findPosition(begin(), position);
+
+				while (first != last)
+					addNode(*first++, insertPosition++);
+			}
 
 			// Erase
+			iterator	erase(iterator position)
+			{
+				size_t	erasePosition = findPosition(begin(), position);
+
+				position++;
+				removeNode(erasePosition);
+				return (position);
+			}
+			
+			iterator	erase(iterator first, iterator last)
+			{
+				size_t erasePosition = findPosition(begin(), first);
+
+				while (first != last)
+				{
+					removeNode(erasePosition);
+					first++;
+				}
+				return (last);
+			}
 			
 			// Swap
 		/*	void	swap(list &x)
@@ -339,6 +368,56 @@ namespace ft
 		// EXTRA PRIVATE MEMBER FUNCTIONS //
 		////////////////////////////////////
 
+		private:
+			size_t	findPosition(iterator start, iterator end)
+			{
+				size_t	position = 0;
+
+				while (start != end)
+				{
+					start++;
+					position++;
+				}
+				return (position);
+			}
+
+			void	addNode(const value_type &val, size_t position)
+			{
+				ListNode<T>		*nextNode = this->_sentinel.next;
+				
+				for (size_t i = 0; i < position && i < this->size(); i++)
+					nextNode = nextNode->next;
+
+				ListNode<T>		*newNode = new ListNode<T>(val);
+				ListNode<T>		*prevNode = nextNode->prev;
+
+				newNode->next = nextNode;
+				newNode->prev = prevNode;
+				nextNode->prev = newNode;
+				prevNode->next = newNode;
+				this->_size++;
+			}
+
+			void	removeNode(size_t position)
+			{
+				if (this->_size == 0)
+					return ;
+
+				ListNode<T>		*deleteNode = this->_sentinel.next;
+
+				for (size_t i = 0; i < position && i < this->size(); i++)
+				{
+					deleteNode = deleteNode->next;
+				}
+
+				ListNode<T>		*newPrev = deleteNode->prev;
+
+				newPrev->next = deleteNode->next;
+				newPrev->next->prev = newPrev;
+				delete deleteNode;
+				this->_size--;
+			}
+
 			//DEBUGGER
 		public:
 			void	nodeInfo(ListNode<T> *info)
@@ -355,7 +434,8 @@ namespace ft
 			{
 				ListNode<T>		*tmp = this->_sentinel.next;
 
-				std::cout << "Sentinel address: " << &this->_sentinel << std::endl << std::endl;
+				std::cout << "Sentinel address: " << &this->_sentinel << 
+				" && Size: " << size() << std::endl << std::endl;
 				for (size_t i = 0; i < this->_size; i++)
 				{
 					nodeInfo(tmp);

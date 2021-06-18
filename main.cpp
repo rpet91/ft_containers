@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:26:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/11 11:24:45 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/18 11:49:03 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,36 @@
 #include "map.hpp"
 #include "stack.hpp"
 #include "queue.hpp"
-#include "ListNode.hpp"
-#include "ListIterator.hpp"
-#include "BidirectionalIterator.hpp"
-#include "Iterator.hpp"
+#include "tests.hpp"
 #include <iostream>
 #include <list>
 
-int		main()
+int		validContainer(std::string choice)
 {
-	ft::list<int>		lst1(5, 10);
-	std::list<int>		real(5, 10);
-	lst1.push_front(16);
-	lst1.push_back(42);
-	real.push_front(16);
-	real.push_back(42);
-	//lst1.debug();
-	
-	ft::list<int>::iterator			it1 = lst1.begin();
-	ft::list<int>::iterator			it2 = lst1.end();
-	ft::list<int>::reverse_iterator	rit1 = lst1.begin();
-	
-	std::cout << *rit1 << std::endl;
+	std::string		containers[] = {"list", "vector", "map", "stack", "queue"};
+
+	for (size_t i = 0; i < (sizeof(containers) / sizeof(std::string)); i++)
+		if (choice == containers[i])
+			return (1);
+	return (0);
+}
+
+int		main(int argc, char **argv)
+{
+	if (argc != 3)
+	{
+		if (argc == 2 && static_cast<std::string>(argv[1]) == "help")
+			printHelp();
+		else
+			std::cout << "Program needs specific arguments, type \"help\" for more options." << std::endl;
+		return (0);
+	}
+	if (validContainer(argv[1]) && static_cast<std::string>(argv[2]) == "help")
+		printHelpContainer(argv[1]);
+	else if (validContainer(argv[1]))
+		testContainer(argv[1], argv[2]);
+	else
+		std::cout << "Program needs specific arguments, type \"help\" for more options." << std::endl;
 
 // Testing for leaks and calling destructor manually
 //	lst1.~list();

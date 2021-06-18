@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/11 11:43:26 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/16 12:53:28 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ namespace ft
 		public:
 			typedef ListIterator					iterator;
 			typedef	BidirectionalIterator< Node > 	bidirectional_iterator;
-			typedef ptrdiff_t						size_type; 
+			typedef ptrdiff_t						size_type;
+			typedef T&								reference;
 
 		public:
 			ListIterator() : bidirectional_iterator()
@@ -45,7 +46,7 @@ namespace ft
 				this->_ptr = src._ptr;
 				return (*this);
 			}
-			T				&operator*()
+			reference	operator*()
 			{
 				return (this->_ptr->data);
 			}
