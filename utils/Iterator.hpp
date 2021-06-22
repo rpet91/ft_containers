@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:37:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/08 10:45:27 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/21 09:25:25 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,20 @@ namespace ft
 			Iterator() : _ptr(0)
 			{
 			}
+
 			Iterator(pointer ptr) : _ptr(ptr)
 			{
 			}
+
 			virtual ~Iterator()
 			{
 			}
+
 			Iterator(Iterator const &src)
 			{
 				*this = src;
 			}
+
 			Iterator    &operator=(Iterator const &src)
 			{
 				this->_ptr = src._ptr;

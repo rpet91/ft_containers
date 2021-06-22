@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 09:31:42 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/18 11:46:19 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/21 08:35:27 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ static void	printHelpList()
 	std::cout << "    " << "NON-MEMBER FUNCTION OVERLOADS:" << std::endl;
 	std::cout << "\t" << "- relational_operators" << std::endl;
 	std::cout << "\t" << "- swap" << std::endl;
+	std::cout << "    " << "ALL FUNCTIONS:" << std::endl;
+	std::cout << "\t" << "- all" << std::endl;
 }
 
 void	printHelp()

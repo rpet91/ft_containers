@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/17 12:00:06 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/22 14:17:02 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,13 @@ namespace ft
 			// Default constructor
 			explicit list(const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
 			{
-				this->_sentinel.next = &this->_sentinel;
-				this->_sentinel.prev = &this->_sentinel;
-				this->_sentinel.data = T();
+				constructorSetup();
 			}
 
 			// Fill constructor
 			explicit list(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0) 
 			{
-				this->_sentinel.next = &this->_sentinel;
-				this->_sentinel.prev = &this->_sentinel;
-				this->_sentinel.data = T();
+				constructorSetup();
 				assign(n, val);
 			}
 
@@ -78,15 +74,14 @@ namespace ft
 				typename ft::iterator_traits<InputIterator>::type* = 0,
 				const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
 			{
-				this->_sentinel.next = &this->_sentinel;
-				this->_sentinel.prev = &this->_sentinel;
-				this->_sentinel.data = T();
+				constructorSetup();
 				assign(first, last);
 			}
 
 			// Copy constructor
-			list(const list &x) : _allocator(x._allocator), _size(0)
+			list(const list &x) : _size(0)
 			{
+				constructorSetup();
 				*this = x;
 			}
 
@@ -99,10 +94,8 @@ namespace ft
 			// Assignment operator
 			list	&operator=(const list &x)
 			{
-				clear();
 				this->_allocator = x._allocator;
-				this->_size = x._size;
-				this->_sentinel = x._sentinel;
+				assign(x.begin(), x.end());
 				return (*this);
 			}
 
@@ -130,7 +123,7 @@ namespace ft
 
 			const_iterator			end() const
 			{
-				return (iterator(&this->_sentinel));
+				return (const_iterator(&this->_sentinel));
 			}
 
 			// Rbegin
@@ -215,12 +208,16 @@ namespace ft
 			void	assign(InputIterator first, InputIterator last,
 						typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
-				clear();
-				while (first != last)
+				size_t	newAmount = distance(first, last);
+				size_t	oldAmount = this->_size;
+
+				for (size_t i = 0; i < newAmount; i++)
 				{
 					push_back(*first);
 					first++;
 				}
+				for (size_t i = 0; i < oldAmount; i++)
+					pop_front();
 			}
 
 			void	assign(size_type n, const value_type &val)
@@ -239,15 +236,7 @@ namespace ft
 			// Pop front
 			void	pop_front()
 			{
-				if (this->_size == 0)
-					return ;
-
-				ListNode<T>		*newHead = this->_sentinel.next->next;
-
-				newHead->prev = &this->_sentinel;
-				delete this->_sentinel.next;
-				this->_sentinel.next = newHead;
-				this->_size--;
+				deleteNode(0);
 			}
 
 			// Push back
@@ -259,15 +248,8 @@ namespace ft
 			// Pop back
 			void	pop_back()
 			{
-				if (this->_size == 0)
-					return ;
-
-				ListNode<T>		*newTail = this->_sentinel.prev->prev;
-
-				newTail->next = &this->_sentinel;
-				delete this->_sentinel.prev;
-				this->_sentinel.prev = newTail;
-				this->_size--;
+				if (size() >= 1)
+					deleteNode(size() - 1);
 			}
 
 			// Insert
@@ -279,7 +261,7 @@ namespace ft
 
 			void		insert(iterator position, size_type n, value_type const &val)
 			{
-				size_t	insertPosition = findPosition(begin(), position);
+				size_t	insertPosition = distance(begin(), position);
 
 				for (size_type i = 0; i < n; i++)
 					addNode(val, insertPosition + i);
@@ -289,7 +271,7 @@ namespace ft
 			void		insert(iterator position, InputIterator first, InputIterator last,
 							typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
-				size_t	insertPosition = findPosition(begin(), position);
+				size_t	insertPosition = distance(begin(), position);
 
 				while (first != last)
 					addNode(*first++, insertPosition++);
@@ -298,27 +280,27 @@ namespace ft
 			// Erase
 			iterator	erase(iterator position)
 			{
-				size_t	erasePosition = findPosition(begin(), position);
+				size_t	erasePosition = distance(begin(), position);
 
 				position++;
-				removeNode(erasePosition);
+				deleteNode(erasePosition);
 				return (position);
 			}
 			
 			iterator	erase(iterator first, iterator last)
 			{
-				size_t erasePosition = findPosition(begin(), first);
+				size_t erasePosition = distance(begin(), first);
 
 				while (first != last)
 				{
-					removeNode(erasePosition);
+					deleteNode(erasePosition);
 					first++;
 				}
 				return (last);
 			}
 			
 			// Swap
-		/*	void	swap(list &x)
+	/*		void	swap(list &x)
 			{
 				list	tmp = x;
 
@@ -349,27 +331,141 @@ namespace ft
 		// OPERATIONS //
 		////////////////
 
+		public:
+			// Splice
+			void	splice(iterator position, list &x)
+			{
+				splice(position, x, x.begin(), x.end());
+			}
+
+			void	splice(iterator position, list &x, iterator i)
+			{
+				size_t			distanceToNode = distance(x.begin(), i);
+				size_t			distanceToAdd = distance(begin(), position);
+				ListNode<T>		*removedNode = x.removeFromList(distanceToNode);
+				ListNode<T>		*placeNode = this->_sentinel.next;
+
+				for (size_t i = 0; i < distanceToAdd; i++)
+					placeNode = placeNode->next;
+				connectNodes(placeNode->prev, removedNode);
+				connectNodes(removedNode, placeNode);
+				this->_size++;
+			}
+
+			void	splice(iterator position, list &x, iterator first, iterator last)
+			{
+				iterator	tmp = first;
+
+				while (first != last)
+				{
+					tmp = first;
+					first++;
+					splice(position, x, tmp);
+				}
+			}
+
+			// Remove
+//			void	remove(value_type const &val)
+//			{
+//			}
+
+			// Remove if
+//			template <class Predicate>
+//			void	remove_if(Predicate pred)
+//			{
+//			}
+
+			// Unique
+//			void	unique()
+//			{
+//			}
+
+//			template <class BinaryPredicate>
+//			void	unique(BinaryPredicate binary_pred)
+//			{
+//			}
+
+			// Merge
+//			void	merge(list &x)
+//			{
+//			}
+
+//			template <class Compare>
+//			void	merge(list &x, Compare comp)
+//			{
+//			}
+
+			// Sort
+//			void	sort()
+//			{
+//			}
+
+//			template <class Compare>
+//			void	sort(Compare comp)
+//			{
+//			}
+
+			// Reverse
+//			void	reverse()
+//			{
+//			}
+
 		///////////////
 		// OBSERVERS //
 		///////////////
 
 		public:
-		//Get allocator
-		allocator_type	get_allocator() const
-		{
-			return (this->_allocator);
-		}
+			// Get allocator
+			allocator_type	get_allocator() const
+			{
+				return (this->_allocator);
+			}
 
 		///////////////////////////////////
 		// NON-MEMBER FUNCTION OVERLOADS //
 		///////////////////////////////////
+		
+		public:
+			// Relational operators
+//			template <class T, class Alloc>
+//			bool operator== (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+//			template <class T, class Alloc>
+//			bool operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+//			template <class T, class Alloc>
+//			bool operator<  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+//			template <class T, class Alloc>
+//			bool operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+//			template <class T, class Alloc>
+//			bool operator>  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+//			template <class T, class Alloc>
+//			bool operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+			// Swap
+//			template <class T, class Alloc>
+//			void	swap(list<T, Alloc> &x, list<T, Alloc> &y)
+//			{
+//				x.swap(y);
+//			}
 
 		////////////////////////////////////
 		// EXTRA PRIVATE MEMBER FUNCTIONS //
 		////////////////////////////////////
 
 		private:
-			size_t	findPosition(iterator start, iterator end)
+			void	constructorSetup()
+			{
+				this->_sentinel.next = &this->_sentinel;
+				this->_sentinel.prev = &this->_sentinel;
+				this->_sentinel.data = T();
+			}
+
+			template < class InputIterator >
+			size_t	distance(InputIterator start, InputIterator end)
 			{
 				size_t	position = 0;
 
@@ -391,31 +487,40 @@ namespace ft
 				ListNode<T>		*newNode = new ListNode<T>(val);
 				ListNode<T>		*prevNode = nextNode->prev;
 
-				newNode->next = nextNode;
-				newNode->prev = prevNode;
-				nextNode->prev = newNode;
-				prevNode->next = newNode;
+				connectNodes(newNode, nextNode);
+				connectNodes(prevNode, newNode);
 				this->_size++;
 			}
 
-			void	removeNode(size_t position)
+			void	deleteNode(size_t position)
+			{
+				ListNode<T>		*deleteNode = removeFromList(position);
+
+				if (deleteNode)
+					delete deleteNode;
+			}
+
+			node	*removeFromList(size_t position)
 			{
 				if (this->_size == 0)
-					return ;
+					return (0);
 
-				ListNode<T>		*deleteNode = this->_sentinel.next;
+				ListNode<T>		*removeNode = this->_sentinel.next;
 
 				for (size_t i = 0; i < position && i < this->size(); i++)
-				{
-					deleteNode = deleteNode->next;
-				}
+					removeNode = removeNode->next;
 
-				ListNode<T>		*newPrev = deleteNode->prev;
+				ListNode<T>		*newPrev = removeNode->prev;
 
-				newPrev->next = deleteNode->next;
-				newPrev->next->prev = newPrev;
-				delete deleteNode;
-				this->_size--;
+				connectNodes(newPrev, removeNode->next);
+				--this->_size;
+				return (removeNode);
+			}
+
+			void	connectNodes(node *first, node *second)
+			{
+				first->next = second;
+				second->prev = first;
 			}
 
 			//DEBUGGER

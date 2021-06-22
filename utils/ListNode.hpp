@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/25 09:47:50 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/07 13:08:21 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/21 09:36:29 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,20 @@ namespace ft
 			ListNode()
 			{
 			}
+
 			ListNode(T const &data) : data(data), next(0), prev(0)
 			{
 			}
+
 			virtual ~ListNode()
 			{
 			}
+
 			ListNode(ListNode const &src)
 			{
 				*this = src;
 			}
+
 			ListNode	&operator=(ListNode const &src)
 			{
 				this->next = src.next;
@@ -39,20 +43,24 @@ namespace ft
 				this->data = src.data;
 				return (*this);
 			}
+
 			bool		operator==(ListNode const &src)
 			{
 				return (this->data == src.data && this->next == src.next
 						&& this->prev == src.prev);
 			}
+
 			bool		operator!=(ListNode const &src)
 			{
 				return (this->data != src.data || this->next != src.next
 						|| this->prev != src.prev);
 			}
 
+		// Public member variables
 			T			data;
 			ListNode	*next;
 			ListNode	*prev;
+
 	};
 }
 

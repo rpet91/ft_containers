@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/16 09:36:53 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/21 09:37:04 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,36 +30,44 @@ namespace ft
 			ReverseIterator() : _current()
 			{
 			}
+
 			ReverseIterator(iterator_type iter) : _current(iter)
 			{
 			}
+
 			virtual ~ReverseIterator()
 			{
 			}
+
 			ReverseIterator(ReverseIterator const &src)
 			{
 				*this = src;
 			}
+
 			iterator	&operator=(iterator const &src)
 			{
 				this->_current = src._current;
 				return (*this);
 			}
+
 			reference	operator*() const
 			{
 				iterator_type	tmp = this->_current;
 
 				return (*--tmp);
 			}
+
 			pointer		operator->() const
 			{
 				return (&(this->operator*()));
 			}
+
 			iterator	&operator++()
 			{
 				--this->_current;
 				return (*this);
 			}
+
 			iterator	operator++(int)
 			{
 				iterator	old = *this;
@@ -67,11 +75,13 @@ namespace ft
 				--this->_current;
 				return (old);
 			}
+
 			iterator	&operator--()
 			{
 				++this->_current;
 				return (*this);
 			}
+
 			iterator	operator--(int)
 			{
 				iterator	old = *this;
@@ -79,23 +89,28 @@ namespace ft
 				++this->_current;
 				return (old);
 			}
+
 			iterator	operator[](difference_type n) const
 			{
 				return (*(*this + n));
 			}
+
 			iterator	operator+(difference_type n) const
 			{
 				return (this->_current - n);
 			}
+
 			iterator	operator-(difference_type n) const
 			{
 				return (this->_current + n);
 			}
+
 			iterator	&operator+=(difference_type n)
 			{
 				this->_current -= n;
 				return (*this);
 			}
+
 			iterator	&operator-=(difference_type n)
 			{
 				this->_current += n;

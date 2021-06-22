@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:26:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/18 11:49:03 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/22 13:56:24 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 #include "tests.hpp"
 #include <iostream>
 #include <list>
+
+void	checkLeaks()
+{
+	system("leaks ft_containers");	
+}
 
 int		validContainer(std::string choice)
 {
@@ -31,6 +36,8 @@ int		validContainer(std::string choice)
 
 int		main(int argc, char **argv)
 {
+	atexit(checkLeaks);
+
 	if (argc != 3)
 	{
 		if (argc == 2 && static_cast<std::string>(argv[1]) == "help")
@@ -46,6 +53,7 @@ int		main(int argc, char **argv)
 	else
 		std::cout << "Program needs specific arguments, type \"help\" for more options." << std::endl;
 
+	std::cout << "TO DO: UNDERSCORE PRIVATE SHIT" << std::endl;
 // Testing for leaks and calling destructor manually
 //	lst1.~list();
 //	while(1);

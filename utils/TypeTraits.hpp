@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 13:06:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/11 11:24:58 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/21 09:46:52 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ namespace ft
 				static one	test(typename C::iterator_category* = 0);
 			template < typename C >
 				static two	test(...);
-
+		
 		public:
 			static const bool result = sizeof(one) == sizeof(test<T>(0));
 	};

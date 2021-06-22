@@ -6,7 +6,7 @@
 #    By: rpet <marvin@codam.nl>                       +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/30 13:04:14 by rpet          #+#    #+#                  #
-#    Updated: 2021/06/18 11:52:00 by rpet          ########   odam.nl          #
+#    Updated: 2021/06/21 08:30:45 by rpet          ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,7 @@ $(NAME): $(OBJS)
 
 clean:
 	rm -f *.o
+	cd tests && rm -f *.o
 
 fclean: clean
 	rm -f $(NAME)
