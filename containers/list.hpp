@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/22 14:17:02 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/23 14:46:39 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "ListIterator.hpp"
 # include "ReverseIterator.hpp"
 # include "TypeTraits.hpp"
+# include "Utils.hpp"
 # include <memory>
 # include <cstddef>
 # include <iostream> //mogelijkweeg
@@ -58,13 +59,13 @@ namespace ft
 			// Default constructor
 			explicit list(const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
 			{
-				constructorSetup();
+				_constructorSetup();
 			}
 
 			// Fill constructor
 			explicit list(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0) 
 			{
-				constructorSetup();
+				_constructorSetup();
 				assign(n, val);
 			}
 
@@ -74,14 +75,14 @@ namespace ft
 				typename ft::iterator_traits<InputIterator>::type* = 0,
 				const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
 			{
-				constructorSetup();
+				_constructorSetup();
 				assign(first, last);
 			}
 
 			// Copy constructor
 			list(const list &x) : _size(0)
 			{
-				constructorSetup();
+				_constructorSetup();
 				*this = x;
 			}
 
@@ -208,7 +209,7 @@ namespace ft
 			void	assign(InputIterator first, InputIterator last,
 						typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
-				size_t	newAmount = distance(first, last);
+				size_t	newAmount = _distance(first, last);
 				size_t	oldAmount = this->_size;
 
 				for (size_t i = 0; i < newAmount; i++)
@@ -230,26 +231,26 @@ namespace ft
 			// Push front
 			void	push_front(const value_type &val)
 			{
-				addNode(val, 0);
+				_addNode(val, 0);
 			}
 
 			// Pop front
 			void	pop_front()
 			{
-				deleteNode(0);
+				_deleteNode(0);
 			}
 
 			// Push back
 			void	push_back(const value_type &val)
 			{
-				addNode(val, size());
+				_addNode(val, size());
 			}
 
 			// Pop back
 			void	pop_back()
 			{
 				if (size() >= 1)
-					deleteNode(size() - 1);
+					_deleteNode(size() - 1);
 			}
 
 			// Insert
@@ -261,52 +262,53 @@ namespace ft
 
 			void		insert(iterator position, size_type n, value_type const &val)
 			{
-				size_t	insertPosition = distance(begin(), position);
+				size_t	insertPosition = _distance(begin(), position);
 
 				for (size_type i = 0; i < n; i++)
-					addNode(val, insertPosition + i);
+					_addNode(val, insertPosition + i);
 			}
 
 			template <class InputIterator>
 			void		insert(iterator position, InputIterator first, InputIterator last,
 							typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
-				size_t	insertPosition = distance(begin(), position);
+				size_t	insertPosition = _distance(begin(), position);
 
 				while (first != last)
-					addNode(*first++, insertPosition++);
+					_addNode(*first++, insertPosition++);
 			}
 
 			// Erase
 			iterator	erase(iterator position)
 			{
-				size_t	erasePosition = distance(begin(), position);
+				size_t	erasePosition = _distance(begin(), position);
 
 				position++;
-				deleteNode(erasePosition);
+				_deleteNode(erasePosition);
 				return (position);
 			}
 			
 			iterator	erase(iterator first, iterator last)
 			{
-				size_t erasePosition = distance(begin(), first);
+				size_t erasePosition = _distance(begin(), first);
 
 				while (first != last)
 				{
-					deleteNode(erasePosition);
+					_deleteNode(erasePosition);
 					first++;
 				}
 				return (last);
 			}
 			
 			// Swap
-	/*		void	swap(list &x)
+			void	swap(list &x)
 			{
-				list	tmp = x;
+				list	tmp;
 
-				x = *this;
-				*this = tmp;
-			}*/
+				tmp.splice(tmp.begin(), x);
+				x.splice(x.begin(), *this);
+				splice(begin(), tmp);
+			}
 			
 			// Resize
 			void	resize(size_type n, value_type val = value_type())
@@ -340,15 +342,15 @@ namespace ft
 
 			void	splice(iterator position, list &x, iterator i)
 			{
-				size_t			distanceToNode = distance(x.begin(), i);
-				size_t			distanceToAdd = distance(begin(), position);
-				ListNode<T>		*removedNode = x.removeFromList(distanceToNode);
+				size_t			distanceToNode = _distance(x.begin(), i);
+				size_t			distanceToAdd = _distance(begin(), position);
+				ListNode<T>		*removedNode = x._removeFromList(distanceToNode);
 				ListNode<T>		*placeNode = this->_sentinel.next;
 
 				for (size_t i = 0; i < distanceToAdd; i++)
 					placeNode = placeNode->next;
-				connectNodes(placeNode->prev, removedNode);
-				connectNodes(removedNode, placeNode);
+				_connectNodes(placeNode->prev, removedNode);
+				_connectNodes(removedNode, placeNode);
 				this->_size++;
 			}
 
@@ -365,30 +367,61 @@ namespace ft
 			}
 
 			// Remove
-//			void	remove(value_type const &val)
-//			{
-//			}
+			void	remove(value_type const &val)
+			{
+				for (iterator it = begin(); it != end(); it++)
+					if (*it == val)
+						it = erase(it);
+			}
 
 			// Remove if
-//			template <class Predicate>
-//			void	remove_if(Predicate pred)
-//			{
-//			}
+			template <class Predicate>
+			void	remove_if(Predicate pred)
+			{
+				for (iterator it = begin(); it != end(); it++)
+					if (pred(*it))
+						it = erase(it);
+			}
 
 			// Unique
-//			void	unique()
-//			{
-//			}
+			void	unique()
+			{
+				unique(ft::isEqual<T>);
+			}
 
-//			template <class BinaryPredicate>
-//			void	unique(BinaryPredicate binary_pred)
-//			{
-//			}
+			template <class BinaryPredicate>
+			void	unique(BinaryPredicate binary_pred)
+			{
+				iterator	it = begin();
+
+				while (it != end())
+				{
+					iterator	nextIt = it;
+
+					nextIt++;
+					if (binary_pred(*nextIt, *it))
+						nextIt = erase(nextIt);
+					else
+						it++;
+				}
+			}
 
 			// Merge
-//			void	merge(list &x)
-//			{
-//			}
+			void	merge(list &x)
+			{
+				if (*this == x)
+					return ;
+
+				iterator	it = begin();
+
+				while (it != end())
+				{
+					if (*it > *x.begin() && x.size())
+						splice(it, x, x.begin());
+					else
+						it++;
+				}
+			}
 
 //			template <class Compare>
 //			void	merge(list &x, Compare comp)
@@ -421,43 +454,12 @@ namespace ft
 				return (this->_allocator);
 			}
 
-		///////////////////////////////////
-		// NON-MEMBER FUNCTION OVERLOADS //
-		///////////////////////////////////
-		
-		public:
-			// Relational operators
-//			template <class T, class Alloc>
-//			bool operator== (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-//			template <class T, class Alloc>
-//			bool operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-//			template <class T, class Alloc>
-//			bool operator<  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-//			template <class T, class Alloc>
-//			bool operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-//			template <class T, class Alloc>
-//			bool operator>  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-//			template <class T, class Alloc>
-//			bool operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
-
-			// Swap
-//			template <class T, class Alloc>
-//			void	swap(list<T, Alloc> &x, list<T, Alloc> &y)
-//			{
-//				x.swap(y);
-//			}
-
 		////////////////////////////////////
 		// EXTRA PRIVATE MEMBER FUNCTIONS //
 		////////////////////////////////////
 
 		private:
-			void	constructorSetup()
+			void	_constructorSetup()
 			{
 				this->_sentinel.next = &this->_sentinel;
 				this->_sentinel.prev = &this->_sentinel;
@@ -465,7 +467,7 @@ namespace ft
 			}
 
 			template < class InputIterator >
-			size_t	distance(InputIterator start, InputIterator end)
+			size_t	_distance(InputIterator start, InputIterator end)
 			{
 				size_t	position = 0;
 
@@ -477,7 +479,7 @@ namespace ft
 				return (position);
 			}
 
-			void	addNode(const value_type &val, size_t position)
+			void	_addNode(const value_type &val, size_t position)
 			{
 				ListNode<T>		*nextNode = this->_sentinel.next;
 				
@@ -487,20 +489,20 @@ namespace ft
 				ListNode<T>		*newNode = new ListNode<T>(val);
 				ListNode<T>		*prevNode = nextNode->prev;
 
-				connectNodes(newNode, nextNode);
-				connectNodes(prevNode, newNode);
+				_connectNodes(newNode, nextNode);
+				_connectNodes(prevNode, newNode);
 				this->_size++;
 			}
 
-			void	deleteNode(size_t position)
+			void	_deleteNode(size_t position)
 			{
-				ListNode<T>		*deleteNode = removeFromList(position);
+				ListNode<T>		*deleteNode = _removeFromList(position);
 
 				if (deleteNode)
 					delete deleteNode;
 			}
 
-			node	*removeFromList(size_t position)
+			node	*_removeFromList(size_t position)
 			{
 				if (this->_size == 0)
 					return (0);
@@ -512,12 +514,12 @@ namespace ft
 
 				ListNode<T>		*newPrev = removeNode->prev;
 
-				connectNodes(newPrev, removeNode->next);
+				_connectNodes(newPrev, removeNode->next);
 				--this->_size;
 				return (removeNode);
 			}
 
-			void	connectNodes(node *first, node *second)
+			void	_connectNodes(node *first, node *second)
 			{
 				first->next = second;
 				second->prev = first;
@@ -550,6 +552,42 @@ namespace ft
 			}
 			//DEBUGGER
 	};
+		///////////////////////////////////
+		// NON-MEMBER FUNCTION OVERLOADS //
+		///////////////////////////////////
+		
+			// Relational operators
+			template <class T, class Alloc>
+			bool operator==(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+			{
+				return (lhs.size() == rhs.size() &&
+						ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+			}
+
+//			template <class T, class Alloc>
+//			bool operator!=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+//			{
+//				return !(lhs == rhs);
+//			}
+
+//			template <class T, class Alloc>
+//			bool operator<(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+//			template <class T, class Alloc>
+//			bool operator<=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+//			template <class T, class Alloc>
+//			bool operator>(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+//			template <class T, class Alloc>
+//			bool operator>=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+
+			// Swap
+//			template <class T, class Alloc>
+//			void	swap(list<T, Alloc> &x, list<T, Alloc> &y)
+//			{
+//				x.swap(y);
+//			}
 
 }
 #endif

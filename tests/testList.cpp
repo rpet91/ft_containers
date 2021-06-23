@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 09:37:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/22 14:16:45 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/23 14:11:11 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <iostream>
 #include <map>
 #include <climits>
+#include <cmath>
 
 template <typename T>
 static void	setup(T &list)
@@ -39,6 +40,16 @@ static void printAddress(T &list)
 
 	for (size_t i = 0; cur != list.end(); i++, cur++)
 		std::cout << "Index [" << i << "]: " << &*cur << std::endl;
+}
+
+bool	singleArg(int &nb)
+{
+	return (nb == 15);
+}
+
+bool	nearArgs(int &first, int &second)
+{
+	return (fabs(first - second) < 3);
 }
 
 static void	constructor()
@@ -400,7 +411,7 @@ static void	erase()
 static void	swap()
 {
 	std::cout << "\t===SWAP===" << std::endl;
-/*	ft::list<int> 	listMine;
+	ft::list<int> 	listMine;
 	ft::list<int> 	listMineSwap;
 	std::list<int>	listReal;
 	std::list<int>	listRealSwap;
@@ -414,18 +425,18 @@ static void	swap()
 	}
 
 	std::cout << "Before Mine:" << std::endl;
-	print(listMine);
+	printAddress(listMine);
 	std::cout << "Before Real:" << std::endl;
-	print(listReal);
+	printAddress(listReal);
 	
 	listMine.swap(listMineSwap);
 	listReal.swap(listRealSwap);
 
 	std::cout << std::endl;
 	std::cout << "After Mine:" << std::endl;
-	print(listMine);
+	printAddress(listMine);
 	std::cout << "After Real:" << std::endl;
-	print(listReal);*/
+	printAddress(listReal);
 }
 
 static void	resize()
@@ -479,54 +490,160 @@ static void	splice()
 	std::cout << "\t===SPLICE===" << std::endl;
 	ft::list<int> 	listMine;
 	std::list<int>	listReal;
-	ft::list<int> 	listSpliceMine1(3, 13);
-	std::list<int>	listSpliceReal1(3, 13);
+	ft::list<int> 	listSpliceMine(3, 13);
+	std::list<int>	listSpliceReal(3, 13);
 	setup(listMine);
 	setup(listReal);
 
 	std::cout << "Before Entire List Mine:" << std::endl;
 	printAddress(listMine);
 	std::cout << "Before Entire Splice List Mine:" << std::endl;
-	printAddress(listSpliceMine1);
+	printAddress(listSpliceMine);
 
-	listMine.splice(++listMine.begin(), listSpliceMine1);
+	listMine.splice(++listMine.begin(), listSpliceMine);
 
 	std::cout << "After Entire List Mine:" << std::endl;
 	printAddress(listMine);
-	print(listMine);
 
 	std::cout << std::endl;
 	std::cout << "Before Entire List Real:" << std::endl;
 	printAddress(listReal);
 	std::cout << "Before Entire Splice List Real:" << std::endl;
-	printAddress(listSpliceReal1);
+	printAddress(listSpliceReal);
 
-	listReal.splice(++listReal.begin(), listSpliceReal1);
+	listReal.splice(++listReal.begin(), listSpliceReal);
 
 	std::cout << "After Entire List Real:" << std::endl;
 	printAddress(listReal);
-	print(listReal);
-	std::cout << "=======================" << std::endl;
 }
 
 static void	remove()
 {
 	std::cout << "\t===REMOVE===" << std::endl;
+	ft::list<int> 	listMine;
+	std::list<int>	listReal;
+	setup(listMine);
+	setup(listReal);
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		listReal.push_back(15);
+		listMine.push_back(15);
+	}
+	listMine.remove(15);
+	listReal.remove(15);
+	
+	std::cout << "Remove Mine:" << std::endl;
+	print(listMine);
+	std::cout << "Remove Real:" << std::endl;
+	print(listReal);
 }
+
 
 static void remove_if()
 {
 	std::cout << "\t===REMOVE IF===" << std::endl;
+	ft::list<int> 	listMine;
+	std::list<int>	listReal;
+	setup(listMine);
+	setup(listReal);
+
+	listMine.remove_if(singleArg);
+	listReal.remove_if(singleArg);
+
+	std::cout << "Remove If Mine:" << std::endl;
+	print(listMine);
+	std::cout << "Remove If Real:" << std::endl;
+	print(listReal);
 }
 
 static void	unique()
 {
 	std::cout << "\t===UNIQUE===" << std::endl;
+	ft::list<int> 	listMine1;
+	ft::list<int> 	listMine2;
+	std::list<int>	listReal1;
+	std::list<int>	listReal2;
+	setup(listMine1);
+	setup(listMine2);
+	setup(listReal1);
+	setup(listReal2);
+
+	for (size_t i = 0; i < 4; i++) // Unique should delete two of them
+	{
+		listReal1.push_back(69);
+		listReal2.push_back(69 + i);
+		listMine1.push_back(69);
+		listMine2.push_back(69 + i);
+	}
+	for (size_t i = 0; i < 3; i++) // Unique shouldn't delete any of them
+	{
+		listMine1.push_back(15);
+		listMine1.push_back(1337);
+		listMine2.push_back(15);
+		listMine2.push_back(1337);
+		listReal1.push_back(15);
+		listReal1.push_back(1337);
+		listReal2.push_back(15);
+		listReal2.push_back(1337);
+	}
+	
+	listMine1.unique();
+	listReal1.unique();
+
+	std::cout << "Unique No Parameters Mine:" << std::endl;
+	print(listMine1);
+	std::cout << "Unique No Parameters Real:" << std::endl;
+	print(listReal1);
+	
+	listMine2.unique(nearArgs);
+	listReal2.unique(nearArgs);
+
+	std::cout << std::endl;
+	std::cout << "Unique Predicate Mine:" << std::endl;
+	print(listMine2);
+	std::cout << "Unique Predicate Real:" << std::endl;
+	print(listReal2);
 }
 
 static void	merge()
 {
 	std::cout << "\t===MERGE===" << std::endl;
+	ft::list<int> 	listMine1;
+	ft::list<int> 	listMine2;
+	std::list<int>	listReal1;
+	std::list<int>	listReal2;
+	setup(listMine1);
+	setup(listReal1);
+
+	for (int i = -3; i < 3; i++)
+	{
+		listMine2.push_back(i * 7);
+		listReal2.push_back(i * 7);
+	}
+
+	std::cout << "Before Merge Mine List1" << std::endl;
+	print(listMine1);
+	std::cout << "Before Merge Mine List2" << std::endl;
+	print(listMine2);
+	std::cout << "Before Merge Real List1" << std::endl;
+	print(listReal1);
+	std::cout << "Before Merge Real List2" << std::endl;
+	print(listReal2);
+
+	listMine1.merge(listMine2);
+	listReal1.merge(listReal2);
+
+	std::cout << std::endl;
+	std::cout << "After Merge Mine List1" << std::endl;
+	print(listMine1);
+	std::cout << "After Merge Mine List2" << std::endl;
+	print(listMine2);
+	std::cout << "After Merge Real List1" << std::endl;
+	print(listReal1);
+	std::cout << "After Merge Real List2" << std::endl;
+	print(listReal2);
+
 }
 
 static void	sort()

@@ -6,7 +6,7 @@
 #    By: rpet <marvin@codam.nl>                       +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/30 13:04:14 by rpet          #+#    #+#                  #
-#    Updated: 2021/06/21 08:30:45 by rpet          ########   odam.nl          #
+#    Updated: 2021/06/23 13:20:09 by rpet          ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,8 @@ _UTILS = ListNode.hpp \
 		 BidirectionalIterator.hpp \
 		 Iterator.hpp \
 		 ReverseIterator.hpp \
-		 TypeTraits.hpp
+		 TypeTraits.hpp \
+		 Utils.hpp
 _TESTS = tests.hpp 
 CONTAINERS = $(addprefix $(DIRCONTAINERS), $(_CONTAINERS))
 UTILS = $(addprefix $(DIRUTILS), $(_UTILS))

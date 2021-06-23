@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:26:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/22 13:56:24 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/23 07:20:15 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int		main(int argc, char **argv)
 	else
 		std::cout << "Program needs specific arguments, type \"help\" for more options." << std::endl;
 
-	std::cout << "TO DO: UNDERSCORE PRIVATE SHIT" << std::endl;
 // Testing for leaks and calling destructor manually
 //	lst1.~list();
 //	while(1);
