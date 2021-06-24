@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/23 14:46:39 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/24 13:22:53 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,39 +409,58 @@ namespace ft
 			// Merge
 			void	merge(list &x)
 			{
+				merge(x, ft::less<T>);
+			}
+
+			template <class Compare>
+			void	merge(list &x, Compare comp)
+			{	
 				if (*this == x)
 					return ;
 
 				iterator	it = begin();
 
-				while (it != end())
+				while (it != end() && x.size())
 				{
-					if (*it > *x.begin() && x.size())
+					if (comp(*x.begin(), *it))
 						splice(it, x, x.begin());
 					else
 						it++;
 				}
+				splice(end(), x);
 			}
 
-//			template <class Compare>
-//			void	merge(list &x, Compare comp)
-//			{
-//			}
-
 			// Sort
-//			void	sort()
-//			{
-//			}
+			void	sort()
+			{
+				sort(ft::less<T>);
+			}
 
-//			template <class Compare>
-//			void	sort(Compare comp)
-//			{
-//			}
+			template <class Compare>
+			void	sort(Compare comp)
+			{
+				if (size() <= 1)
+					return ;
+
+				list		halfList;
+				iterator	middle = begin();
+
+				for (size_t i = 0; i < size() / 2; i++)
+					middle++;
+				halfList.splice(halfList.begin(), *this, middle, end());
+				sort(comp);
+				halfList.sort(comp);
+				merge(halfList, comp);
+			}
 
 			// Reverse
-//			void	reverse()
-//			{
-//			}
+			void	reverse()
+			{
+				iterator	it = begin();
+				
+				while (it != end())
+					splice(begin(), *this, it++);
+			}
 
 		///////////////
 		// OBSERVERS //
@@ -564,30 +583,45 @@ namespace ft
 						ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 			}
 
-//			template <class T, class Alloc>
-//			bool operator!=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
-//			{
-//				return !(lhs == rhs);
-//			}
+			template <class T, class Alloc>
+			bool operator!=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+			{
+				return !(lhs == rhs);
+			}
 
-//			template <class T, class Alloc>
-//			bool operator<(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+			template <class T, class Alloc>
+			bool operator<(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+			{
+				return (ft::lexicographical_compare(lhs.begin(), lhs.end(),
+							rhs.begin(), rhs.end()));
+			}
 
-//			template <class T, class Alloc>
-//			bool operator<=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+			template <class T, class Alloc>
+			bool operator<=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+			{
+				return (ft::lexicographical_compare(lhs.begin(), lhs.end(),
+							rhs.begin(), rhs.end()) || lhs == rhs);
+			}
 
-//			template <class T, class Alloc>
-//			bool operator>(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+			template <class T, class Alloc>
+			bool operator>(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+			{
+				return !(ft::lexicographical_compare(lhs.begin(), lhs.end(),
+							rhs.begin(), rhs.end()) || lhs == rhs);
+			}
 
-//			template <class T, class Alloc>
-//			bool operator>=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+			template <class T, class Alloc>
+			bool operator>=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
+			{
+				return !(ft::lexicographical_compare(lhs.begin(), lhs.end(),
+							rhs.begin(), rhs.end()));
+			}
 
 			// Swap
-//			template <class T, class Alloc>
-//			void	swap(list<T, Alloc> &x, list<T, Alloc> &y)
-//			{
-//				x.swap(y);
-//			}
-
+			template <class T, class Alloc>
+			void	swap(list<T, Alloc> &x, list<T, Alloc> &y)
+			{
+				x.swap(y);
+			}
 }
 #endif

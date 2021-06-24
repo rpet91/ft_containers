@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 09:37:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/23 14:11:11 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/24 13:51:02 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,20 @@
 #include <map>
 #include <climits>
 #include <cmath>
+#include <cstdlib>
+
+// TESTER HELPER FUNCTIONS
 
 template <typename T>
 static void	setup(T &list)
 {
 	for (size_t i = 1; i < 6; i++)
 		list.push_back(i * 5);
+}
+
+static int	getRandomNumber()
+{
+	return(rand() % 1337);
 }
 
 template <typename T>
@@ -42,15 +50,27 @@ static void printAddress(T &list)
 		std::cout << "Index [" << i << "]: " << &*cur << std::endl;
 }
 
-bool	singleArg(int &nb)
+bool	singleArg(int nb)
 {
 	return (nb == 15);
 }
 
-bool	nearArgs(int &first, int &second)
+bool	nearArgs(int first, int second)
 {
 	return (fabs(first - second) < 3);
 }
+
+bool	myComparison(int first, int second)
+{
+	return (first > second);
+}
+
+bool	sortEvenFromOdd(int first, int second)
+{
+	return (first % 2 == 0 && second % 2 == 1);
+}
+
+// LIST TESTS
 
 static void	constructor()
 {
@@ -68,6 +88,7 @@ static void	constructor()
 	print(rangeConstructor);
 	std::cout << "Copy constructor:" << std::endl;	
 	print(copyConstructor);
+	std::cout << std::endl;
 }
 
 static void	begin()
@@ -98,6 +119,7 @@ static void	begin()
 	std::cout << "Begin Real: " << *realIt << std::endl;
 //	std::cout << "Const Begin Mine: " << *mineConstIt << std::endl;
 //	std::cout << "Const Begin Real: " << *realConstIt << std::endl;
+	std::cout << std::endl;
 }
 
 static void	end()
@@ -129,6 +151,7 @@ static void	end()
 	std::cout << "End Real: " << *realIt << std::endl;
 //	std::cout << "Const End Mine: " << *mineConstIt << std::endl;
 //	std::cout << "Const End Real: " << *realConstIt << std::endl;
+	std::cout << std::endl;
 }
 
 static void rbegin()
@@ -159,6 +182,7 @@ static void rbegin()
 	std::cout << "Rbegin Real: " << *realIt << std::endl;
 //	std::cout << "Const Rbegin Mine: " << *mineConstIt << std::endl;
 //	std::cout << "Const Rbegin Real: " << *realConstIt << std::endl;
+	std::cout << std::endl;
 }
 
 static void	rend()
@@ -190,6 +214,7 @@ static void	rend()
 	std::cout << "Rend Real: " << *realIt << std::endl;
 //	std::cout << "Const Rend Mine: " << *mineConstIt << std::endl;
 //	std::cout << "Const Rend Real: " << *realConstIt << std::endl;
+	std::cout << std::endl;
 }
 
 static void	empty()
@@ -206,6 +231,7 @@ static void	empty()
 	
 	std::cout << "Mine: " << listMine.empty() << std::endl;
 	std::cout << "Real: " << listReal.empty() << std::endl;
+	std::cout << std::endl;
 }
 
 static void	size()
@@ -218,6 +244,7 @@ static void	size()
 
 	std::cout << "Mine: " << listMine.size() << std::endl;
 	std::cout << "Real: " << listReal.size() << std::endl;
+	std::cout << std::endl;
 }
 
 static void max_size()
@@ -230,6 +257,7 @@ static void max_size()
 
 	std::cout << "Mine: " << listMine.max_size() << std::endl;
 	std::cout << "Real: " << listReal.max_size() << std::endl;
+	std::cout << std::endl;
 }
 
 static void	front()
@@ -242,6 +270,7 @@ static void	front()
 
 	std::cout << "Mine: " << listMine.front() << std::endl;
 	std::cout << "Real: " << listReal.front() << std::endl;
+	std::cout << std::endl;
 }
 
 static void back()
@@ -254,6 +283,7 @@ static void back()
 
 	std::cout << "Mine: " << listMine.back() << std::endl;
 	std::cout << "Real: " << listReal.back() << std::endl;
+	std::cout << std::endl;
 }
 
 static void	assign()
@@ -280,6 +310,7 @@ static void	assign()
 	print(listMine);
 	std::cout << "Fill Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	push_front()
@@ -297,6 +328,7 @@ static void	push_front()
 	print(listMine);
 	std::cout << "Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	pop_front()
@@ -314,6 +346,7 @@ static void	pop_front()
 	print(listMine);
 	std::cout << "Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	push_back()
@@ -331,6 +364,7 @@ static void	push_back()
 	print(listMine);
 	std::cout << "Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	pop_back()
@@ -348,6 +382,7 @@ static void	pop_back()
 	print(listMine);
 	std::cout << "Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	insert()
@@ -382,6 +417,7 @@ static void	insert()
 	print(listMine);
 	std::cout << "Range Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	erase()
@@ -406,6 +442,7 @@ static void	erase()
 	std::cout << "Range Real:" << std::endl;
 	std::cout << "Next: " << *listReal.erase(++listReal.begin(), --listReal.end()) << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	swap()
@@ -437,6 +474,7 @@ static void	swap()
 	printAddress(listMine);
 	std::cout << "After Real:" << std::endl;
 	printAddress(listReal);
+	std::cout << std::endl;
 }
 
 static void	resize()
@@ -460,6 +498,7 @@ static void	resize()
 	print(listMine);
 	std::cout << "After Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	clear()
@@ -483,6 +522,7 @@ static void	clear()
 	print(listMine);
 	std::cout << "After Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	splice()
@@ -497,7 +537,7 @@ static void	splice()
 
 	std::cout << "Before Entire List Mine:" << std::endl;
 	printAddress(listMine);
-	std::cout << "Before Entire Splice List Mine:" << std::endl;
+	std::cout << "Before Entire List Mine:" << std::endl;
 	printAddress(listSpliceMine);
 
 	listMine.splice(++listMine.begin(), listSpliceMine);
@@ -508,13 +548,14 @@ static void	splice()
 	std::cout << std::endl;
 	std::cout << "Before Entire List Real:" << std::endl;
 	printAddress(listReal);
-	std::cout << "Before Entire Splice List Real:" << std::endl;
+	std::cout << "Before Entire List Real:" << std::endl;
 	printAddress(listSpliceReal);
 
 	listReal.splice(++listReal.begin(), listSpliceReal);
 
 	std::cout << "After Entire List Real:" << std::endl;
 	printAddress(listReal);
+	std::cout << std::endl;
 }
 
 static void	remove()
@@ -537,6 +578,7 @@ static void	remove()
 	print(listMine);
 	std::cout << "Remove Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 
@@ -555,6 +597,7 @@ static void remove_if()
 	print(listMine);
 	std::cout << "Remove If Real:" << std::endl;
 	print(listReal);
+	std::cout << std::endl;
 }
 
 static void	unique()
@@ -604,6 +647,7 @@ static void	unique()
 	print(listMine2);
 	std::cout << "Unique Predicate Real:" << std::endl;
 	print(listReal2);
+	std::cout << std::endl;
 }
 
 static void	merge()
@@ -611,8 +655,10 @@ static void	merge()
 	std::cout << "\t===MERGE===" << std::endl;
 	ft::list<int> 	listMine1;
 	ft::list<int> 	listMine2;
+	ft::list<int> 	listMine3;
 	std::list<int>	listReal1;
 	std::list<int>	listReal2;
+	std::list<int>	listReal3;
 	setup(listMine1);
 	setup(listReal1);
 
@@ -621,54 +667,172 @@ static void	merge()
 		listMine2.push_back(i * 7);
 		listReal2.push_back(i * 7);
 	}
+	for (int i = -2; i < 4; i++)
+	{
+		listMine3.push_back(i * 10);
+		listReal3.push_back(i * 10);
+	}
 
-	std::cout << "Before Merge Mine List1" << std::endl;
+	std::cout << "Before Merge Mine1:" << std::endl;
 	print(listMine1);
-	std::cout << "Before Merge Mine List2" << std::endl;
+	std::cout << "Before Merge Mine2:" << std::endl;
 	print(listMine2);
-	std::cout << "Before Merge Real List1" << std::endl;
+	std::cout << "Before Merge Real1:" << std::endl;
 	print(listReal1);
-	std::cout << "Before Merge Real List2" << std::endl;
+	std::cout << "Before Merge Real2:" << std::endl;
 	print(listReal2);
 
 	listMine1.merge(listMine2);
 	listReal1.merge(listReal2);
 
 	std::cout << std::endl;
-	std::cout << "After Merge Mine List1" << std::endl;
+	std::cout << "After Merge Mine1:" << std::endl;
 	print(listMine1);
-	std::cout << "After Merge Mine List2" << std::endl;
+	std::cout << "After Merge Mine2:" << std::endl;
 	print(listMine2);
-	std::cout << "After Merge Real List1" << std::endl;
+	std::cout << "After Merge Real1:" << std::endl;
 	print(listReal1);
-	std::cout << "After Merge Real List2" << std::endl;
+	std::cout << "After Merge Real2:" << std::endl;
 	print(listReal2);
+
+	std::cout << std::endl;
+	std::cout << "Before Function Merge Mine1:" << std::endl;
+	print(listMine1);
+	std::cout << "Before Function Merge Mine3:" << std::endl;
+	print(listMine3);
+	std::cout << "Before Function Merge Real1:" << std::endl;
+	print(listReal1);
+	std::cout << "Before Function Merge Real3:" << std::endl;
+	print(listReal3);
+
+	listMine1.merge(listMine3, myComparison);
+	listReal1.merge(listReal3, myComparison);
+
+	std::cout << "After Function Merge Mine1:" << std::endl;
+	print(listMine1);
+	std::cout << "After Function Merge Mine3:" << std::endl;
+	print(listMine3);
+	std::cout << "After Function Merge Real1:" << std::endl;
+	print(listReal1);
+	std::cout << "After Function Merge Real3:" << std::endl;
+	print(listReal3);
+	std::cout << std::endl;
 
 }
 
 static void	sort()
 {
 	std::cout << "\t===SORT===" << std::endl;
+	ft::list<int> 	listMine1;
+	ft::list<int> 	listMine2;
+	std::list<int>	listReal1;
+	std::list<int>	listReal2;
+
+	for (size_t i = 0; i < 6; i++)
+	{
+		int	nb = getRandomNumber();
+
+		listMine1.push_back(nb);
+		listReal1.push_back(nb);
+		nb = getRandomNumber();
+		listMine2.push_back(nb);
+		listReal2.push_back(nb);
+	}
+
+	std::cout << "Before Sort Mine1:" << std::endl;
+	print(listMine1);
+	std::cout << "Before Sort Real1:" << std::endl;
+	print(listReal1);
+
+	listMine1.sort();
+	listReal1.sort();
+
+	std::cout << "After Sort Mine1:" << std::endl;
+	print(listMine1);
+	std::cout << "After Sort Real1:" << std::endl;
+	print(listReal1);
+
+	std::cout << std::endl;
+	std::cout << "Before Sort Function Mine2:" << std::endl;
+	print(listMine2);
+	std::cout << "Before Sort Function Real2:" << std::endl;
+	print(listReal2);
+
+	listMine2.sort(sortEvenFromOdd);
+	listReal2.sort(sortEvenFromOdd);
+
+	std::cout << "After Sort Function Mine2:" << std::endl;
+	print(listMine2);
+	std::cout << "After Sort Function Real2:" << std::endl;
+	print(listReal2);
+	std::cout << std::endl;
 }
 
 static void	reverse()
 {
 	std::cout << "\t===REVERSE===" << std::endl;
-}
-
-static void	get_allocator()
-{
-	std::cout << "\t===GET ALLOCATOR===" << std::endl;
 	ft::list<int> 	listMine;
 	std::list<int>	listReal;
+	setup(listMine);
+	setup(listReal);
 
-	if (listMine.get_allocator() == listReal.get_allocator())
-		std::cout << "Mine and Real return the same type of allocator." << std::endl;
+	listMine.reverse();
+	listReal.reverse();
+
+	std::cout << "After Reverse Mine:" << std::endl;
+	print(listMine);
+	std::cout << "After Reverse Real:" << std::endl;
+	print(listReal);
+	std::cout << std::endl;
+}
+
+static void	get_allocator() // not relevant
+{
+	std::cout << "\t===GET ALLOCATOR===" << std::endl;
+	ft::list<int> 					listMine;
+	ft::list<int>::allocator_type	allocator;
+
+	std::cout << "Big Test" << std::endl;
+	allocator = listMine.get_allocator();
+	std::cout << std::endl;
 }
 
 static void	relational_operators()
 {
 	std::cout << "\t===RELATIONAL OPERATORS===" << std::endl;
+	ft::list<int> 	listMine1;
+	ft::list<int>	listMine2;
+	setup(listMine1);
+	setup(listMine2);
+
+	std::cout << "== Operator:" << std::endl;
+	if (listMine1 == listMine2)
+		std::cout << "Check" << std::endl;
+
+	listMine1.push_back(1337);
+	std::cout << "!= Operator:" << std::endl;
+	if (listMine1 != listMine2)
+		std::cout << "Check" << std::endl;
+
+	listMine2.push_back(1338);
+	std::cout << "< Operator:" << std::endl;
+	if (listMine1 < listMine2)
+		std::cout << "Check" << std::endl;
+
+	listMine1.pop_back();
+	listMine1.push_back(1338); // 1337 = true, 1338 = true, 1339 = false
+	std::cout << "<= Operator:" << std::endl;
+	if (listMine1 <= listMine2)
+		std::cout << "Check" << std::endl;
+
+	std::cout << "> Operator:" << std::endl;
+	if (listMine1 > listMine2)
+		std::cout << "Check" << std::endl;
+
+	std::cout << ">= Operator:" << std::endl;
+	if (listMine1 >= listMine2)
+		std::cout << "Check" << std::endl;
+	std::cout << std::endl;
 }
 
 static void	all()

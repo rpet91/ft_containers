@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:26:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/23 07:20:15 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/24 13:49:17 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include "queue.hpp"
 #include "tests.hpp"
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include <list>
 
 void	checkLeaks()
@@ -36,8 +38,10 @@ int		validContainer(std::string choice)
 
 int		main(int argc, char **argv)
 {
+	// Turn on or off to check for leaks.
 	atexit(checkLeaks);
 
+	srand(time(0));
 	if (argc != 3)
 	{
 		if (argc == 2 && static_cast<std::string>(argv[1]) == "help")
@@ -52,9 +56,5 @@ int		main(int argc, char **argv)
 		testContainer(argv[1], argv[2]);
 	else
 		std::cout << "Program needs specific arguments, type \"help\" for more options." << std::endl;
-
-// Testing for leaks and calling destructor manually
-//	lst1.~list();
-//	while(1);
 	return (0);
 }
