@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 09:31:42 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/21 08:35:27 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/28 09:50:57 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,63 @@ static void	printHelpList()
 	std::cout << "\t" << "- get_allocator" << std::endl;
 	std::cout << "    " << "NON-MEMBER FUNCTION OVERLOADS:" << std::endl;
 	std::cout << "\t" << "- relational_operators" << std::endl;
-	std::cout << "\t" << "- swap" << std::endl;
+	std::cout << "\t" << "- swap_overload" << std::endl;
 	std::cout << "    " << "ALL FUNCTIONS:" << std::endl;
 	std::cout << "\t" << "- all" << std::endl;
 }
+
+void	printHelpVector()
+{
+	std::cout << "For the vector functions you can choose the following options:" << std::endl;
+	std::cout << "    " << "CONSTRUCTORS:" << std::endl;
+	std::cout << "\t" << "- constructor" << std::endl;
+	std::cout << "    " << "ITERATORS:" << std::endl;
+	std::cout << "\t" << "- begin" << std::endl;
+	std::cout << "\t" << "- end" << std::endl;
+	std::cout << "\t" << "- rbegin" << std::endl;
+	std::cout << "\t" << "- rend" << std::endl;
+	std::cout << "    " << "CAPACITY:" << std::endl;
+	std::cout << "\t" << "- size" << std::endl;
+	std::cout << "\t" << "- max_size" << std::endl;
+	std::cout << "\t" << "- resize" << std::endl;
+	std::cout << "\t" << "- capacity" << std::endl;
+	std::cout << "\t" << "- empty" << std::endl;
+	std::cout << "\t" << "- reserve" << std::endl;
+	std::cout << "    " << "ELEMENT ACCESS:" << std::endl;
+	std::cout << "\t" << "- operator_subscript" << std::endl;
+	std::cout << "\t" << "- at" << std::endl;
+	std::cout << "\t" << "- front" << std::endl;
+	std::cout << "\t" << "- back" << std::endl;
+	std::cout << "    " << "MODIFIERS:" << std::endl;
+	std::cout << "\t" << "- assign" << std::endl;
+	std::cout << "\t" << "- push_back" << std::endl;
+	std::cout << "\t" << "- pop_back" << std::endl;
+	std::cout << "\t" << "- insert" << std::endl;
+	std::cout << "\t" << "- erase" << std::endl;
+	std::cout << "\t" << "- swap" << std::endl;
+	std::cout << "\t" << "- clear" << std::endl;
+	std::cout << "    " << "ALLOCATOR:" << std::endl;
+	std::cout << "\t" << "- get_allocator" << std::endl;
+	std::cout << "    " << "NON-MEMBER FUNCTION OVERLOADS:" << std::endl;
+	std::cout << "\t" << "- relational_operators" << std::endl;
+	std::cout << "\t" << "- swap_overload" << std::endl;
+	std::cout << "    " << "TEMPLATE SPECIALIZATIONS:" << std::endl;
+	std::cout << "\t" << "- vector_bool" << std::endl;
+	std::cout << "    " << "ALL FUNCTIONS:" << std::endl;
+	std::cout << "\t" << "- all" << std::endl;
+}
+
+//void	printHelpMap()
+//{
+//}
+
+//void	printHelpStack()
+//{
+//}
+
+//void	printHelpQueue()
+//{
+//}
 
 void	printHelp()
 {
@@ -75,8 +128,8 @@ void	printHelpContainer(std::string container)
 {
 	if (container == "list")
 		printHelpList();
-//	if (container == "vector")
-//		printHelpVector();
+	if (container == "vector")
+		printHelpVector();
 //	if (container == "map")
 //		printHelpMap();
 //	if (container == "stack")
@@ -89,8 +142,8 @@ void	testContainer(std::string container, std::string function)
 {
 	if (container == "list")
 		testList(function);
-//	if (container == "vector")
-//		testVector(function);
+	if (container == "vector")
+		testVector(function);
 //	if (container == "map")
 //		testMap(function);
 //	if (container == "stack")

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:26:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/24 13:49:17 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/28 09:42:28 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		validContainer(std::string choice)
 
 int		main(int argc, char **argv)
 {
-	// Turn on or off to check for leaks.
+	// Turn on/off to check for leaks.
 	atexit(checkLeaks);
 
 	srand(time(0));

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/24 13:50:29 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/28 11:18:58 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,16 @@
 
 namespace ft
 {
-	template < typename Node, typename T >
-	class ListIterator : public BidirectionalIterator< Node >
+	template < class Node, class T, class Pointer = T*, class Reference = T&>
+	class ListIterator : public BidirectionalIterator< Node, Node*, Node& >
 	{
 		public:
-			typedef ListIterator					iterator;
-			typedef	BidirectionalIterator< Node > 	bidirectional_iterator;
-			typedef ptrdiff_t						size_type;
-			typedef T&								reference;
+			typedef ListIterator<Node, T>						iterator;
+			typedef ListIterator<const Node, const T>			const_iterator;
+			typedef	BidirectionalIterator<Node, Node*, Node&> 	bidirectional_iterator;
+			typedef ptrdiff_t									size_type;
+			typedef T*											pointer;
+			typedef T&											reference;
 
 		public:
 			ListIterator() : bidirectional_iterator()
@@ -54,6 +56,11 @@ namespace ft
 			reference	operator*()
 			{
 				return (this->_ptr->data);
+			}
+			
+			pointer		operator->()
+			{
+				return (&this->_ptr->data);
 			}
 
 			iterator	&operator++()
@@ -84,14 +91,19 @@ namespace ft
 				return (old);
 			}
 
-			bool			operator==(iterator const &src) const
+			bool		operator==(iterator const &src) const
 			{
 				return (this->_ptr == src._ptr);
 			}
 
-			bool			operator!=(iterator const &src) const
+			bool		operator!=(iterator const &src) const
 			{
 				return (this->_ptr != src._ptr);
+			}
+
+			operator	const_iterator() const
+			{
+				return (const_iterator(this->_ptr));
 			}
 	};
 }

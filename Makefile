@@ -6,12 +6,15 @@
 #    By: rpet <marvin@codam.nl>                       +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/30 13:04:14 by rpet          #+#    #+#                  #
-#    Updated: 2021/06/23 13:20:09 by rpet          ########   odam.nl          #
+#    Updated: 2021/06/28 09:38:47 by rpet          ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = ft_containers
-SRCS = main.cpp tests/info.cpp tests/testList.cpp
+SRCS = main.cpp \
+	   tests/info.cpp \
+	   tests/testList.cpp \
+	   tests/testVector.cpp
 OBJS = $(SRCS:.cpp=.o)
 FLAGS = -Wall -Werror -Wextra -std=c++98 -pedantic
 #DEBUG = -fsanitize=address -g3

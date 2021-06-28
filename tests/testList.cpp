@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 09:37:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/24 13:51:02 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/28 11:23:02 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,24 +101,24 @@ static void	begin()
 
 	ft::list<int>::iterator			mineIt = listMine.begin();
 	std::list<int>::iterator		realIt = listReal.begin();
-//	ft::list<int>::const_iterator	mineConstIt = listMine.begin();
-//	std::list<int>::const_iterator	realConstIt = listReal.begin();
+	ft::list<int>::const_iterator	mineConstIt = listMine.begin();
+	std::list<int>::const_iterator	realConstIt = listReal.begin();
 
 	std::cout << "Begin Mine: " << *mineIt << std::endl;
 	std::cout << "Begin Real: " << *realIt << std::endl;
-//	std::cout << "Const Begin Mine: " << *mineConstIt << std::endl;
-//	std::cout << "Const Begin Real: " << *realConstIt << std::endl;
+	std::cout << "Const Begin Mine: " << *mineConstIt << std::endl;
+	std::cout << "Const Begin Real: " << *realConstIt << std::endl;
 
 	mineIt++;
 	realIt++;
-//	mineConstIt++;
-//	realConstIt++;
+	mineConstIt++;
+	realConstIt++;
 
 	std::cout << std::endl;
 	std::cout << "Begin Mine: " << *mineIt << std::endl;
 	std::cout << "Begin Real: " << *realIt << std::endl;
-//	std::cout << "Const Begin Mine: " << *mineConstIt << std::endl;
-//	std::cout << "Const Begin Real: " << *realConstIt << std::endl;
+	std::cout << "Const Begin Mine: " << *mineConstIt << std::endl;
+	std::cout << "Const Begin Real: " << *realConstIt << std::endl;
 	std::cout << std::endl;
 }
 
@@ -132,25 +132,25 @@ static void	end()
 
 	ft::list<int>::iterator			mineIt = listMine.end();
 	std::list<int>::iterator		realIt = listReal.end();
-//	ft::list<int>::const_iterator	mineConstIt = listMine.end();
-//	std::list<int>::const_iterator	realConstIt = listReal.end();
+	ft::list<int>::const_iterator	mineConstIt = listMine.end();
+	std::list<int>::const_iterator	realConstIt = listReal.end();
 
 	// End points to the sentinel. The value is undefined. Mine is 0, Real is the size
 	std::cout << "End Mine: " << *mineIt << std::endl;
 	std::cout << "End Real: " << *realIt << std::endl;
-//	std::cout << "Const End Mine: " << *mineConstIt << std::endl;
-//	std::cout << "Const End Real: " << *realConstIt << std::endl;
+	std::cout << "Const End Mine: " << *mineConstIt << std::endl;
+	std::cout << "Const End Real: " << *realConstIt << std::endl;
 	
 	mineIt++;
 	realIt++;
-//	mineConstIt++;
-//	realConstIt++;
+	mineConstIt++;
+	realConstIt++;
 
 	std::cout << std::endl;
 	std::cout << "End Mine: " << *mineIt << std::endl;
 	std::cout << "End Real: " << *realIt << std::endl;
-//	std::cout << "Const End Mine: " << *mineConstIt << std::endl;
-//	std::cout << "Const End Real: " << *realConstIt << std::endl;
+	std::cout << "Const End Mine: " << *mineConstIt << std::endl;
+	std::cout << "Const End Real: " << *realConstIt << std::endl;
 	std::cout << std::endl;
 }
 
@@ -164,24 +164,24 @@ static void rbegin()
 
 	ft::list<int>::reverse_iterator			mineIt = listMine.rbegin();
 	std::list<int>::reverse_iterator		realIt = listReal.rbegin();
-//	ft::list<int>::const_reverese_iterator	mineConstIt = listMine.rbegin();
-//	std::list<int>::const_reverse_iterator	realConstIt = listReal.rbegin();
+//	ft::list<int>::const_reverse_iterator	mineConstIt = listMine.rbegin();
+	std::list<int>::const_reverse_iterator	realConstIt = listReal.rbegin();
 
 	std::cout << "Rbegin Mine: " << *mineIt << std::endl;
 	std::cout << "Rbegin Real: " << *realIt << std::endl;
 //	std::cout << "Const Rbegin Mine: " << *mineConstIt << std::endl;
-//	std::cout << "Const Rbegin Real: " << *realConstIt << std::endl;
-	
+	std::cout << "Const Rbegin Real: " << *realConstIt << std::endl;
+
 	mineIt++;
 	realIt++;
 //	mineConstIt++;
-//	realConstIt++;
+	realConstIt++;
 
 	std::cout << std::endl;
 	std::cout << "Rbegin Mine: " << *mineIt << std::endl;
 	std::cout << "Rbegin Real: " << *realIt << std::endl;
 //	std::cout << "Const Rbegin Mine: " << *mineConstIt << std::endl;
-//	std::cout << "Const Rbegin Real: " << *realConstIt << std::endl;
+	std::cout << "Const Rbegin Real: " << *realConstIt << std::endl;
 	std::cout << std::endl;
 }
 
@@ -196,24 +196,24 @@ static void	rend()
 	ft::list<int>::reverse_iterator			mineIt = listMine.rend();
 	std::list<int>::reverse_iterator		realIt = listReal.rend();
 //	ft::list<int>::const_reverse_iterator	mineConstIt = listMine.rend();
-//	std::list<int>::const_reverse_iterator	realConstIt = listReal.rend();
+	std::list<int>::const_reverse_iterator	realConstIt = listReal.rend();
 
 	// End points to the sentinel. The value is undefined. Mine is 0, Real is the size
 	std::cout << "Rend Mine: " << *mineIt << std::endl;
 	std::cout << "Rend Real: " << *realIt << std::endl;
 //	std::cout << "Const Rend Mine: " << *mineConstIt << std::endl;
-//	std::cout << "Const Rend Real: " << *realConstIt << std::endl;
+	std::cout << "Const Rend Real: " << *realConstIt << std::endl;
 	
 	mineIt++;
 	realIt++;
 //	mineConstIt++;
-//	realConstIt++;
+	realConstIt++;
 
 	std::cout << std::endl;
 	std::cout << "Rend Mine: " << *mineIt << std::endl;
 	std::cout << "Rend Real: " << *realIt << std::endl;
 //	std::cout << "Const Rend Mine: " << *mineConstIt << std::endl;
-//	std::cout << "Const Rend Real: " << *realConstIt << std::endl;
+	std::cout << "Const Rend Real: " << *realConstIt << std::endl;
 	std::cout << std::endl;
 }
 
@@ -835,6 +835,41 @@ static void	relational_operators()
 	std::cout << std::endl;
 }
 
+void	swap_overload()
+{
+	std::cout << "\t===SWAP OVERLOAD===" << std::endl;
+	ft::list<int> 	listMine1;
+	ft::list<int> 	listMine2;
+	std::list<int>	listReal1;
+	std::list<int>	listReal2;
+
+	for (size_t i = 0; i < 6; i++)
+	{
+		int	nb = getRandomNumber();
+
+		listMine1.push_back(nb);
+		listReal1.push_back(nb);
+		nb = getRandomNumber();
+		listMine2.push_back(nb);
+		listReal2.push_back(nb);
+	}
+
+	std::cout << "Before Swap Overload Mine1:" << std::endl;
+	print(listMine1);
+	std::cout << "Before Swap Overload Real1:" << std::endl;
+	print(listReal1);
+
+	ft::swap(listMine1, listMine2);
+	std::swap(listReal1, listReal2);
+
+	std::cout << std::endl;
+	std::cout << "After Swap Overload Mine1:" << std::endl;
+	print(listMine1);
+	std::cout << "After Swap Overload Real1:" << std::endl;
+	print(listReal1);
+	std::cout << std::endl;
+}
+
 static void	all()
 {
 	constructor();
@@ -866,6 +901,7 @@ static void	all()
 	reverse();
 	get_allocator();
 	relational_operators();
+	swap_overload();
 }
 
 void		testList(std::string choice)
@@ -902,13 +938,14 @@ void		testList(std::string choice)
 	functions["reverse"] = reverse;
 	functions["get_allocator"] = get_allocator;
 	functions["relational_operators"] = relational_operators;
+	functions["swap_overload"] = swap_overload;
 	functions["all"] = all;
 
 	if (functions.find(choice) != functions.end())
 		functions[choice]();
 	else
 	{
-		std::cout << "The chosen function does not exist. Type \"list help\"" <<
-			" for a list of valid options." << std::endl;
+		std::cout << "The function \"" << choice <<
+			"\" doesn't exist. Type \"list help\" for a list of options." << std::endl;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/21 09:35:32 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/28 11:14:41 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,19 @@
 # define BIDIRECTIONALITERATOR_HPP
 # include "Iterator.hpp"
 # include "TypeTraits.hpp"
+# include <iostream>
 
 namespace ft
 {
-	template < typename T >
-	class BidirectionalIterator : public Iterator< ft::bidirectional_iterator_tag, T >
+	template < class T, class Pointer, class Reference,
+			 class Category = ft::bidirectional_iterator_tag >
+	class BidirectionalIterator : public Iterator< Category, T >
 	{
-		typedef Iterator< ft::bidirectional_iterator_tag, T >	base_iterator;
-		typedef BidirectionalIterator							iterator;
+		typedef Iterator<Category, T>							base_iterator;
+		typedef BidirectionalIterator<T, const T*, const T&>	const_iterator;
+		typedef BidirectionalIterator<T, T*, T&>				iterator;
+		typedef T*												pointer;
+		typedef T&												reference;
 
 		public:
 			BidirectionalIterator() : base_iterator()
@@ -47,14 +52,16 @@ namespace ft
 				return (*this);
 			}
 
-			iterator	&operator++()
+/*			iterator	&operator++()
 			{
+				std::cout << "++ operator" << std::endl;
 				++*this;
 				return (*this);
 			}
 
 			iterator	operator++(int)
 			{
+				std::cout << "++ int operator" << std::endl;
 				iterator	old = *this;
 			
 				++*this;
@@ -63,18 +70,24 @@ namespace ft
 
 			iterator	&operator--()
 			{
+				std::cout << "-- operator" << std::endl;
 				--*this;
 				return (*this);
 			}
 
 			iterator	operator--(int)
 			{
+				std::cout << "-- int operator" << std::endl;
 				iterator	old = *this;
 
 				--*this;
 				return (old);
-			}
+			}*/
 
+			operator	const_iterator() const
+			{
+				return (const_iterator(this->_ptr));
+			}
 	};
 }
 

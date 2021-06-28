@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/24 13:22:53 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/28 11:23:40 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ namespace ft
 	template < class T, class Alloc = std::allocator<T> >
 	class list
 	{
-
 		//////////////////
 		// MEMBER TYPES //
 		//////////////////
@@ -135,7 +134,7 @@ namespace ft
 			
 			const_reverse_iterator	rbegin() const
 			{
-				return (reverse_iterator(&this->_sentinel));
+				return (const_reverse_iterator(&this->_sentinel));
 			}
 		
 			// Rend
@@ -146,7 +145,7 @@ namespace ft
 
 			const_reverse_iterator	rend() const
 			{
-				return (reverse_iterator(this->_sentinel.next));
+				return (const_reverse_iterator(this->_sentinel.next));
 			}
 
 		//////////////

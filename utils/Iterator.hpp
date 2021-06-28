@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:37:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/21 09:25:25 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/24 14:15:35 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ namespace ft
 			 class Pointer = T*, class Reference = T& >
 	class Iterator
 	{
-
 		public:
 			typedef T			value_type;
 			typedef Distance	difference_type;
