@@ -6,15 +6,19 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:55 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/28 12:43:58 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/01 11:55:05 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
+# include "RandomAccessIterator.hpp"
+# include "ReverseIterator.hpp"
 # include "TypeTraits.hpp"
 # include <memory>
 # include <cstddef>
+# include <stdexcept>
+# include <iostream> //todo: weg
 
 namespace ft
 {
@@ -26,14 +30,24 @@ namespace ft
 		//////////////////
 
 		public:
-			typedef T			value_type;
-			typedef Alloc		allocator_type;
-			typedef ptrdiff_t	difference_type;
-			typedef size_t		size_type;
+			typedef T												value_type;
+			typedef Alloc											allocator_type;
+			typedef typename allocator_type::reference				reference;
+			typedef typename allocator_type::const_reference		const_reference;
+			typedef typename allocator_type::pointer				pointer;
+			typedef typename allocator_type::const_pointer			const_pointer;
+			typedef RandomAccessIterator<T, T*, T&>					iterator;
+			typedef RandomAccessIterator<T, const T*, const T&>		const_iterator;
+			typedef ReverseIterator<iterator>						reverse_iterator;
+			typedef ReverseIterator<const_iterator>					const_reverse_iterator;
+			typedef ptrdiff_t										difference_type;
+			typedef size_t											size_type;
 
 		private:
 			allocator_type	_allocator;
 			size_type		_size;
+			size_type		_capacity;
+			pointer			_data;
 
 		////////////////////////////////////////////////////
 		// CONSTRUCTORS, DESTRUCTOR & ASSIGNMENT OPERATOR //
@@ -41,27 +55,29 @@ namespace ft
 
 		public:
 			// Default constructor
-			explicit vector(const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
+			explicit vector(const allocator_type &alloc = allocator_type()) :
+				_allocator(alloc), _size(0), _capacity(0), _data(0)
 			{
 			}
 
 			// Fill constructor
-/*			explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
+			explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(n), _capacity(n), _data(0)
 			{
-				assign(n, val);
-			}*/
+				this->_data = this->_allocator.allocate(this->_capacity);
+				for (size_t i = 0; i < this->_size; i++)
+					this->_allocator.construct(&this->_data[i], val);
+			}
 
 			// Range constructor
 /*			template <class InputIterator>
 			vector(InputIterator first, InputIterator last, 
 				typename ft::iterator_traits<InputIterator>::type* = 0,
-				const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
+				const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0), _capacity(0), _data(0)
 			{
-				assign(first, last);
 			}*/
 
 			// Copy constructor
-/*			vector(const vector &x) : _size(0)
+/*			vector(const vector &x) : _size(0), _capacity(0), _data(0)
 			{
 				*this = x;
 			}*/
@@ -69,13 +85,14 @@ namespace ft
 			// Destructor
 			~vector()
 			{
-				// clear();
+				clear();
 			}
 
 			// Assignment operator
 /*			vector	&operator=(const vector &x)
 			{
 				this->_allocator = x._allocator;
+				clear();
 				assign(x.begin(), x.end());
 				return (*this);
 			}*/
@@ -83,6 +100,51 @@ namespace ft
 		///////////////
 		// ITERATORS //
 		///////////////
+		
+		public:
+			// Begin
+			iterator				begin()
+			{
+				return (iterator(this->_data));
+			}
+
+			const_iterator			begin() const
+			{
+				return (const_iterator(this->_data));
+			}
+
+			// End
+			iterator				end()
+			{
+				return (iterator(&this->_data[this->_size]));
+			}
+
+			const_iterator			end() const
+			{
+				return (const_iterator(&this->_data[this->_size]));
+			}
+
+			// Rbegin
+			reverse_iterator		rbegin()
+			{
+				return (reverse_iterator(&this->_data[this->_size]));
+			}
+
+			const_reverse_iterator	rbegin() const
+			{
+				return (const_reverse_iterator(&this->_data[this->_size]));
+			}
+
+			// Rend
+			reverse_iterator		rend()
+			{
+				return (reverse_iterator(this->_data));
+			}
+
+			const_reverse_iterator	rend() const
+			{
+				return (const_reverse_iterator(this->_data));
+			}
 
 		//////////////
 		// CAPACITY //
@@ -101,26 +163,190 @@ namespace ft
 				return (this->_allocator.max_size());
 			}
 
-	//		void		resize(size_type n, value_type val= value_type())
-	//		{
-//
-//			}
+			// Resize
+			void		resize(size_type n, value_type val= value_type())
+			{
+				while (this->_size != n)
+				{
+					if (this->_size < n)
+						push_back(val);
+					else
+						pop_back();
+				}
+			}
+
+			// Capacity
+			size_type	capacity() const
+			{
+				return (this->_capacity);
+			}
+
+			// Empty
+			bool		empty() const
+			{
+				return (this->_size == 0);
+			}
+
+			// Reserve
+			void		reserve(size_type n)
+			{
+				if (n <= this->_capacity)
+					return ;
+				this->_capacity = n;
+
+				pointer		tmp = this->_allocator.allocate(this->_capacity);
+
+				for (size_t i = 0; i < this->_size; i++)
+				{
+					this->_allocator.construct(&tmp[i], this->_data[i]);
+					this->_allocator.destroy(&this->_data[i]);
+				}
+				this->_allocator.deallocate(this->_data, this->_capacity);
+				this->_data = tmp;
+			}
 
 		////////////////////
 		// ELEMENT ACCESS //
 		////////////////////
 
+		public:
+			// Operator[]
+			reference		operator[](size_type n)
+			{
+				return (this->_data[n]);
+			}
+
+			const_reference	operator[](size_type n) const
+			{
+				return (this->_data[n]);
+			}
+
+			// At
+			reference		at(size_type n)
+			{
+				if (n >= this->_size)
+					throw (std::out_of_range("out of range"));
+				return (this->_data[n]);
+			}
+
+			const_reference	at(size_type n) const
+			{
+				if (n >= this->_size)
+					throw (std::out_of_range("out of range"));
+				return (this->_data[n]);
+			}
+
+			// Front
+			reference		front()
+			{
+				return (this->_data[0]);
+			}
+
+			const_reference	front() const
+			{
+				return (this->_data[0]);
+			}
+
+			// Back
+			reference		back()
+			{
+				return (this->_data[this->_size - 1]);
+			}
+
+			const_reference	back() const
+			{
+				return (this->_data[this->_size - 1]);
+			}
+
 		///////////////
 		// MODIFIERS //
 		///////////////
 
+		public:
+			// Assign
+//			template <class InputIterator>
+//			void	assign(InputIterator first, InputIterator last,
+//						typename ft::iterator_traits<InputIterator>::type* = 0)
+//			{
+//			}
+
+			void		assign(size_type n, const value_type &val)
+			{
+			//	clear();
+				for (size_t i = 0; i < n; i++)
+					push_back(val);
+			}
+
+			// Push back
+			void		push_back(const value_type &val)
+			{
+				if (this->_capacity == 0)
+					reserve(1);
+				else if (this->_size + 1 > this->_capacity)
+					reserve(this->_capacity * 2);
+				this->_allocator.construct(&this->_data[this->_size], val);
+				this->_size++;
+			}
+
+			// Pop back
+			void	pop_back()
+			{
+				this->_size--;
+				this->_allocator.destroy(&this->_data[this->_size]);
+			}
+
+			// Insert
+//			iterator	insert(iterator position, const value_type &val)
+//			{
+//			}
+
+//			void		insert(iterator position, size_type n, const value_type &val)
+//			{
+//			}
+
+//			template <class InputIterator>
+//			void		insert(iterator position, InputIterator first, InputIterator last)
+//			{
+//			}
+
+			// Erase
+//			iterator	erase(iterator position)
+//			{
+//			}
+
+//			iterator	erase(iterator first, iterator last)
+//			{
+//			}
+
+			// Swap
+//			void		swap(vector &x)
+//			{
+//			}
+
+			// Clear
+			void		clear()
+			{
+				while (this->_size)
+					pop_back();
+				this->_allocator.deallocate(this->_data, this->_capacity);
+			}
+
 		///////////////
 		// ALLOCATOR //
 		///////////////
+
+		public:
+			// Get allocator
+			allocator_type	get_allocator() const
+			{
+				return (this->_allocator);
+			}
 			
 		////////////////////////////////////
 		// EXTRA PRIVATE MEMBER FUNCTIONS //
 		////////////////////////////////////
+
+		public:
 
 	};
 		///////////////////////////////////

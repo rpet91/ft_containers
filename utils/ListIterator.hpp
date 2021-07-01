@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/28 11:18:58 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/01 13:48:39 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,16 +89,6 @@ namespace ft
 
 				this->_ptr = this->_ptr->prev;
 				return (old);
-			}
-
-			bool		operator==(iterator const &src) const
-			{
-				return (this->_ptr == src._ptr);
-			}
-
-			bool		operator!=(iterator const &src) const
-			{
-				return (this->_ptr != src._ptr);
 			}
 
 			operator	const_iterator() const

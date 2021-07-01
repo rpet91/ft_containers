@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/28 11:14:41 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/01 13:42:12 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define BIDIRECTIONALITERATOR_HPP
 # include "Iterator.hpp"
 # include "TypeTraits.hpp"
-# include <iostream>
+# include <iostream> //weg
 
 namespace ft
 {
@@ -23,7 +23,6 @@ namespace ft
 	class BidirectionalIterator : public Iterator< Category, T >
 	{
 		typedef Iterator<Category, T>							base_iterator;
-		typedef BidirectionalIterator<T, const T*, const T&>	const_iterator;
 		typedef BidirectionalIterator<T, T*, T&>				iterator;
 		typedef T*												pointer;
 		typedef T&												reference;
@@ -52,43 +51,71 @@ namespace ft
 				return (*this);
 			}
 
-/*			iterator	&operator++()
+			// *a
+			reference	operator*()
 			{
-				std::cout << "++ operator" << std::endl;
+				return (*this->_ptr);
+			}
+
+			// a->m
+			pointer		operator->()
+			{
+				return (&(*this->_prt));
+			}
+
+			// ++a
+			iterator	&operator++()
+			{
 				++*this;
 				return (*this);
 			}
 
+			// a++
 			iterator	operator++(int)
 			{
-				std::cout << "++ int operator" << std::endl;
 				iterator	old = *this;
 			
 				++*this;
 				return (old);
 			}
 
+			// --a
 			iterator	&operator--()
 			{
-				std::cout << "-- operator" << std::endl;
 				--*this;
 				return (*this);
 			}
 
+			// a--
 			iterator	operator--(int)
 			{
-				std::cout << "-- int operator" << std::endl;
 				iterator	old = *this;
 
 				--*this;
 				return (old);
-			}*/
-
-			operator	const_iterator() const
-			{
-				return (const_iterator(this->_ptr));
 			}
+
+			// friend declaration
+			template < class T1, class T2 >
+			friend bool operator==(BidirectionalIterator< T1, T1*, T1& > const &lhs, BidirectionalIterator< T2, T2*, T2& > const &rhs);
+
 	};
+
+	// a == b
+	template <class T1, class T2>
+	bool operator==(BidirectionalIterator< T1, T1*, T1& > const &lhs,
+			BidirectionalIterator< T2, T2*, T2& > const &rhs)
+	{
+		return (lhs._ptr == rhs._ptr);
+	}
+	
+	// a != b
+	template <class T1, class T2>
+	bool operator!=(BidirectionalIterator< T1, T1*, T1& > const &lhs,
+			BidirectionalIterator< T2, T2*, T2& > const &rhs)
+	{
+		return (!(lhs == rhs));
+	}
 }
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 09:37:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/28 11:23:02 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/01 14:14:12 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ static void printAddress(T &list)
 		std::cout << "Index [" << i << "]: " << &*cur << std::endl;
 }
 
-bool	singleArg(int nb)
+bool	lowerThan(int nb)
 {
-	return (nb == 15);
+	return (nb < 13);
 }
 
 bool	nearArgs(int first, int second)
@@ -164,23 +164,23 @@ static void rbegin()
 
 	ft::list<int>::reverse_iterator			mineIt = listMine.rbegin();
 	std::list<int>::reverse_iterator		realIt = listReal.rbegin();
-//	ft::list<int>::const_reverse_iterator	mineConstIt = listMine.rbegin();
+	ft::list<int>::const_reverse_iterator	mineConstIt = listMine.rbegin();
 	std::list<int>::const_reverse_iterator	realConstIt = listReal.rbegin();
 
 	std::cout << "Rbegin Mine: " << *mineIt << std::endl;
 	std::cout << "Rbegin Real: " << *realIt << std::endl;
-//	std::cout << "Const Rbegin Mine: " << *mineConstIt << std::endl;
+	std::cout << "Const Rbegin Mine: " << *mineConstIt << std::endl;
 	std::cout << "Const Rbegin Real: " << *realConstIt << std::endl;
 
 	mineIt++;
 	realIt++;
-//	mineConstIt++;
+	mineConstIt++;
 	realConstIt++;
 
 	std::cout << std::endl;
 	std::cout << "Rbegin Mine: " << *mineIt << std::endl;
 	std::cout << "Rbegin Real: " << *realIt << std::endl;
-//	std::cout << "Const Rbegin Mine: " << *mineConstIt << std::endl;
+	std::cout << "Const Rbegin Mine: " << *mineConstIt << std::endl;
 	std::cout << "Const Rbegin Real: " << *realConstIt << std::endl;
 	std::cout << std::endl;
 }
@@ -195,24 +195,24 @@ static void	rend()
 
 	ft::list<int>::reverse_iterator			mineIt = listMine.rend();
 	std::list<int>::reverse_iterator		realIt = listReal.rend();
-//	ft::list<int>::const_reverse_iterator	mineConstIt = listMine.rend();
+	ft::list<int>::const_reverse_iterator	mineConstIt = listMine.rend();
 	std::list<int>::const_reverse_iterator	realConstIt = listReal.rend();
 
 	// End points to the sentinel. The value is undefined. Mine is 0, Real is the size
 	std::cout << "Rend Mine: " << *mineIt << std::endl;
 	std::cout << "Rend Real: " << *realIt << std::endl;
-//	std::cout << "Const Rend Mine: " << *mineConstIt << std::endl;
+	std::cout << "Const Rend Mine: " << *mineConstIt << std::endl;
 	std::cout << "Const Rend Real: " << *realConstIt << std::endl;
 	
 	mineIt++;
 	realIt++;
-//	mineConstIt++;
+	mineConstIt++;
 	realConstIt++;
 
 	std::cout << std::endl;
 	std::cout << "Rend Mine: " << *mineIt << std::endl;
 	std::cout << "Rend Real: " << *realIt << std::endl;
-//	std::cout << "Const Rend Mine: " << *mineConstIt << std::endl;
+	std::cout << "Const Rend Mine: " << *mineConstIt << std::endl;
 	std::cout << "Const Rend Real: " << *realConstIt << std::endl;
 	std::cout << std::endl;
 }
@@ -590,8 +590,8 @@ static void remove_if()
 	setup(listMine);
 	setup(listReal);
 
-	listMine.remove_if(singleArg);
-	listReal.remove_if(singleArg);
+	listMine.remove_if(lowerThan);
+	listReal.remove_if(lowerThan);
 
 	std::cout << "Remove If Mine:" << std::endl;
 	print(listMine);
@@ -820,7 +820,7 @@ static void	relational_operators()
 		std::cout << "Check" << std::endl;
 
 	listMine1.pop_back();
-	listMine1.push_back(1338); // 1337 = true, 1338 = true, 1339 = false
+	listMine1.push_back(1339); // 1337 = true, 1338 = true, 1339 = false
 	std::cout << "<= Operator:" << std::endl;
 	if (listMine1 <= listMine2)
 		std::cout << "Check" << std::endl;

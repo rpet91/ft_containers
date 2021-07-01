@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/28 11:23:40 by rpet          ########   odam.nl         */
+/*   Updated: 2021/06/28 13:04:09 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,7 +379,11 @@ namespace ft
 			{
 				for (iterator it = begin(); it != end(); it++)
 					if (pred(*it))
-						it = erase(it);
+					{
+						iterator	removeMe = it;
+						--it;
+						removeMe = erase(removeMe);
+					}
 			}
 
 			// Unique
