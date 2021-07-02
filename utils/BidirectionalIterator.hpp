@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/01 13:42:12 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/02 10:00:28 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define BIDIRECTIONALITERATOR_HPP
 # include "Iterator.hpp"
 # include "TypeTraits.hpp"
-# include <iostream> //weg
 
 namespace ft
 {
@@ -22,10 +21,13 @@ namespace ft
 			 class Category = ft::bidirectional_iterator_tag >
 	class BidirectionalIterator : public Iterator< Category, T >
 	{
-		typedef Iterator<Category, T>							base_iterator;
-		typedef BidirectionalIterator<T, T*, T&>				iterator;
-		typedef T*												pointer;
-		typedef T&												reference;
+		public:
+			typedef Iterator<Category, T>						base_iterator;
+			typedef BidirectionalIterator<T, T*, T&>			iterator;
+			typedef ptrdiff_t									difference_type;
+			typedef T*											pointer;
+			typedef T&											reference;
+			typedef Category									iterator_category;
 
 		public:
 			BidirectionalIterator() : base_iterator()
@@ -66,7 +68,7 @@ namespace ft
 			// ++a
 			iterator	&operator++()
 			{
-				++*this;
+				this->_ptr++;
 				return (*this);
 			}
 
@@ -75,14 +77,14 @@ namespace ft
 			{
 				iterator	old = *this;
 			
-				++*this;
+				this->_ptr++;
 				return (old);
 			}
 
 			// --a
 			iterator	&operator--()
 			{
-				--*this;
+				this->_ptr--;
 				return (*this);
 			}
 
@@ -91,7 +93,7 @@ namespace ft
 			{
 				iterator	old = *this;
 
-				--*this;
+				this->_ptr--;
 				return (old);
 			}
 

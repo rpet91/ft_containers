@@ -6,12 +6,14 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/23 13:18:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/24 11:55:48 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/02 11:13:09 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_HPP
 # define UTILS_HPP
+# include "TypeTraits.hpp"
+# include <cstddef>
 
 namespace ft
 {
@@ -54,6 +56,19 @@ namespace ft
 			++first2;
 		}
 		return (first2 != last2);
+	}
+
+	template <class InputIterator>
+	ptrdiff_t	distance(InputIterator first, InputIterator last)
+	{
+		ptrdiff_t	size = 0;
+
+		while (first != last)
+		{
+			first++;
+			size++;
+		}
+		return (size);
 	}
 }
 

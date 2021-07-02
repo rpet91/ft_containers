@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 13:27:09 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/01 13:55:07 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/02 09:30:55 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define RANDOMACCESSITERATOR_HPP
 # include "BidirectionalIterator.hpp"
 # include <cstddef>
-# include <iostream> // weg
 
 namespace ft
 {
@@ -29,6 +28,7 @@ namespace ft
 			typedef ptrdiff_t									difference_type;
 			typedef T*											pointer;
 			typedef T&											reference;
+			typedef Category									iterator_category;
 
 		public:
 			RandomAccessIterator() : bidirectional_iterator()
@@ -132,7 +132,6 @@ namespace ft
 	template <class T1, class T2, class T3>
 	bool	operator<(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs)
 	{
-		std::cout << "RAI <" << std::endl;
 		return (lhs._ptr < rhs._ptr);
 	}
 
@@ -140,7 +139,6 @@ namespace ft
 	template <class T1, class T2, class T3>
 	bool	operator>(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs)
 	{
-		std::cout << "RAI >" << std::endl;
 		return (rhs._ptr < lhs._ptr);
 	}
 
@@ -148,7 +146,6 @@ namespace ft
 	template <class T1, class T2, class T3>
 	bool	operator<=(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs)
 	{
-		std::cout << "RAI <=" << std::endl;
 		return (!(rhs._ptr < lhs._ptr));
 	}
 
@@ -156,7 +153,6 @@ namespace ft
 	template <class T1, class T2, class T3>
 	bool	operator>=(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs)
 	{
-		std::cout << "RAI >=" << std::endl;
 		return (!(lhs._ptr < rhs._ptr));
 	}
 

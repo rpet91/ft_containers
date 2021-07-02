@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 09:31:42 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/28 09:50:57 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/02 13:51:30 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,6 @@ void	printHelpVector()
 	std::cout << "    " << "NON-MEMBER FUNCTION OVERLOADS:" << std::endl;
 	std::cout << "\t" << "- relational_operators" << std::endl;
 	std::cout << "\t" << "- swap_overload" << std::endl;
-	std::cout << "    " << "TEMPLATE SPECIALIZATIONS:" << std::endl;
-	std::cout << "\t" << "- vector_bool" << std::endl;
 	std::cout << "    " << "ALL FUNCTIONS:" << std::endl;
 	std::cout << "\t" << "- all" << std::endl;
 }

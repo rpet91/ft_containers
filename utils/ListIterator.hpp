@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/01 13:48:39 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/02 09:28:49 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ namespace ft
 			typedef ListIterator<Node, T>						iterator;
 			typedef ListIterator<const Node, const T>			const_iterator;
 			typedef	BidirectionalIterator<Node, Node*, Node&> 	bidirectional_iterator;
-			typedef ptrdiff_t									size_type;
+			typedef ptrdiff_t									difference_type;
 			typedef T*											pointer;
 			typedef T&											reference;
 

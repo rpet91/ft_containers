@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/01 14:10:31 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/02 09:53:10 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ namespace ft
 	template < class Iterator >
 	class ReverseIterator
 	{
-		typedef typename Iterator::const_iterator		const_type;
+		typedef typename Iterator::iterator_category	iterator_category;
+		typedef typename Iterator::value_type			value_type;
+		typedef typename Iterator::difference_type		difference_type;
 		typedef typename Iterator::pointer				pointer;
 		typedef typename Iterator::reference			reference;
-		typedef typename Iterator::size_type			size_type;
-		typedef typename Iterator::difference_type		difference_type;
-		typedef typename Iterator::iterator_category	iterator_category;
+		typedef typename Iterator::const_iterator		const_type;
 		typedef Iterator								iterator_type;
 		typedef ReverseIterator<iterator_type>			iterator;
 		typedef ReverseIterator<const_type>				const_iterator;

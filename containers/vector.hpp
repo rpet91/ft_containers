@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:55 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/01 11:55:05 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/02 14:13:11 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "RandomAccessIterator.hpp"
 # include "ReverseIterator.hpp"
 # include "TypeTraits.hpp"
+# include "Utils.hpp"
 # include <memory>
 # include <cstddef>
 # include <stdexcept>
@@ -69,33 +70,43 @@ namespace ft
 			}
 
 			// Range constructor
-/*			template <class InputIterator>
+			template <class InputIterator>
 			vector(InputIterator first, InputIterator last, 
 				typename ft::iterator_traits<InputIterator>::type* = 0,
 				const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0), _capacity(0), _data(0)
 			{
-			}*/
+				assign(first, last);
+			}
 
 			// Copy constructor
-/*			vector(const vector &x) : _size(0), _capacity(0), _data(0)
+			vector(const vector &x) : _size(0), _capacity(0), _data(0)
 			{
 				*this = x;
-			}*/
+			}
 
 			// Destructor
 			~vector()
 			{
 				clear();
+				this->_allocator.deallocate(this->_data, this->_capacity);
 			}
 
 			// Assignment operator
-/*			vector	&operator=(const vector &x)
+			vector	&operator=(const vector &x)
 			{
-				this->_allocator = x._allocator;
 				clear();
+		//		this->_capacity = x._capacity;
+		//		this->_data = this->_allocator.allocate(this->_capacity);
 				assign(x.begin(), x.end());
+			/*	this->_allocator.deallocate(this->_data, this->_capacity);
+				this->_allocator = x._allocator;
+				this->_size = x._size;
+				this->_capacity = x._capacity;
+				this->_data = this->_allocator.allocate(this->_capacity);
+				for (size_type i = 0; i < x._size; i++)
+					this->_allocator.construct(&this->_data[i], x._data[i]);*/
 				return (*this);
-			}*/
+			}
 
 		///////////////
 		// ITERATORS //
@@ -166,13 +177,12 @@ namespace ft
 			// Resize
 			void		resize(size_type n, value_type val= value_type())
 			{
+				while (this->_size > n)
+					pop_back();
+				if (this->_capacity < n)
+					this->_capacity = n;
 				while (this->_size != n)
-				{
-					if (this->_size < n)
-						push_back(val);
-					else
-						pop_back();
-				}
+					push_back(val);
 			}
 
 			// Capacity
@@ -210,7 +220,7 @@ namespace ft
 		////////////////////
 
 		public:
-			// Operator[]
+			// Operator[] (subscript)
 			reference		operator[](size_type n)
 			{
 				return (this->_data[n]);
@@ -264,16 +274,24 @@ namespace ft
 
 		public:
 			// Assign
-//			template <class InputIterator>
-//			void	assign(InputIterator first, InputIterator last,
-//						typename ft::iterator_traits<InputIterator>::type* = 0)
-//			{
-//			}
+			template <class InputIterator>
+			void	assign(InputIterator first, InputIterator last,
+						typename ft::iterator_traits<InputIterator>::type* = 0)
+			{
+				reserve(ft::distance(first, last));
+				clear();
+				while (first != last)
+				{
+					push_back(*first);
+					first++;
+				}
+			}
 
 			void		assign(size_type n, const value_type &val)
 			{
-			//	clear();
-				for (size_t i = 0; i < n; i++)
+				reserve(n);
+				clear();
+				for (size_type i = 0; i < n; i++)
 					push_back(val);
 			}
 
@@ -319,16 +337,19 @@ namespace ft
 //			}
 
 			// Swap
-//			void		swap(vector &x)
-//			{
-//			}
+			void		swap(vector &x)
+			{
+				vector	tmp = x;
+
+				x = *this;;
+				*this = tmp;
+			}
 
 			// Clear
 			void		clear()
 			{
 				while (this->_size)
 					pop_back();
-				this->_allocator.deallocate(this->_data, this->_capacity);
 			}
 
 		///////////////
@@ -346,13 +367,58 @@ namespace ft
 		// EXTRA PRIVATE MEMBER FUNCTIONS //
 		////////////////////////////////////
 
-		public:
+		private:
 
 	};
 		///////////////////////////////////
 		// NON-MEMBER FUNCTION OVERLOADS //
 		///////////////////////////////////
 
+			// Relational operators
+			template <class T, class Alloc>
+			bool operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return (lhs.size() == rhs.size() &&
+						ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+			}
+
+			template <class T, class Alloc>
+			bool operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return !(lhs == rhs);
+			}
+
+			template <class T, class Alloc>
+			bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return (ft::lexicographical_compare(lhs.begin(), lhs.end(),
+							rhs.begin(), rhs.end()));
+			}
+
+			template <class T, class Alloc>
+			bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return !(rhs < lhs);
+			}
+
+			template <class T, class Alloc>
+			bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return (rhs < lhs);
+			}
+
+			template <class T, class Alloc>
+			bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+			{
+				return !(lhs < rhs);
+			}
+
+			// Swap
+			template <class T, class Alloc>
+			void	swap(vector<T, Alloc> &x, vector<T, Alloc> &y)
+			{
+				x.swap(y);
+			}
 }
 
 #endif

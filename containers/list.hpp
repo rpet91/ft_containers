@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/28 13:04:09 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/02 14:00:27 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,15 +208,15 @@ namespace ft
 			void	assign(InputIterator first, InputIterator last,
 						typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
-				size_t	newAmount = _distance(first, last);
-				size_t	oldAmount = this->_size;
+				difference_type	newAmount = ft::distance(first, last);
+				size_type		oldAmount = this->_size;
 
-				for (size_t i = 0; i < newAmount; i++)
+				for (difference_type i = 0; i < newAmount; i++)
 				{
 					push_back(*first);
 					first++;
 				}
-				for (size_t i = 0; i < oldAmount; i++)
+				for (size_type i = 0; i < oldAmount; i++)
 					pop_front();
 			}
 
@@ -261,7 +261,7 @@ namespace ft
 
 			void		insert(iterator position, size_type n, value_type const &val)
 			{
-				size_t	insertPosition = _distance(begin(), position);
+				difference_type	insertPosition = ft::distance(begin(), position);
 
 				for (size_type i = 0; i < n; i++)
 					_addNode(val, insertPosition + i);
@@ -271,7 +271,7 @@ namespace ft
 			void		insert(iterator position, InputIterator first, InputIterator last,
 							typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
-				size_t	insertPosition = _distance(begin(), position);
+				difference_type	insertPosition = ft::distance(begin(), position);
 
 				while (first != last)
 					_addNode(*first++, insertPosition++);
@@ -280,7 +280,7 @@ namespace ft
 			// Erase
 			iterator	erase(iterator position)
 			{
-				size_t	erasePosition = _distance(begin(), position);
+				difference_type	erasePosition = ft::distance(begin(), position);
 
 				position++;
 				_deleteNode(erasePosition);
@@ -289,7 +289,7 @@ namespace ft
 			
 			iterator	erase(iterator first, iterator last)
 			{
-				size_t erasePosition = _distance(begin(), first);
+				difference_type erasePosition = ft::distance(begin(), first);
 
 				while (first != last)
 				{
@@ -341,12 +341,12 @@ namespace ft
 
 			void	splice(iterator position, list &x, iterator i)
 			{
-				size_t			distanceToNode = _distance(x.begin(), i);
-				size_t			distanceToAdd = _distance(begin(), position);
+				difference_type		distanceToNode = ft::distance(x.begin(), i);
+				difference_type		distanceToAdd = ft::distance(begin(), position);
 				ListNode<T>		*removedNode = x._removeFromList(distanceToNode);
 				ListNode<T>		*placeNode = this->_sentinel.next;
 
-				for (size_t i = 0; i < distanceToAdd; i++)
+				for (difference_type i = 0; i < distanceToAdd; i++)
 					placeNode = placeNode->next;
 				_connectNodes(placeNode->prev, removedNode);
 				_connectNodes(removedNode, placeNode);
@@ -488,19 +488,6 @@ namespace ft
 				this->_sentinel.data = T();
 			}
 
-			template < class InputIterator >
-			size_t	_distance(InputIterator start, InputIterator end)
-			{
-				size_t	position = 0;
-
-				while (start != end)
-				{
-					start++;
-					position++;
-				}
-				return (position);
-			}
-
 			void	_addNode(const value_type &val, size_t position)
 			{
 				ListNode<T>		*nextNode = this->_sentinel.next;
@@ -548,7 +535,7 @@ namespace ft
 			}
 
 			//DEBUGGER
-		public:
+/*		public:
 			void	nodeInfo(ListNode<T> *info)
 			{
 				if (!info)
@@ -571,8 +558,7 @@ namespace ft
 					if (tmp->next)
 						tmp = tmp->next;
 				}
-			}
-			//DEBUGGER
+			}*/	
 	};
 		///////////////////////////////////
 		// NON-MEMBER FUNCTION OVERLOADS //
@@ -602,22 +588,19 @@ namespace ft
 			template <class T, class Alloc>
 			bool operator<=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
 			{
-				return (ft::lexicographical_compare(lhs.begin(), lhs.end(),
-							rhs.begin(), rhs.end()) || lhs == rhs);
+				return !(rhs < lhs);
 			}
 
 			template <class T, class Alloc>
 			bool operator>(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
 			{
-				return !(ft::lexicographical_compare(lhs.begin(), lhs.end(),
-							rhs.begin(), rhs.end()) || lhs == rhs);
+				return (rhs < lhs);
 			}
 
 			template <class T, class Alloc>
 			bool operator>=(const list<T,Alloc>& lhs, const list<T,Alloc>& rhs)
 			{
-				return !(ft::lexicographical_compare(lhs.begin(), lhs.end(),
-							rhs.begin(), rhs.end()));
+				return !(lhs < rhs);
 			}
 
 			// Swap
