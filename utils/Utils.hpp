@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/23 13:18:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/02 11:13:09 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/13 13:34:29 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ namespace ft
 	}
 
 	template <class InputIterator1, class InputIterator2>
-	bool lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
-			InputIterator2 first2, InputIterator2 last2)
+	bool	 lexicographical_compare(InputIterator1 first1, InputIterator1 last1,
+				InputIterator2 first2, InputIterator2 last2)
 	{
 		while (first1 != last1)
 		{

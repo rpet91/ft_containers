@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/02 14:00:27 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/21 08:56:35 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,23 +129,23 @@ namespace ft
 			// Rbegin
 			reverse_iterator		rbegin()
 			{
-				return (reverse_iterator(&this->_sentinel));
+				return (reverse_iterator(end()));
 			}
 			
 			const_reverse_iterator	rbegin() const
 			{
-				return (const_reverse_iterator(&this->_sentinel));
+				return (const_reverse_iterator(end()));
 			}
 		
 			// Rend
 			reverse_iterator		rend()
 			{
-				return (reverse_iterator(this->_sentinel.next));
+				return (reverse_iterator(begin()));
 			}
 
 			const_reverse_iterator	rend() const
 			{
-				return (const_reverse_iterator(this->_sentinel.next));
+				return (const_reverse_iterator(begin()));
 			}
 
 		//////////////
@@ -488,11 +488,11 @@ namespace ft
 				this->_sentinel.data = T();
 			}
 
-			void	_addNode(const value_type &val, size_t position)
+			void	_addNode(const value_type &val, size_type position)
 			{
 				ListNode<T>		*nextNode = this->_sentinel.next;
 				
-				for (size_t i = 0; i < position && i < this->size(); i++)
+				for (size_type i = 0; i < position && i < this->size(); i++)
 					nextNode = nextNode->next;
 
 				ListNode<T>		*newNode = new ListNode<T>(val);
@@ -511,14 +511,14 @@ namespace ft
 					delete deleteNode;
 			}
 
-			node	*_removeFromList(size_t position)
+			node	*_removeFromList(size_type position)
 			{
 				if (this->_size == 0)
 					return (0);
 
 				ListNode<T>		*removeNode = this->_sentinel.next;
 
-				for (size_t i = 0; i < position && i < this->size(); i++)
+				for (size_type i = 0; i < position && i < this->size(); i++)
 					removeNode = removeNode->next;
 
 				ListNode<T>		*newPrev = removeNode->prev;

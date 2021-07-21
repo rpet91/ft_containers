@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:55 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/02 14:13:11 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/21 14:15:12 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,7 @@ namespace ft
 			// Assignment operator
 			vector	&operator=(const vector &x)
 			{
-				clear();
-		//		this->_capacity = x._capacity;
-		//		this->_data = this->_allocator.allocate(this->_capacity);
 				assign(x.begin(), x.end());
-			/*	this->_allocator.deallocate(this->_data, this->_capacity);
-				this->_allocator = x._allocator;
-				this->_size = x._size;
-				this->_capacity = x._capacity;
-				this->_data = this->_allocator.allocate(this->_capacity);
-				for (size_type i = 0; i < x._size; i++)
-					this->_allocator.construct(&this->_data[i], x._data[i]);*/
 				return (*this);
 			}
 
@@ -138,23 +128,23 @@ namespace ft
 			// Rbegin
 			reverse_iterator		rbegin()
 			{
-				return (reverse_iterator(&this->_data[this->_size]));
+				return (reverse_iterator(end()));
 			}
 
 			const_reverse_iterator	rbegin() const
 			{
-				return (const_reverse_iterator(&this->_data[this->_size]));
+				return (const_reverse_iterator(end()));
 			}
 
 			// Rend
 			reverse_iterator		rend()
 			{
-				return (reverse_iterator(this->_data));
+				return (reverse_iterator(begin()));
 			}
 
 			const_reverse_iterator	rend() const
 			{
-				return (const_reverse_iterator(this->_data));
+				return (const_reverse_iterator(begin()));
 			}
 
 		//////////////
@@ -180,7 +170,10 @@ namespace ft
 				while (this->_size > n)
 					pop_back();
 				if (this->_capacity < n)
-					this->_capacity = n;
+				{
+					this->_capacity *= 2;
+					reserve(n);
+				}
 				while (this->_size != n)
 					push_back(val);
 			}
@@ -278,8 +271,8 @@ namespace ft
 			void	assign(InputIterator first, InputIterator last,
 						typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
-				reserve(ft::distance(first, last));
 				clear();
+				reserve(ft::distance(first, last));
 				while (first != last)
 				{
 					push_back(*first);
@@ -289,8 +282,8 @@ namespace ft
 
 			void		assign(size_type n, const value_type &val)
 			{
-				reserve(n);
 				clear();
+				reserve(n);
 				for (size_type i = 0; i < n; i++)
 					push_back(val);
 			}
@@ -298,12 +291,7 @@ namespace ft
 			// Push back
 			void		push_back(const value_type &val)
 			{
-				if (this->_capacity == 0)
-					reserve(1);
-				else if (this->_size + 1 > this->_capacity)
-					reserve(this->_capacity * 2);
-				this->_allocator.construct(&this->_data[this->_size], val);
-				this->_size++;
+				_addElement(val, size());
 			}
 
 			// Pop back
@@ -314,18 +302,46 @@ namespace ft
 			}
 
 			// Insert
-//			iterator	insert(iterator position, const value_type &val)
-//			{
-//			}
+			iterator	insert(iterator position, const value_type &val)
+			{
+				difference_type	insertPos = ft::distance(begin(), position);
 
-//			void		insert(iterator position, size_type n, const value_type &val)
-//			{
-//			}
+				insert(position, 1, val);
+				return (begin() + insertPos);
+			}
 
-//			template <class InputIterator>
-//			void		insert(iterator position, InputIterator first, InputIterator last)
-//			{
-//			}
+			void		insert(iterator position, size_type n, const value_type &val)
+			{
+				difference_type	insertPosition = ft::distance(begin(), position);
+
+				if (n == 0)
+					return ;
+				if (this->_capacity == 0)
+					reserve(n);
+				if (this->_size + n > this->_capacity)
+					reserve(this->_capacity * 2);
+				_moveElements(n, insertPosition);
+				for (size_type i = 0; i < n; i++)
+					_addElement(val, insertPosition + i);
+			}
+
+			template <class InputIterator>
+			void		insert(iterator position, InputIterator first, InputIterator last,
+										typename ft::iterator_traits<InputIterator>::type* = 0)
+			{
+				difference_type	insertPosition = ft::distance(begin(), position);
+				difference_type n = ft::distance(first, last);
+
+				if (n == 0)
+					return ;
+				if (this->_capacity == 0)
+					reserve(n);
+				if (this->_size + n > this->_capacity)
+					reserve(this->_capacity * 2);
+				_moveElements(n, insertPosition);
+				while (first != last)
+					_addElement(*first++, insertPosition++);
+			}
 
 			// Erase
 //			iterator	erase(iterator position)
@@ -368,6 +384,21 @@ namespace ft
 		////////////////////////////////////
 
 		private:
+			void	_addElement(const value_type &val, size_type position)
+			{
+				if (this->_capacity == 0)
+					reserve(1);
+				else if (this->_size + 1 > this->_capacity)
+					reserve(this->_capacity * 2);
+				this->_allocator.construct(&this->_data[position], val);
+				this->_size++;
+			}
+
+			void	_moveElements(size_type n, difference_type position)
+			{
+				for (size_type i = this->_size + n - 1; i >= position + n; i--)
+					this->_data[i] = this->_data[i - n];
+			}
 
 	};
 		///////////////////////////////////

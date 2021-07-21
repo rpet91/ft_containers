@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/02 10:00:28 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/21 12:30:58 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,13 @@ namespace ft
 	class BidirectionalIterator : public Iterator< Category, T >
 	{
 		public:
-			typedef Iterator<Category, T>						base_iterator;
-			typedef BidirectionalIterator<T, T*, T&>			iterator;
-			typedef ptrdiff_t									difference_type;
-			typedef T*											pointer;
-			typedef T&											reference;
-			typedef Category									iterator_category;
+			typedef Iterator<Category, T>							base_iterator;
+			typedef BidirectionalIterator<T, T*, T&>				iterator;
+			typedef BidirectionalIterator<T, const T*, const T&>	const_iterator;
+			typedef ptrdiff_t										difference_type;
+			typedef T*												pointer;
+			typedef T&												reference;
+			typedef Category										iterator_category;
 
 		public:
 			BidirectionalIterator() : base_iterator()
@@ -52,6 +53,18 @@ namespace ft
 				this->_ptr = src._ptr;
 				return (*this);
 			}
+			
+			// a == b
+			bool		operator==(iterator const &src)
+			{
+				return (this->_ptr == src._ptr);
+			}
+			
+			// a != b
+			bool		operator!=(iterator const &src)
+			{
+				return !(*this == src);
+			}
 
 			// *a
 			reference	operator*()
@@ -62,7 +75,7 @@ namespace ft
 			// a->m
 			pointer		operator->()
 			{
-				return (&(*this->_prt));
+				return (&(*this->_ptr));
 			}
 
 			// ++a
@@ -97,26 +110,29 @@ namespace ft
 				return (old);
 			}
 
-			// friend declaration
-			template < class T1, class T2 >
-			friend bool operator==(BidirectionalIterator< T1, T1*, T1& > const &lhs, BidirectionalIterator< T2, T2*, T2& > const &rhs);
+			// friend declaration for ==
+			template <class T1, class T2, class T3>
+			friend bool operator==(BidirectionalIterator< T1, T2*, T2& > const &lhs, BidirectionalIterator< T1, T3*, T3& > const &rhs);
 
+			// friend declaration for !=
+			template <class T1, class T2, class T3>
+			friend bool operator!=(BidirectionalIterator< T1, T2*, T2& > const &lhs, BidirectionalIterator< T1, T3*, T3& > const &rhs);
 	};
 
 	// a == b
-	template <class T1, class T2>
-	bool operator==(BidirectionalIterator< T1, T1*, T1& > const &lhs,
-			BidirectionalIterator< T2, T2*, T2& > const &rhs)
+	template <class T1, class T2, class T3>
+	bool operator==(BidirectionalIterator< T1, T2*, T2& > const &lhs,
+			BidirectionalIterator< T1, T3*, T3& > const &rhs)
 	{
 		return (lhs._ptr == rhs._ptr);
 	}
 	
 	// a != b
-	template <class T1, class T2>
-	bool operator!=(BidirectionalIterator< T1, T1*, T1& > const &lhs,
-			BidirectionalIterator< T2, T2*, T2& > const &rhs)
+	template <class T1, class T2, class T3>
+	bool operator!=(BidirectionalIterator< T1, T2*, T2& > const &lhs,
+			BidirectionalIterator< T1, T3*, T3& > const &rhs)
 	{
-		return (!(lhs == rhs));
+		return !(lhs == rhs);
 	}
 }
 

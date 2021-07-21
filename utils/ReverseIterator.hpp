@@ -6,28 +6,32 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/02 09:53:10 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/21 08:20:38 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REVERSEITERATOR_HPP
 # define REVERSEITERATOR_HPP
-# include <iostream>
+# include "TypeTraits.hpp"
 
 namespace ft
 {
 	template < class Iterator >
 	class ReverseIterator
 	{
-		typedef typename Iterator::iterator_category	iterator_category;
-		typedef typename Iterator::value_type			value_type;
-		typedef typename Iterator::difference_type		difference_type;
-		typedef typename Iterator::pointer				pointer;
-		typedef typename Iterator::reference			reference;
-		typedef typename Iterator::const_iterator		const_type;
-		typedef Iterator								iterator_type;
-		typedef ReverseIterator<iterator_type>			iterator;
-		typedef ReverseIterator<const_type>				const_iterator;
+		public:
+			typedef typename Iterator::iterator_category	iterator_category;
+			typedef typename Iterator::value_type			value_type;
+			typedef typename Iterator::difference_type		difference_type;
+			typedef typename Iterator::pointer				pointer;
+			typedef typename Iterator::reference			reference;
+			typedef typename Iterator::const_iterator		const_type;
+			typedef Iterator								iterator_type;
+			typedef ReverseIterator<iterator_type>			iterator;
+			typedef ReverseIterator<const_type>				const_iterator;
+		
+		private:
+			iterator_type	_current;
 
 		public:
 			ReverseIterator() : _current()
@@ -51,6 +55,11 @@ namespace ft
 			{
 				this->_current = src._current;
 				return (*this);
+			}
+
+			iterator_type	base() const
+			{
+				return (this->_current);
 			}
 
 			reference	operator*() const
@@ -93,7 +102,7 @@ namespace ft
 				return (old);
 			}
 
-			iterator	operator[](difference_type n) const
+			reference	operator[](difference_type n) const
 			{
 				return (*(*this + n));
 			}
@@ -124,9 +133,6 @@ namespace ft
 			{
 				return (const_iterator(this->_current));
 			}
-
-		private:
-			iterator_type	_current;
 	};
 
 	template <class Iter1, class Iter2>
@@ -164,6 +170,22 @@ namespace ft
 	{
 		return (lhs.base() >= rhs.base());
 	}
+
+	// RandomAccessIterator +
+	template <class Iterator>
+	ReverseIterator<Iterator>	operator+(typename ReverseIterator<Iterator>::difference_type n, const ReverseIterator<Iterator> &rev_it)
+	{
+		return (rev_it + n);
+	}
+
+	// RandomAccessIterator -
+	template <class Iterator>
+	typename ReverseIterator<Iterator>::difference_type
+	operator-(const ReverseIterator<Iterator> &lhs, const ReverseIterator<Iterator> &rhs)
+	{
+		return (rhs.base() - lhs.base());
+	}
+	
 }
 
 #endif

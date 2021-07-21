@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/28 09:36:54 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/02 14:38:43 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/21 12:32:10 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,11 @@ static void		constructor()
 {
 	std::cout << "\t===CONSTRUCTOR===" << std::endl;
 	ft::vector<int>		defaultConstructor;
-	std::cout << "joe1" << std::endl;
 	ft::vector<int>		fillConstructor(5, 10);
-	std::cout << "joe2" << std::endl;
 	ft::vector<int>		rangeConstructor(fillConstructor.begin(), fillConstructor.end());
-	std::cout << "joe3" << std::endl;
 	ft::vector<int>		copyConstructor(fillConstructor);
-
 	std::cout << "Default constructor:" << std::endl;
+
 	print(defaultConstructor);
 	std::cout << "Fill constructor:" << std::endl;
 	print(fillConstructor);
@@ -210,7 +207,7 @@ static void		resize()
 	print(vectorReal);
 
 	vectorMine.resize(9);	
-	vectorReal.resize(9);	
+	vectorReal.resize(9);
 	
 	std::cout << "After Mine: " << std::endl;
 	print(vectorMine);
@@ -441,18 +438,19 @@ static void	insert()
 	std::cout << "\t===INSERT===" << std::endl;
 	ft::vector<int> 	vectorMine;
 	std::vector<int>	vectorReal;
+
 	setup(vectorMine);
 	setup(vectorReal);
 
 	std::cout << "Single Element Mine:" << std::endl;
-//	std::cout << "Inserted element: " << *vectorMine.insert(++vectorMine.begin(), 1337) << std::endl;
+	std::cout << "Inserted element: " << *vectorMine.insert(++vectorMine.begin(), 1337) << std::endl;
 	print(vectorMine);
 	std::cout << "Single Element Real:" << std::endl;
 	std::cout << "Inserted element: " << *vectorReal.insert(++vectorReal.begin(), 1337) << std::endl;
 	print(vectorReal);
 
-//	vectorMine.insert(++vectorMine.begin(), 5, 69);
-	vectorReal.insert(++vectorReal.begin(), 5, 69);
+	vectorMine.insert(++vectorMine.begin(), 3, 69);
+	vectorReal.insert(++vectorReal.begin(), 3, 69);
 
 	std::cout << std::endl;
 	std::cout << "Fill Mine:" << std::endl;
@@ -460,7 +458,7 @@ static void	insert()
 	std::cout << "Fill Real:" << std::endl;
 	print(vectorReal);
 
-//	vectorMine.insert(++vectorMine.begin(), ++vectorMine.begin(), --vectorMine.end());
+	vectorMine.insert(++vectorMine.begin(), ++vectorMine.begin(), --vectorMine.end());
 	vectorReal.insert(++vectorReal.begin(), ++vectorReal.begin(), --vectorReal.end());
 
 	std::cout << std::endl;
