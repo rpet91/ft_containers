@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:55 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/21 14:15:12 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/29 14:39:47 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,14 @@ namespace ft
 		public:
 			// Default constructor
 			explicit vector(const allocator_type &alloc = allocator_type()) :
-				_allocator(alloc), _size(0), _capacity(0), _data(0)
+				_allocator(alloc), _size(0), _capacity(0), _data(NULL)
 			{
 			}
 
 			// Fill constructor
-			explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(n), _capacity(n), _data(0)
+			explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0), _capacity(0), _data(0)
 			{
-				this->_data = this->_allocator.allocate(this->_capacity);
-				for (size_t i = 0; i < this->_size; i++)
-					this->_allocator.construct(&this->_data[i], val);
+				assign(n, val);
 			}
 
 			// Range constructor
@@ -94,6 +92,8 @@ namespace ft
 			// Assignment operator
 			vector	&operator=(const vector &x)
 			{
+				clear();
+				_setCapacity(x._capacity, true);
 				assign(x.begin(), x.end());
 				return (*this);
 			}
@@ -167,14 +167,10 @@ namespace ft
 			// Resize
 			void		resize(size_type n, value_type val= value_type())
 			{
+				_setCapacity(n);
 				while (this->_size > n)
 					pop_back();
-				if (this->_capacity < n)
-				{
-					this->_capacity *= 2;
-					reserve(n);
-				}
-				while (this->_size != n)
+				while (this->_size < n)
 					push_back(val);
 			}
 
@@ -193,19 +189,7 @@ namespace ft
 			// Reserve
 			void		reserve(size_type n)
 			{
-				if (n <= this->_capacity)
-					return ;
-				this->_capacity = n;
-
-				pointer		tmp = this->_allocator.allocate(this->_capacity);
-
-				for (size_t i = 0; i < this->_size; i++)
-				{
-					this->_allocator.construct(&tmp[i], this->_data[i]);
-					this->_allocator.destroy(&this->_data[i]);
-				}
-				this->_allocator.deallocate(this->_data, this->_capacity);
-				this->_data = tmp;
+				_setCapacity(n, true);
 			}
 
 		////////////////////
@@ -272,7 +256,7 @@ namespace ft
 						typename ft::iterator_traits<InputIterator>::type* = 0)
 			{
 				clear();
-				reserve(ft::distance(first, last));
+				_setCapacity(ft::distance(first, last), true);
 				while (first != last)
 				{
 					push_back(*first);
@@ -283,7 +267,7 @@ namespace ft
 			void		assign(size_type n, const value_type &val)
 			{
 				clear();
-				reserve(n);
+				_setCapacity(n, true);
 				for (size_type i = 0; i < n; i++)
 					push_back(val);
 			}
@@ -314,13 +298,8 @@ namespace ft
 			{
 				difference_type	insertPosition = ft::distance(begin(), position);
 
-				if (n == 0)
-					return ;
-				if (this->_capacity == 0)
-					reserve(n);
-				if (this->_size + n > this->_capacity)
-					reserve(this->_capacity * 2);
-				_moveElements(n, insertPosition);
+				_setCapacity(this->_size + n);
+				_moveElementsForward(n, insertPosition);
 				for (size_type i = 0; i < n; i++)
 					_addElement(val, insertPosition + i);
 			}
@@ -332,33 +311,42 @@ namespace ft
 				difference_type	insertPosition = ft::distance(begin(), position);
 				difference_type n = ft::distance(first, last);
 
-				if (n == 0)
-					return ;
-				if (this->_capacity == 0)
-					reserve(n);
-				if (this->_size + n > this->_capacity)
-					reserve(this->_capacity * 2);
-				_moveElements(n, insertPosition);
-				while (first != last)
-					_addElement(*first++, insertPosition++);
+				_setCapacity(this->_size + n);
+				_moveElementsForward(n, insertPosition);
+				for (difference_type i = 0; i < n; i++)
+					_addElement(*(first + i), insertPosition + i);
 			}
 
 			// Erase
-//			iterator	erase(iterator position)
-//			{
-//			}
+			iterator	erase(iterator position)
+			{
+				return (erase(position, position + 1));
+			}
 
-//			iterator	erase(iterator first, iterator last)
-//			{
-//			}
+			iterator	erase(iterator first, iterator last)
+			{
+				difference_type	erasePosition = ft::distance(begin(), first);
+				difference_type	n = ft::distance(first, last);
+
+				_moveElementsBackward(n, erasePosition);
+				for (difference_type i = 0; i < n; i++)
+					pop_back();
+				return (begin() + erasePosition);
+			}
 
 			// Swap
 			void		swap(vector &x)
 			{
-				vector	tmp = x;
-
-				x = *this;;
-				*this = tmp;
+				size_type		tmpSize = this->_size;
+				size_type		tmpCapacity = this->_capacity;
+				pointer			tmpData = this->_data;
+				
+				this->_size = x._size;
+				this->_capacity = x._capacity;
+				this->_data = x._data;
+				x._size = tmpSize;
+				x._capacity = tmpCapacity;
+				x._data = tmpData;
 			}
 
 			// Clear
@@ -384,22 +372,63 @@ namespace ft
 		////////////////////////////////////
 
 		private:
+			void	_debug()
+			{
+				iterator	it1 = begin();
+				iterator	it2 = end();
+				size_t		i = 0;
+
+				std::cout << "CAPACITY: " << this->_capacity << std::endl;
+				while (it1 != it2)
+				{
+					std::cout << "Index [" << i << "]: " << *it1 << std::endl;
+					it1++;
+					i++;
+				}
+			}
+
 			void	_addElement(const value_type &val, size_type position)
 			{
-				if (this->_capacity == 0)
-					reserve(1);
-				else if (this->_size + 1 > this->_capacity)
-					reserve(this->_capacity * 2);
+				_setCapacity(this->_size + 1);
 				this->_allocator.construct(&this->_data[position], val);
 				this->_size++;
 			}
 
-			void	_moveElements(size_type n, difference_type position)
+			void	_moveElementsForward(size_type n, size_type position)
 			{
 				for (size_type i = this->_size + n - 1; i >= position + n; i--)
 					this->_data[i] = this->_data[i - n];
 			}
 
+			void	_moveElementsBackward(size_type n, size_type position)
+			{
+				for (size_type i = 0; i <= this->_size - n; i++)
+					this->_data[position + i] = this->_data[position + i + n];
+			}
+
+			void	_setCapacity(size_type n, bool fixedNb = false)
+			{
+				if (n <= this->_capacity)
+					return ;
+				size_type	newCapacity = n;
+
+				if (fixedNb == false)
+				{
+					if (n > this->_capacity && n < this->_capacity * 2)
+						newCapacity = this->_capacity * 2;
+				}
+
+				pointer		tmp = this->_allocator.allocate(newCapacity);
+
+				for (size_t i = 0; i < this->_size; i++)
+				{
+					this->_allocator.construct(&tmp[i], this->_data[i]);
+					this->_allocator.destroy(&this->_data[i]);
+				}
+				this->_allocator.deallocate(this->_data, this->_capacity);
+				this->_capacity = newCapacity;
+				this->_data = tmp;
+			}
 	};
 		///////////////////////////////////
 		// NON-MEMBER FUNCTION OVERLOADS //

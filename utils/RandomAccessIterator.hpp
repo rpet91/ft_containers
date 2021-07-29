@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 13:27:09 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/21 08:23:55 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/28 09:13:53 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ namespace ft
 				*this = src;
 			}
 
-			iterator				&operator=(iterator const &src)
+			RandomAccessIterator	&operator=(RandomAccessIterator const &src)
 			{
 				this->_ptr = src._ptr;
 				return (*this);
@@ -74,7 +74,7 @@ namespace ft
 			}
 		
 			// a - b	
-			difference_type			operator-(iterator const &val) const
+			difference_type			operator-(RandomAccessIterator const &val) const
 			{
 				return (this->_ptr - val._ptr);
 			}
@@ -141,26 +141,9 @@ namespace ft
 			template <class T1, class T2, class T3>
 			friend bool	operator==(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs);
 
-			// friend declaration for !=
-			template <class T1, class T2, class T3>
-			friend bool	operator!=(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs);
-
 			// friend declaration for <
 			template <class T1, class T2, class T3>
 			friend bool	operator<(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs);
-
-			// friend declaration for >
-			template <class T1, class T2, class T3>
-			friend bool	operator>(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs);
-
-			// friend declaration for <=
-			template <class T1, class T2, class T3>
-			friend bool	operator<=(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs);
-
-			// friend declaration for >=
-			template <class T1, class T2, class T3>
-			friend bool	operator>=(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs);
-
 		};
 	
 	// n + a
@@ -195,21 +178,21 @@ namespace ft
 	template <class T1, class T2, class T3>
 	bool	operator>(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs)
 	{
-		return (rhs._ptr < lhs._ptr);
+		return (rhs < lhs);
 	}
 
 	// a <= b
 	template <class T1, class T2, class T3>
 	bool	operator<=(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs)
 	{
-		return (!(rhs._ptr < lhs._ptr));
+		return (!(rhs < lhs));
 	}
 
 	// a >= b
 	template <class T1, class T2, class T3>
 	bool	operator>=(RandomAccessIterator< T1, T2*, T2& > const &lhs, RandomAccessIterator< T1, T3*, T3& > const &rhs)
 	{
-		return (!(lhs._ptr < rhs._ptr));
+		return (!(lhs < rhs));
 	}
 
 }

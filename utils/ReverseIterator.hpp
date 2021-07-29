@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/21 08:20:38 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/28 09:23:34 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,15 +104,15 @@ namespace ft
 
 			reference	operator[](difference_type n) const
 			{
-				return (*(*this + n));
+				return (base()[-n - 1]);
 			}
 
-			iterator	operator+(difference_type n) const
+			ReverseIterator	operator+(difference_type n) const
 			{
 				return (this->_current - n);
 			}
 
-			iterator	operator-(difference_type n) const
+			ReverseIterator	operator-(difference_type n) const
 			{
 				return (this->_current + n);
 			}
@@ -171,21 +171,20 @@ namespace ft
 		return (lhs.base() >= rhs.base());
 	}
 
-	// RandomAccessIterator +
+	// n + a
 	template <class Iterator>
 	ReverseIterator<Iterator>	operator+(typename ReverseIterator<Iterator>::difference_type n, const ReverseIterator<Iterator> &rev_it)
 	{
 		return (rev_it + n);
 	}
 
-	// RandomAccessIterator -
-	template <class Iterator>
-	typename ReverseIterator<Iterator>::difference_type
-	operator-(const ReverseIterator<Iterator> &lhs, const ReverseIterator<Iterator> &rhs)
+	// a - b
+	template <class Iterator1, class Iterator2>
+	typename ReverseIterator<Iterator1>::difference_type
+	operator-(const ReverseIterator<Iterator1> &lhs, const ReverseIterator<Iterator2> &rhs)
 	{
 		return (rhs.base() - lhs.base());
-	}
-	
+	}	
 }
 
 #endif

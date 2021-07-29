@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/21 08:56:35 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/22 13:39:50 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,8 +293,8 @@ namespace ft
 
 				while (first != last)
 				{
-					_deleteNode(erasePosition);
 					first++;
+					_deleteNode(erasePosition);
 				}
 				return (last);
 			}
@@ -533,32 +533,6 @@ namespace ft
 				first->next = second;
 				second->prev = first;
 			}
-
-			//DEBUGGER
-/*		public:
-			void	nodeInfo(ListNode<T> *info)
-			{
-				if (!info)
-					return ;
-				std::cout << "Address: " << info << std::endl;
-				std::cout << "Value: " << info->data << std::endl;
-				std::cout << "Prev: " << info->prev << " & Next: " << info->next << std::endl;
-				std::cout <<  std::endl;
-			}
-
-			void	debug()
-			{
-				ListNode<T>		*tmp = this->_sentinel.next;
-
-				std::cout << "Sentinel address: " << &this->_sentinel << 
-				" && Size: " << size() << std::endl << std::endl;
-				for (size_t i = 0; i < this->_size; i++)
-				{
-					nodeInfo(tmp);
-					if (tmp->next)
-						tmp = tmp->next;
-				}
-			}*/	
 	};
 		///////////////////////////////////
 		// NON-MEMBER FUNCTION OVERLOADS //

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/21 12:30:58 by rpet          ########   odam.nl         */
+/*   Updated: 2021/07/27 14:26:21 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define BIDIRECTIONALITERATOR_HPP
 # include "Iterator.hpp"
 # include "TypeTraits.hpp"
+# include <cstddef>
 
 namespace ft
 {
