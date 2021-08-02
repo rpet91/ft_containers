@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 13:06:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/21 07:41:33 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/02 09:48:33 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,35 @@ namespace ft
 			static const bool result = sizeof(one) == sizeof(test<T>(0));
 	};
 
-	template < class T >
-	struct iterator_traits : public enable_if<is_iterator<T>::result, T>
+	template < class Iter, typename T = typename enable_if<is_iterator<Iter>::result, Iter>::type* >
+	struct iterator_traits
 	{
+		typedef typename Iter::difference_type		difference_type;
+		typedef typename Iter::value_type			value_type;
+		typedef typename Iter::pointer				pointer;
+		typedef typename Iter::reference			reference;
+		typedef typename Iter::iterator_category	iterator_category;
 	};
 
 	template < class T >
 	struct iterator_traits<T*>
 	{
-		typedef random_access_iterator_tag	type;
+		typedef std::ptrdiff_t					difference_type;
+		typedef	T								value_type;
+		typedef T*								pointer;
+		typedef T&								reference;
+		typedef ft::random_access_iterator_tag	iterator_category;
 	};
 	
 	template < class T >
 	struct iterator_traits<const T*>
 	{
-		typedef random_access_iterator_tag	type;
+		typedef std::ptrdiff_t					difference_type;
+		typedef	T								value_type;
+		typedef const T*						pointer;
+		typedef const T&						reference;
+		typedef ft::random_access_iterator_tag	iterator_category;
+
 	};
 }
 #endif

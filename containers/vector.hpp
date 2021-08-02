@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:55 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/29 14:39:47 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/02 09:44:58 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ namespace ft
 			// Range constructor
 			template <class InputIterator>
 			vector(InputIterator first, InputIterator last, 
-				typename ft::iterator_traits<InputIterator>::type* = 0,
+				typename ft::iterator_traits<InputIterator>::iterator_category* = 0,
 				const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0), _capacity(0), _data(0)
 			{
 				assign(first, last);
@@ -92,8 +92,6 @@ namespace ft
 			// Assignment operator
 			vector	&operator=(const vector &x)
 			{
-				clear();
-				_setCapacity(x._capacity, true);
 				assign(x.begin(), x.end());
 				return (*this);
 			}
@@ -253,7 +251,7 @@ namespace ft
 			// Assign
 			template <class InputIterator>
 			void	assign(InputIterator first, InputIterator last,
-						typename ft::iterator_traits<InputIterator>::type* = 0)
+						typename ft::iterator_traits<InputIterator>::iterator_category* = 0)
 			{
 				clear();
 				_setCapacity(ft::distance(first, last), true);
@@ -306,7 +304,7 @@ namespace ft
 
 			template <class InputIterator>
 			void		insert(iterator position, InputIterator first, InputIterator last,
-										typename ft::iterator_traits<InputIterator>::type* = 0)
+										typename ft::iterator_traits<InputIterator>::iterator_category* = 0)
 			{
 				difference_type	insertPosition = ft::distance(begin(), position);
 				difference_type n = ft::distance(first, last);
@@ -372,21 +370,6 @@ namespace ft
 		////////////////////////////////////
 
 		private:
-			void	_debug()
-			{
-				iterator	it1 = begin();
-				iterator	it2 = end();
-				size_t		i = 0;
-
-				std::cout << "CAPACITY: " << this->_capacity << std::endl;
-				while (it1 != it2)
-				{
-					std::cout << "Index [" << i << "]: " << *it1 << std::endl;
-					it1++;
-					i++;
-				}
-			}
-
 			void	_addElement(const value_type &val, size_type position)
 			{
 				_setCapacity(this->_size + 1);

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/23 13:18:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/29 09:18:08 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/02 09:59:28 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,32 @@ namespace ft
 		return (first2 != last2);
 	}
 
-	template <class InputIterator>
-	ptrdiff_t	distance(InputIterator first, InputIterator last)
+	template<class It>
+	typename ft::iterator_traits<It>::difference_type
+	do_distance(It first, It last, ft::input_iterator_tag)
 	{
-		ptrdiff_t	size = 0;
+		typename ft::iterator_traits<It>::difference_type result = 0;
 
 		while (first != last)
 		{
-			first++;
-			size++;
+			++first;
+			++result;
 		}
-		return (size);
+		return (result);
+	}
+	
+	template<class It>
+	typename ft::iterator_traits<It>::difference_type
+	do_distance(It first, It last, ft::random_access_iterator_tag)
+	{
+		return (last - first);
+	}
+
+	template <class It>
+	typename ft::iterator_traits<It>::difference_type
+	distance(It first, It last)
+	{
+		return (ft::do_distance(first, last, typename ft::iterator_traits<It>::iterator_category()));
 	}
 }
 

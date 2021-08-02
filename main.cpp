@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/22 13:58:38 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/29 14:45:14 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/02 10:59:46 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,6 @@
 	#define OFILE_NAME "ft_times.txt"
 	#define LEAKS_CONTAINER "leaks ft_containers"
 #endif
-
-template<typename T>
-class MutantStack : public ft::stack<T>
-{
-	public:
-		MutantStack() {}
-		MutantStack(const MutantStack<T>& src) { *this = src; }
-		MutantStack<T>& operator=(const MutantStack<T>& rhs) 
-		{
-			this->c = rhs.c;
-			return *this;
-		}
-		~MutantStack() {}
-
-		typedef typename ft::stack<T>::container_type::iterator iterator;
-
-		iterator begin() { return this->c.begin(); }
-		iterator end() { return this->c.end(); }
-};
 
 // Class where all the calculating times are noted in a txt file
 class TimeLog
@@ -116,13 +97,13 @@ void	printVectorCapacity(ft::vector<T> &vector)
 void	vectorTest_constructors()
 {
 	std::cout << "\t======== Constructors ========" << std::endl << std::endl;
-	std::cout << "Default constructor:" << std::endl;
+	std::cout << "Default constructor called." << std::endl;
 	ft::vector<int>		defaultConstructor;
-	std::cout << "Fill constructor:" << std::endl;
+	std::cout << "Fill constructor called." << std::endl;
 	ft::vector<int>		fillConstructor(5, rand());
-	std::cout << "Range constructor:" << std::endl;
+	std::cout << "Range constructor called." << std::endl;
 	ft::vector<int>		rangeConstructor(fillConstructor.begin(), fillConstructor.end());
-	std::cout << "Copy constructor:" << std::endl;
+	std::cout << "Copy constructor called." << std::endl;
 	ft::vector<int>		copyConstructor(fillConstructor);
 
 	std::cout << "Default constructor:" << std::endl;
@@ -384,6 +365,20 @@ void	vectorTest_nonMemberFunctions()
 	printVector(vec2);
 }
 
+void	stackTests()
+{
+	std::cout << "\t======== Constructors ========" << std::endl << std::endl;
+	std::cout << "Default constructor called." << std::endl;
+	ft::stack<int>		defaultConstructor;
+	std::cout << "Copy constructor called." << std::endl;
+	ft::stack<int>		copyConstructor(defaultConstructor);
+
+	std::cout << "Default constructor:" << std::endl;
+//	printStack(defaultConstructor);
+	std::cout << "Copy constructor:" << std::endl;
+//	printStack(copyConstructor);
+}
+
 int		main()
 {
 	// Turn on or off to check for leaks
@@ -406,6 +401,10 @@ int		main()
 	time.calculateTime("Vector modifier functions: ");
 	vectorTest_nonMemberFunctions();
 	time.calculateTime("Vector non-member functions: ");
+
+	// Stack tests
+	stackTests();
+	time.calculateTime("Stack tests: ");
 
 	// Total time
 	time.totalTime();
