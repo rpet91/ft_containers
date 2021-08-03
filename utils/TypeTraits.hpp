@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 13:06:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/02 09:48:33 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/03 09:21:33 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,24 @@ namespace ft
 			static const bool result = sizeof(one) == sizeof(test<T>(0));
 	};
 
-	template < class Iter, typename T = typename enable_if<is_iterator<Iter>::result, Iter>::type* >
-	struct iterator_traits
+	template < class Iter, bool >
+	struct _iterator_traits
+	{
+	};
+
+	template < class Iter >
+	struct _iterator_traits<Iter, true>
 	{
 		typedef typename Iter::difference_type		difference_type;
 		typedef typename Iter::value_type			value_type;
 		typedef typename Iter::pointer				pointer;
 		typedef typename Iter::reference			reference;
 		typedef typename Iter::iterator_category	iterator_category;
+	};
+
+	template < class Iter >
+	struct iterator_traits : public _iterator_traits<Iter, is_iterator<Iter>::result>
+	{
 	};
 
 	template < class T >
@@ -79,7 +89,6 @@ namespace ft
 		typedef const T*						pointer;
 		typedef const T&						reference;
 		typedef ft::random_access_iterator_tag	iterator_category;
-
 	};
 }
 #endif

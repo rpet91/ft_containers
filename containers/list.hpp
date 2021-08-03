@@ -6,20 +6,19 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/22 13:39:50 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/02 13:44:07 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_HPP
 # define LIST_HPP
 # include "ListNode.hpp"
-# include "ListIterator.hpp"
+# include "NodeIterator.hpp"
 # include "ReverseIterator.hpp"
 # include "TypeTraits.hpp"
 # include "Utils.hpp"
 # include <memory>
 # include <cstddef>
-# include <iostream> //mogelijkweeg
 
 namespace ft
 {
@@ -38,8 +37,8 @@ namespace ft
 			typedef typename allocator_type::pointer			pointer;
 			typedef typename allocator_type::const_pointer		const_pointer;
 			typedef ListNode<T>									node;
-			typedef ListIterator<node, T>						iterator;
-			typedef ListIterator<const node, const T>			const_iterator;
+			typedef NodeIterator<node, T>						iterator;
+			typedef NodeIterator<const node, const T>			const_iterator;
 			typedef ReverseIterator<iterator>					reverse_iterator;
 			typedef ReverseIterator<const_iterator>				const_reverse_iterator;
 			typedef ptrdiff_t									difference_type;
@@ -71,7 +70,7 @@ namespace ft
 			// Range constructor
 			template <class InputIterator>
 			list(InputIterator first, InputIterator last,
-				typename ft::iterator_traits<InputIterator>::type* = 0,
+				typename ft::iterator_traits<InputIterator>::iterator_category* = 0,
 				const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0)
 			{
 				_constructorSetup();
@@ -206,7 +205,7 @@ namespace ft
 			// Assign
 			template <class InputIterator>
 			void	assign(InputIterator first, InputIterator last,
-						typename ft::iterator_traits<InputIterator>::type* = 0)
+						typename ft::iterator_traits<InputIterator>::iterator_category* = 0)
 			{
 				difference_type	newAmount = ft::distance(first, last);
 				size_type		oldAmount = this->_size;
@@ -269,7 +268,7 @@ namespace ft
 
 			template <class InputIterator>
 			void		insert(iterator position, InputIterator first, InputIterator last,
-							typename ft::iterator_traits<InputIterator>::type* = 0)
+							typename ft::iterator_traits<InputIterator>::iterator_category* = 0)
 			{
 				difference_type	insertPosition = ft::distance(begin(), position);
 

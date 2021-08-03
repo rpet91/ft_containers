@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/23 13:18:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/02 09:59:28 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/03 09:22:45 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,22 @@
 
 namespace ft
 {
-	template <typename T>
-	bool	less(T const &first, T const &second)
+	template <class Arg1, class Arg2, class Result>
+	struct binary_function
 	{
-		return (first < second);
-	}
+		typedef Arg1 first_argument_type;
+		typedef Arg2 second_argument_type;
+		typedef Result result_type;
+	};
+
+	template <class T>
+	struct less : binary_function <T,T,bool>
+	{
+		bool	operator()(const T& x, const T& y) const
+		{
+			return (x < y);
+		}
+	};
 	
 	template <typename T>
 	bool	isEqual(T const &first, T const &second)

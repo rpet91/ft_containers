@@ -6,7 +6,7 @@
 #    By: rpet <marvin@codam.nl>                       +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/30 13:04:14 by rpet          #+#    #+#                  #
-#    Updated: 2021/07/27 11:11:52 by rpet          ########   odam.nl          #
+#    Updated: 2021/08/02 14:29:44 by rpet          ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,8 @@ CC = clang++
 DIRCONTAINERS = ./containers/
 DIRUTILS = ./utils/
 _CONTAINERS = list vector map stack queue 
-_UTILS = ListNode ListIterator RandomAccessIterator BidirectionalIterator \
-		 Iterator ReverseIterator TypeTraits Utils
+_UTILS = ListNode NodeIterator RandomAccessIterator BidirectionalIterator \
+		 Iterator ReverseIterator TypeTraits Utils Pair
 CONTAINERS = $(addsuffix .hpp, $(addprefix $(DIRCONTAINERS), $(_CONTAINERS)))
 UTILS = $(addsuffix .hpp, $(addprefix $(DIRUTILS), $(_UTILS)))
 INC = $(CONTAINERS) $(UTILS)

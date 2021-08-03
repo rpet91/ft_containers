@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ListIterator.hpp                                   :+:    :+:            */
+/*   NodeIterator.hpp                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/21 08:56:03 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/02 13:40:38 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LISTITERATOR_HPP
-# define LISTITERATOR_HPP
+#ifndef NODEITERATOR_HPP
+# define NODEITERATOR_HPP
 # include "ListNode.hpp"
 # include "BidirectionalIterator.hpp"
 # include <cstddef>
@@ -19,30 +19,30 @@
 namespace ft
 {
 	template < class Node, class T, class Pointer = T*, class Reference = T&>
-	class ListIterator : public BidirectionalIterator< Node, Node*, Node& >
+	class NodeIterator : public BidirectionalIterator< Node, Node*, Node& >
 	{
 		public:
-			typedef ListIterator<Node, T>						iterator;
-			typedef ListIterator<const Node, const T>			const_iterator;
+			typedef NodeIterator<Node, T>						iterator;
+			typedef NodeIterator<const Node, const T>			const_iterator;
 			typedef	BidirectionalIterator<Node, Node*, Node&> 	bidirectional_iterator;
 			typedef ptrdiff_t									difference_type;
 			typedef T*											pointer;
 			typedef T&											reference;
 
 		public:
-			ListIterator() : bidirectional_iterator()
+			NodeIterator() : bidirectional_iterator()
 			{
 			}
 
-			ListIterator(Node *ptr) : bidirectional_iterator(ptr)
+			NodeIterator(Node *ptr) : bidirectional_iterator(ptr)
 			{
 			}
 
-			virtual ~ListIterator()
+			virtual ~NodeIterator()
 			{
 			}
 
-			ListIterator(ListIterator const &src)
+			NodeIterator(NodeIterator const &src)
 			{
 				*this = src;
 			}

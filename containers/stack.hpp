@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:31:28 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/26 13:07:29 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/02 13:33:24 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ namespace ft
 	template <class T, class Container>
 	bool operator!=(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
 	{
-		return !(lhs.c == rhs.c);
+		return !(lhs == rhs);
 	}
 
 	template <class T, class Container>
@@ -149,19 +149,19 @@ namespace ft
 	template <class T, class Container>
 	bool operator<=(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
 	{
-		return !(rhs.c < lhs.c);
+		return !(rhs < lhs);
 	}
 
 	template <class T, class Container>
 	bool operator>(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
 	{
-		return (rhs.c < lhs.c);
+		return (rhs < lhs);
 	}
 
 	template <class T, class Container>
 	bool operator>=(const stack<T,Container>& lhs, const stack<T,Container>& rhs)
 	{
-		return !(lhs.c < rhs.c);
+		return !(lhs < rhs);
 	}
 }
 

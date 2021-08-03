@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/22 13:58:38 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/02 10:59:46 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/03 09:23:23 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,11 @@
 #include <fstream>
 #include <string>
 #include <deque>
+#include <list>
 #include <cstdlib>
 #include <ctime>
+#include <cstddef>
+	#include <vector>
 #include <exception>
 #ifdef USE_STD
 	#include <map>
@@ -74,11 +77,20 @@ void	checkLeaks()
 	system(LEAKS_CONTAINER);
 }
 
+// Print all the content in a stack
+template <typename T>
+void	printStack(ft::stack<T> &stack)
+{
+	for (ft::stack<T> dump = stack; !stack.empty(); stack.pop())
+		std::cout << stack.top() << std::endl;
+}
+
+
 // Print all the content in a vector
 template <typename T>
 void	printVector(ft::vector<T> &vector)
 {
-	typename ft::vector<T>::iterator		cur = vector.begin();
+	typename ft::vector<T>::iterator	cur = vector.begin();
 
 	std::cout << "Current vector has a size of: " << vector.size() <<
 		" and a capacity of: " << vector.capacity() << std::endl;
@@ -367,22 +379,47 @@ void	vectorTest_nonMemberFunctions()
 
 void	stackTests()
 {
-	std::cout << "\t======== Constructors ========" << std::endl << std::endl;
+	std::cout << "\t======== Stack tests ========" << std::endl << std::endl;
+	std::deque<int>		deque(5, 69);
+	std::list<int>		list(6, 42);
+	ft::vector<int>		vector(7, 1337);
 	std::cout << "Default constructor called." << std::endl;
-	ft::stack<int>		defaultConstructor;
+	ft::stack<int>		stack1;
 	std::cout << "Copy constructor called." << std::endl;
-	ft::stack<int>		copyConstructor(defaultConstructor);
+	ft::stack<int>		stack2 = stack1;
+	std::cout << "Assign operator called." << std::endl;
+	ft::stack<int>		stack3 = stack1;
 
-	std::cout << "Default constructor:" << std::endl;
-//	printStack(defaultConstructor);
-	std::cout << "Copy constructor:" << std::endl;
-//	printStack(copyConstructor);
+	std::cout << "Copy constructor deque called." << std::endl;
+	ft::stack<int>						copyConstructorDeque(deque);
+	std::cout << "Copy constructor list called." << std::endl;
+	ft::stack<int, std::list<int> >		copyConstructorList(list);
+	std::cout << "Copy constructor vector called." << std::endl;
+	ft::stack<int, ft::vector<int> >	copyConstructorVector(vector);
+
+	std::cout << "Empty: " << std::boolalpha << stack1.empty() << std::endl;
+	std::cout << "Empty: " << std::boolalpha << copyConstructorDeque.empty() << std::endl;
+	std::cout << "Size: " << copyConstructorList.size() << std::endl;
+	std::cout << "Top: " << copyConstructorDeque.top() << std::endl;
+	std::cout << "Calling push..." << std::endl;
+	copyConstructorDeque.push(99999);
+	std::cout << "Top: " << copyConstructorDeque.top() << std::endl;
+	std::cout << "Calling pop..." << std::endl;
+	copyConstructorDeque.pop();
+	std::cout << "Top: " << copyConstructorDeque.top() << std::endl;
+	
+	std::cout << "stack1 == stack2: " << std::boolalpha << (stack1 == stack2) << std::endl;
+	std::cout << "stack1 != stack2: " << std::boolalpha << (stack1 != stack2) << std::endl;
+	std::cout << "stack1 < stack2: " << std::boolalpha << (stack1 < stack2) << std::endl;
+	std::cout << "stack1 <= stack2: " << std::boolalpha << (stack1 <= stack2) << std::endl;
+	std::cout << "stack1 > stack2: " << std::boolalpha << (stack1 > stack2) << std::endl;
+	std::cout << "stack1 >= stack2: " << std::boolalpha << (stack1 >= stack2) << std::endl;
 }
 
 int		main()
 {
 	// Turn on or off to check for leaks
-	//atexit(checkLeaks);
+//	atexit(checkLeaks);
 
 	TimeLog	time;
 
