@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/25 09:47:50 by rpet          #+#    #+#                 */
-/*   Updated: 2021/06/21 09:36:29 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/18 11:58:13 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,16 @@ namespace ft
 				this->prev = src.prev;
 				this->data = src.data;
 				return (*this);
+			}
+
+			ListNode	*nextNode()
+			{
+				return (this->next);
+			}
+
+			ListNode	*prevNode()
+			{
+				return (this->prev);
 			}
 
 			bool		operator==(ListNode const &src)

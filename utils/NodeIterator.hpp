@@ -6,13 +6,14 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/02 13:40:38 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/18 13:51:30 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef NODEITERATOR_HPP
 # define NODEITERATOR_HPP
 # include "ListNode.hpp"
+# include "MapNode.hpp"
 # include "BidirectionalIterator.hpp"
 # include <cstddef>
 
@@ -60,34 +61,34 @@ namespace ft
 			
 			pointer		operator->()
 			{
-				return (&this->_ptr->data);
+				return &(this->_ptr->data);
 			}
 
-			iterator	&operator++()
+			NodeIterator	&operator++()
 			{
-				this->_ptr = this->_ptr->next;
+				this->_ptr = this->_ptr->nextNode();
 				return (*this);
 			}
 
-			iterator	operator++(int)
+			NodeIterator	operator++(int)
 			{
-				iterator	old = *this;
+				NodeIterator	old = *this;
 
-				this->_ptr = this->_ptr->next;
+				this->_ptr = this->_ptr->nextNode();
 				return (old);
 			}
 
-			iterator	&operator--()
+			NodeIterator	&operator--()
 			{
-				this->_ptr = this->_ptr->prev;
+				this->_ptr = this->_ptr->prevNode();
 				return (*this);
 			}
 
-			iterator	operator--(int)
+			NodeIterator	operator--(int)
 			{
-				iterator	old = *this;
+				NodeIterator	old = *this;
 
-				this->_ptr = this->_ptr->prev;
+				this->_ptr = this->_ptr->prevNode();
 				return (old);
 			}
 

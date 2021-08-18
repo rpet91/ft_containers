@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/22 13:58:38 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/03 09:23:23 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/18 14:38:17 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	printVectorCapacity(ft::vector<T> &vector)
 
 void	vectorTest_constructors()
 {
-	std::cout << "\t======== Constructors ========" << std::endl << std::endl;
+	std::cout << "\t======== Vector constructors ========" << std::endl << std::endl;
 	std::cout << "Default constructor called." << std::endl;
 	ft::vector<int>		defaultConstructor;
 	std::cout << "Fill constructor called." << std::endl;
@@ -416,6 +416,25 @@ void	stackTests()
 	std::cout << "stack1 >= stack2: " << std::boolalpha << (stack1 >= stack2) << std::endl;
 }
 
+void	mapTest_constructors()
+{
+	std::cout << "\t======== Map constructors ========" << std::endl << std::endl;
+	ft::map<char, int>	map;
+
+	map.insert(ft::make_pair('g', 20));
+	map.insert(ft::make_pair('b', 20));
+	map.insert(ft::make_pair('c', 20));
+	map.insert(ft::make_pair('d', 20));
+	map.insert(ft::make_pair('e', 20));
+	map.insert(ft::make_pair('f', 20));
+	map.insert(ft::make_pair('a', 20));
+	map.insert(ft::make_pair('a', 20));
+
+//	ft::map<char, int>::iterator	it = map.begin();
+	map.printshit();
+
+}
+
 int		main()
 {
 	// Turn on or off to check for leaks
@@ -442,6 +461,10 @@ int		main()
 	// Stack tests
 	stackTests();
 	time.calculateTime("Stack tests: ");
+
+	// Map tests
+	mapTest_constructors();
+	time.calculateTime("Map constructors: ");
 
 	// Total time
 	time.totalTime();

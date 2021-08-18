@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/02 14:27:41 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/03 07:33:38 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/16 11:56:59 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ namespace ft
 			return !(lhs < rhs);
 		}
 
+		// Make pair
 		template <class T1, class T2>
 		pair<T1,T2> make_pair(T1 x, T2 y)
 		{

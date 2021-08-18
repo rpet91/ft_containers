@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/02 13:44:07 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/05 13:57:28 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ namespace ft
 			}
 
 			// Copy constructor
-			list(const list &x) : _size(0)
+			list(const list &x) : _allocator(x._allocator), _size(0)
 			{
 				_constructorSetup();
 				*this = x;
@@ -93,7 +93,6 @@ namespace ft
 			// Assignment operator
 			list	&operator=(const list &x)
 			{
-				this->_allocator = x._allocator;
 				assign(x.begin(), x.end());
 				return (*this);
 			}
