@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/23 13:18:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/17 11:24:59 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/23 07:35:57 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,15 @@ namespace ft
 			++first2;
 		}
 		return (true);
+	}
+
+	template <class T>
+	void	swap(T &a, T &b)
+	{
+		T	c(a);
+
+		a = b;
+		b = c;
 	}
 
 	template <class InputIterator1, class InputIterator2>

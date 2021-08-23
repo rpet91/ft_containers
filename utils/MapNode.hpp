@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/03 09:59:37 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/18 14:36:14 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/19 07:36:14 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,10 @@ namespace ft
 			{
 				MapNode	*ret = this;
 
+				// Checks if we have a right child or if we are the first sentinel
 				if (this->right || this == this->first)
 				{
+					// If we are the first sentinel, ret becomes the root
 					if (this == this->first)
 					{
 						ret = this->parent;

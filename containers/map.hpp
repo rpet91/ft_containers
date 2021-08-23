@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:31:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/18 14:40:39 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/23 08:20:25 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,8 @@ namespace ft
 			}
 
 			// Copy constructor
-			map(const map &x) : _compare(x._compare), _allocator(x._allocator)
+			map(const map &x) :
+				_compare(x._compare), _allocator(x._allocator), _size(0), _root(0)
 			{
 				_constructorSetup();
 				*this = x;
@@ -122,15 +123,15 @@ namespace ft
 			// Destructor
 			~map()
 			{
+				//clear();
 			}
 
 			// Assignment operator
 			map	&operator=(const map &x)
 			{
-				this->_size = x._size;
-				this->_root = x._root;
-				this->_firstSentinel = x._firstSentinel;
-				this->_lastSentinel = x._lastSentinel;
+				clear();
+				insert(x.begin(), x.end());
+				return (*this);
 			}
 
 		///////////////
@@ -213,7 +214,7 @@ namespace ft
 			// Operator[]
 			mapped_type	&operator[](const key_type &k)
 			{
-				return ((*((insert(ft::make_pair(k, mapped_type()))).first)).data.second);
+				return ((*((insert(ft::make_pair(k, mapped_type()))).first)).second);
 			}
 
 		///////////////
@@ -221,12 +222,6 @@ namespace ft
 		///////////////
 
 		public:
-
-			void	printshit()
-			{
-				print_tree();
-			}
-
 			// Insert
 			ft::pair<iterator, bool>	insert(const value_type &val)
 			{
@@ -250,6 +245,35 @@ namespace ft
 			{
 				while (first != last)
 					insert(*(first++));
+			}
+
+			// Erase
+			void		erase(iterator position)
+			{
+				this->_root = _deleteNode(position->first, this->_root);
+				_updateSentinels();
+			}
+
+			size_type	erase(const key_type &k)
+			{
+				size_type	oldSize = this->_size;
+
+				this->_root = _deleteNode(k, this->_root);
+				this->_updateSentinels();
+				return (oldSize - this->_size);
+			}
+
+			void		erase(iterator first, iterator last)
+			{
+				while (first != last)
+					erase(first++);
+			}
+
+			// Clear
+			void		clear()
+			{
+				while (this->_size)
+					erase(this->_root->data.first);
 			}
 
 		///////////////
@@ -331,6 +355,65 @@ namespace ft
 				return (tmp);
 			}
 
+			// Deletes the node if possible
+			node	*_deleteNode(const key_type &k, node *current)
+			{
+				if (!current)
+					return (current);
+				// Checks if key is on the left or right side of the tree
+				if (k < current->data.first)
+					current->left = _deleteNode(k, current->left);
+				else if (k > current->data.first)
+					current->right = _deleteNode(k, current->right);
+				else // This is the node we want to delete
+				{
+					// Checks if the node has one or no child
+					if (!current->left || !current->right)
+					{
+						node	*tmp = current->left ? current->left : current->right;
+
+						// No child
+						if (!current->left && !current->right)
+						{
+							tmp = current;
+							current = 0;
+							this->_size--;
+							this->_allocator.destroy(tmp);
+							this->_allocator.deallocate(tmp, 1);
+						}
+						else // One child
+						{
+							tmp->parent = current->parent;
+
+							node	*tmp2 = current;
+
+							current = tmp;
+							this->_size--;
+							this->_allocator.destroy(tmp2);
+							this->_allocator.deallocate(tmp2, 1);
+						}
+					}
+					else // We have two childs
+					{
+						node	*tmp = current->right;
+
+						while (tmp->left)
+							tmp = tmp->left;
+						_swapNodes(current, tmp);
+						ft::swap(current, tmp);
+						current->right = _deleteNode(tmp->data.first, current->right);
+					}
+				}
+				// Checks if the tree only had one node
+				if (!current)
+					return (current);
+				current->updateHeight();
+				// Checks if we need rotation
+				if (_rotateNodeErase(current))
+					return (current->parent);
+				return (current);
+			}
+
 			// Inserts a new node if possible
 			node	*_insertNode(const value_type &val, node *current, node *parent)
 			{
@@ -338,6 +421,7 @@ namespace ft
 
 				if (!current)
 					return (_createNode(val, parent));
+				// Checks if we have to place the node on the left or right side of the tree
 				if (this->_compare(key, current->data.first))
 					current->left = _insertNode(val, current->left, current);
 				else if (this->_compare(current->data.first, key))
@@ -345,7 +429,8 @@ namespace ft
 				else
 					return (current);
 				current->updateHeight();
-				if (_rotateNode(key, current))
+				// Checks if we need rotation
+				if (_rotateNodeInsert(key, current))
 					return (current->parent);
 				return (current);
 			}
@@ -360,13 +445,12 @@ namespace ft
 				newNode->last = &this->_lastSentinel;
 				newNode->parent = parent;
 				this->_size++;
-				this->_firstSentinel.parent = this->_root;
-				this->_lastSentinel.parent = this->_root;
+				_updateSentinels();
 				return (newNode);
 			}
 
-			// Checks if a rotation is necessarry
-			bool	_rotateNode(const key_type &key, node *current)
+			// Checks if a rotation is necessary after inserting a new node
+			bool	_rotateNodeInsert(const key_type &key, node *current)
 			{
 				// Left left rotate
 				if (current->getBalance() > 1 && this->_compare(key, current->left->data.first))
@@ -396,6 +480,111 @@ namespace ft
 				}
 				return (false);
 			}
+			
+			// Checks if a rotation is necessary after erasing a node
+			bool	_rotateNodeErase(node *current)
+			{
+				// Left left rotate
+				if (current->getBalance() > 1 && current->left->getBalance() >= 0)
+				{
+					current->rightRotate();
+					return (true);
+				}
+				// Right right rotate
+				if (current->getBalance() < -1 && current->right->getBalance() <= 0)
+				{
+					current->leftRotate();
+					return (true);
+				}
+				// Left right rotate
+				if (current->getBalance() > 1 && current->left->getBalance() < 0)
+				{
+					current->left->leftRotate();
+					current->rightRotate();
+					return (true);
+				}
+				// Right left rotate
+				if (current->getBalance() < -1 && current->right->getBalance() > 0)
+				{
+					current->right->rightRotate();
+					current->leftRotate();
+					return (true);
+				}
+				return (false);
+			}
+
+			// Updates the pointers to the first and last sentinel
+			void	_updateSentinels()
+			{
+				this->_firstSentinel.parent = this->_root;
+				this->_lastSentinel.parent = this->_root;
+			}
+
+			// Swaps two nodes including all the links with their parent and childs
+			void	_swapNodes(node *first, node *second)
+			{
+				std::cout << "SWAPNODES" << std::endl;
+				if (first == second)
+					return ;
+				// Checks if first has a parent and connects the correct child with second
+				if (first->parent)
+				{
+					if (first == first->parent->right)
+						first->parent->right = second;
+					else
+						first->parent->left = second;
+				}
+				// Checks if second has a parent and connects the correct child with first
+				if (second->parent)
+				{
+					if (second == second->parent->right)
+						second->parent->right = first;
+					else
+						second->parent->left = first;
+				}
+				ft::swap(first->parent, second->parent);
+				// Connects all the child's parents with the correct node
+				if (first->left)
+					first->left->parent = second;
+				if (first->right)
+					first->right->parent = second;
+				if (second->left)
+					second->left->parent = first;
+				if (second->right)
+					second->right->parent = first;
+				ft::swap(first->left, second->left);
+				ft::swap(first->right, second->right);
+				ft::swap(first->height, second->height);
+			}
+
+		public:
+			void	printshit()
+			{
+				print_tree();
+			}
+
+			void	debug()
+			{
+				debugRecursive(this->_root);
+			}
+
+			void	debugRecursive(node	*root)
+			{
+				if (!root)
+					return ;
+				debugRecursive(root->left);
+				printdebug(root);
+				debugRecursive(root->right);
+			}
+
+			void	printdebug(node *node)
+			{
+				if (node->parent)
+					std::cout << "Key: " << node->data.first << " has parent key: "
+						<< node->parent->data.first << std::endl;
+				else
+					std::cout << "Key: " << node->data.first << " has no parent" << std::endl;
+			}
 
 		private:
 			void	print_node(std::string root_path)
@@ -403,6 +592,8 @@ namespace ft
 				node	*tmp = this->_root;
 
 				std::cout << ".";
+				if (!tmp)
+					return ;
 				for (int i = 0; root_path[i]; ++i){
 					if (root_path[i] == 'L'){
 						if (tmp->left == NULL)

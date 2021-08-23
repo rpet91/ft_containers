@@ -6,7 +6,7 @@
 #    By: rpet <marvin@codam.nl>                       +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/30 13:04:14 by rpet          #+#    #+#                  #
-#    Updated: 2021/08/18 14:02:48 by rpet          ########   odam.nl          #
+#    Updated: 2021/08/19 14:29:47 by rpet          ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,15 +45,11 @@ $(STD_NAME): $(SRC) $(INC)
 	$(CC) $(FLAGS) $(SRC) -I$(DIRCONTAINERS) -I$(DIRUTILS) -D USE_STD=1 -o $(STD_NAME)
 
 clean:
-	rm -f $(FT_OFILE)
-	rm -f $(STD_OFILE)
-	rm -rf $(NAME).dSYM
-	rm -rf $(STD_NAME).dSYM
+	rm -f $(FT_OFILE) $(STD_OFILE)
+	rm -rf $(NAME).dSYM $(STD_NAME).dSYM
 
 fclean: clean
-	rm -f $(NAME)
-	rm -f $(STD_NAME)
-	rm -f $(TIMES_FILE)
+	rm -f $(NAME) $(STD_NAME) $(TIMES_FILE)
 
 re: fclean all
 

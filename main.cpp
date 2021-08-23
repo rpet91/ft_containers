@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/22 13:58:38 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/18 14:38:17 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/23 08:20:37 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -421,7 +421,10 @@ void	mapTest_constructors()
 	std::cout << "\t======== Map constructors ========" << std::endl << std::endl;
 	ft::map<char, int>	map;
 
+//	std::cout << map.erase('g') << std::endl;
 	map.insert(ft::make_pair('g', 20));
+//	std::cout << map.erase('g') << std::endl;
+//	std::cout << map.erase('g') << std::endl;
 	map.insert(ft::make_pair('b', 20));
 	map.insert(ft::make_pair('c', 20));
 	map.insert(ft::make_pair('d', 20));
@@ -429,10 +432,18 @@ void	mapTest_constructors()
 	map.insert(ft::make_pair('f', 20));
 	map.insert(ft::make_pair('a', 20));
 	map.insert(ft::make_pair('a', 20));
+//	map['h'] = 20;
+//	map['h'] = 20;
 
-//	ft::map<char, int>::iterator	it = map.begin();
+	ft::map<char, int>::iterator	it = map.begin();
+//	it++;
+	map.erase(it, map.end());
+	map.erase(map.begin(), map.end());
+//	std::cout << map.erase('d') << std::endl;
+//	map.erase(map.begin());
+//	map.erase(map.begin());
 	map.printshit();
-
+	map.debug();
 }
 
 int		main()
