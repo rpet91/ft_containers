@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:31:28 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/02 13:33:24 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/25 11:14:32 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace ft
 			}
 
 			// Destructor
-			~stack()
+			virtual ~stack()
 			{
 			}
 

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/22 13:58:38 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/23 08:20:37 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/25 14:05:52 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ void	printVectorCapacity(ft::vector<T> &vector)
 		" and a capacity of: " << vector.capacity() << std::endl;
 }
 
+// VECTOR CONSTRUCTORS
 void	vectorTest_constructors()
 {
 	std::cout << "\t======== Vector constructors ========" << std::endl << std::endl;
@@ -128,6 +129,7 @@ void	vectorTest_constructors()
 	printVector(copyConstructor);
 }
 
+// VECTOR ITERATOR FUNCTIONS
 void	vectorTest_iteratorFunctions()
 {
 	std::cout << "\t======== Iterator functions ========" << std::endl << std::endl;
@@ -160,6 +162,7 @@ void	vectorTest_iteratorFunctions()
 	printVector(vec);
 }
 
+// VECTOR ITERATOR OPERATIONS
 void	vectorTest_iteratorOperators()
 {
 	std::cout << "\t===== Iterator operators =====" << std::endl;
@@ -228,6 +231,7 @@ void	vectorTest_iteratorOperators()
 	printVector(vec);
 }
 
+// VECTOR CAPACITY FUNCTIONS
 void	vectorTest_capacityFunctions()
 {
 	std::cout << "\t===== Capacity functions =====" << std::endl << std::endl;
@@ -261,6 +265,7 @@ void	vectorTest_capacityFunctions()
 	printVector(vec);
 }
 
+// VECTOR ELEMENT ACCESS FUCNTIONS
 void	vectorTest_elementFunctions()
 {
 	std::cout << "\t===== Element access functions =====" << std::endl << std::endl;
@@ -291,11 +296,11 @@ void	vectorTest_elementFunctions()
 	printVector(vec);
 }
 
+// VECTOR MODIFIER FUNCTIONS
 void	vectorTest_modifierFunctions()
 {
 	std::cout << "\t===== Modifier functions =====" << std::endl << std::endl;
-	ft::vector<int>				vec1;
-	ft::vector<int>				vec2;
+	ft::vector<int>				vec1, vec2;
 	ft::vector<int>::iterator	it;
 
 	for (size_t i = 0; i < 15; i++)
@@ -337,13 +342,18 @@ void	vectorTest_modifierFunctions()
 	printVector(vec2);
 	std::cout << "Clear:" << std::endl;
 	vec1.clear();
+
+	// Stress test
+	for (size_t i = 0; i < 5000000; i++)
+		vec1.push_back(i);
+	vec1.clear();
 }
 
+// VECTOR NON-MEMBER FUNCTIONS
 void	vectorTest_nonMemberFunctions()
 {
 	std::cout << "\t===== Non-member functions =====" << std::endl << std::endl;
-	ft::vector<int>				vec1;
-	ft::vector<int>				vec2;
+	ft::vector<int>				vec1, vec2;
 	std::string					result;
 		
 	for (size_t i = 0; i < 8; i++)
@@ -377,6 +387,7 @@ void	vectorTest_nonMemberFunctions()
 	printVector(vec2);
 }
 
+// STACK TESTS
 void	stackTests()
 {
 	std::cout << "\t======== Stack tests ========" << std::endl << std::endl;
@@ -416,40 +427,255 @@ void	stackTests()
 	std::cout << "stack1 >= stack2: " << std::boolalpha << (stack1 >= stack2) << std::endl;
 }
 
+// MAP CONSTRUCTORS
 void	mapTest_constructors()
 {
 	std::cout << "\t======== Map constructors ========" << std::endl << std::endl;
+	std::cout << "Default constructor called." << std::endl;
+	ft::map<char, int>	defaultConstructor;
+	for (size_t i = 0; i < 12; i++)
+		defaultConstructor['a' + rand() % 26] = rand();
+	std::cout << "Range constructor called." << std::endl;
+	ft::map<char, int>	rangeConstructor(defaultConstructor.begin(), defaultConstructor.end());
+	std::cout << "Copy constructor called." << std::endl;
+	ft::map<char, int>	copyConstructor(rangeConstructor);
+}
+
+// MAP ITERATOR FUNCTIONS
+void	mapTest_iteratorFunctions()
+{
+	std::cout << "\t======== Iterator functions ========" << std::endl << std::endl;
+	ft::map<char, int>							map;
+	ft::map<char, int>::iterator				it;
+	ft::map<char, int>::const_iterator			cit;
+	ft::map<char, int>::reverse_iterator		rit;
+	ft::map<char, int>::const_reverse_iterator	crit;
+
+	for (size_t i = 0; i < 15; i++)
+		map['a' + rand() % 26] = rand();
+
+	it = map.begin();
+	cit = map.begin();
+	rit = map.rbegin();
+	crit = map.rbegin();
+	std::cout << "Begin: " << it->first << std::endl;
+	std::cout << "Const begin: " << cit->first << std::endl;
+	std::cout << "Reverse begin: " << rit->first << std::endl;
+	std::cout << "Const reverse begin: " << crit->first << std::endl;
+	
+	it = --map.end()--;
+	cit = --map.end()--;
+	rit = --map.rend()--;
+	crit = --map.rend()--;
+	std::cout << "End: [" << it->first << "]" << std::endl;
+	std::cout << "Const end: [" << cit->first << "]" << std::endl;
+	std::cout << "Reverse end: [" << rit->first << "]" << std::endl;
+	std::cout << "Const reverse end: [" << crit->first << "]" << std::endl;
+
+	it = map.begin();
+	while (it != map.end())
+	{
+		std::cout << "Map key content: " << it->first << std::endl;
+		it++;
+	}
+}
+
+// MAP ITERATOR OPERATORS
+void	mapTest_iteratorOperators()
+{
+	std::cout << "\t======== Iterator operators ========" << std::endl << std::endl;
+	ft::map<char, int>							map;
+	ft::map<char, int>::iterator				it;
+	ft::map<char, int>::const_iterator			cit;
+	ft::map<char, int>::reverse_iterator		rit;
+	ft::map<char, int>::const_reverse_iterator	crit;
+	ft::map<char, int>::iterator				itCopy(it);
+	
+	for (size_t i = 0; i < 15; i++)
+		map['a' + rand() % 26] = rand();
+
+	it = map.begin();
+	cit = map.begin();
+	rit = --map.rend()--;
+	crit = --map.rend()--;
+	// *it
+	std::cout << "*it|*cit|*rit|*crit: " << (*it).first << (*cit).first << (*rit).first << (*crit).first << std::endl;
+	// it->
+	std::cout << "it->|cit->|rit->|crit->: " << it->first << cit->first << rit->first << crit->first << std::endl;
+	// ++it & --rit
+	std::cout << "++it|++cit|--rit|--crit: " << (++it)->first << (++cit)->first << (--rit)->first << (--crit)->first << std::endl;
+	// it++ & rit--
+	std::cout << "it++|cit++|rit--|crit--: " << (it++)->first << (cit++)->first << (rit--)->first << (crit--)->first << std::endl;
+	// == & != & =
+	std::cout << (itCopy == it) << std::endl;
+	std::cout << (itCopy != it) << std::endl;
+	itCopy = it;
+	std::cout << (itCopy == it) << std::endl;
+	std::cout << (itCopy != it) << std::endl;
+}
+
+// MAP CAPACITY FUNCTIONS
+void	mapTest_capacityFunctions()
+{
+	std::cout << "\t======== Capacity functions ========" << std::endl << std::endl;
 	ft::map<char, int>	map;
+	
+	for (size_t i = 0; i < 15; i++)
+		map['a' + rand() % 26] = rand();
 
-//	std::cout << map.erase('g') << std::endl;
-	map.insert(ft::make_pair('g', 20));
-//	std::cout << map.erase('g') << std::endl;
-//	std::cout << map.erase('g') << std::endl;
-	map.insert(ft::make_pair('b', 20));
-	map.insert(ft::make_pair('c', 20));
-	map.insert(ft::make_pair('d', 20));
-	map.insert(ft::make_pair('e', 20));
-	map.insert(ft::make_pair('f', 20));
-	map.insert(ft::make_pair('a', 20));
-	map.insert(ft::make_pair('a', 20));
-//	map['h'] = 20;
-//	map['h'] = 20;
+	std::cout << "Size" << map.size() << std::endl;
+	std::cout << "Empty before clear: " << map.empty() << std::endl;
+	map.clear();
+	std::cout << "Empty after clear: " << map.empty() << std::endl;
+}
 
-	ft::map<char, int>::iterator	it = map.begin();
-//	it++;
-	map.erase(it, map.end());
-	map.erase(map.begin(), map.end());
-//	std::cout << map.erase('d') << std::endl;
-//	map.erase(map.begin());
-//	map.erase(map.begin());
-	map.printshit();
-	map.debug();
+// MAP ELEMENT ACCESS FUNCTIONS
+void	mapTest_elementFunctions()
+{
+	std::cout << "\t======== Element access functions ========" << std::endl << std::endl;
+	ft::map<char, int>	map;
+	
+	std::cout << (map['a'] = 1337) << std::endl;
+	std::cout << (map['b'] = 69) << std::endl;
+	std::cout << (map['c'] = 42) << std::endl;
+	std::cout << (map['d'] = 9000) << std::endl;
+	std::cout << (map['a'] = 5050) << std::endl;
+	std::cout << map['e'] << std::endl;
+	std::cout << (map['e'] = 242)<< std::endl;
+}
+
+// MAP MODIFIER FUNCTIONS
+void	mapTest_modifierFunctions()
+{
+	std::cout << "\t======== Modifier functions ========" << std::endl << std::endl;
+	ft::map<char, int>				map, map2;
+	ft::map<int, int>				stressMap;
+	ft::map<char, int>::iterator	it, it2;
+
+	// Insert a pair
+	for (size_t i = 0; i < 8; i++)
+		map.insert(ft::make_pair('a' + rand() % 26, rand()));
+	it = map.begin();
+	// Insert a pair on a certain 'position'
+	for (size_t i = 0; i < 8; i++)
+	{
+		it = map.insert(it, ft::make_pair('a' + rand() % 26, rand()));
+		std::cout << "it: " << it->first << std::endl;
+	}
+	// Insert a range in a new map
+	map2.insert(map.begin(), map.end());
+	it = map2.begin();
+	while (it != map2.end())
+	{
+		std::cout << "Map2 key content: " << it->first << std::endl;
+		it++;
+	}
+	it = map.begin();
+	it++;
+	it++;
+	// Erases a node and tests if the iterator still points to the correct node.
+	std::cout << "Iterator points to before erase: " << it->first << std::endl;
+	map.erase(map.begin());
+	std::cout << "Iterator points to after erase: " << it->first << std::endl;
+	// Erases a given key
+	char	eraseKey = it->first;
+	map.erase(eraseKey);
+	// Tries to erase a non-existing key
+	map.erase('.');
+	it = map.begin();
+	while (it != map.end())
+	{
+		std::cout << "Map key content: " << it->first << std::endl;
+		it++;
+	}
+	map.clear();
+	it = map.begin();
+	while (it != map.end())
+	{
+		std::cout << "Map key content: " << it->first << std::endl;
+		it++;
+	}
+	// Stress test
+	for (size_t i = 0; i < 500000; i++)
+		stressMap.insert(ft::make_pair(i, rand()));
+	stressMap.clear();
+}
+
+// MAP OPERATION FUNCTIONS
+void	mapTest_operationFunctions()
+{
+	std::cout << "\t======== Operation functions ========" << std::endl << std::endl;
+	ft::map<char, int>					map;
+	ft::map<char, int>::iterator		it1, it2;
+	ft::map<char, int>::const_iterator	cit1, cit2;
+	
+	for (size_t i = 0; i < 15; i++)
+		map['a' + i] = rand();
+	for (ft::map<char, int>::iterator cur = map.begin(); cur != map.end(); cur++)
+		std::cout << "Map key content: " << cur->first << std::endl;
+	// Find
+	it1 = map.find('h');
+	it2 = map.find('x');
+	cit1 = map.find('h');
+	cit2 = map.find('x');
+	if (map.end() == it1)
+		std::cout << "Didn't find the key in it1" << std::endl;
+	else
+		std::cout << "Key found in it1: " << it1->first << std::endl;
+	if (map.end() == cit1)
+		std::cout << "Didn't find the key in cit1"<< std::endl;
+	else
+		std::cout << "Key found in cit1: " << cit1->first << std::endl;
+	if (map.end() == it2)
+		std::cout << "Didn't find the key in it2" << std::endl;
+	else
+		std::cout << "Key found in it2: " << it2->first << std::endl;
+	if (map.end() == cit2)
+		std::cout << "Didn't find the key in cit2"<< std::endl;
+	else
+		std::cout << "Key found in cit2: " << cit2->first << std::endl;
+
+	// Count
+	std::cout << "Count: " << map.count('h') << std::endl;
+	std::cout << "Count: " << map.count('x') << std::endl;
+	std::cout << "Count: " << map.count('o') << std::endl;
+	std::cout << "Count: " << map.count('p') << std::endl;
+
+	// Lower bound
+	ft::map<char, int>	boundMap;
+	for (size_t i = 0; i < 25; i++)
+		boundMap['a' + rand() % 26] = rand();
+	for (ft::map<char, int>::iterator cur = boundMap.begin(); cur != boundMap.end(); cur++)
+		std::cout << "Bound map key content: " << cur->first << std::endl;
+	for (size_t i = 0; i < 26; i++)
+	{
+		if (boundMap.lower_bound('a' + i) != boundMap.end())
+			std::cout << "Lower bound key: " << boundMap.lower_bound('a' + i)->first << std::endl;
+	}
+	std::cout << std::endl;
+	// Upper bound
+	for (size_t i = 0; i < 26; i++)
+	{
+		if (boundMap.upper_bound('a' + i) != boundMap.end())
+			std::cout << "Upper bound key: " << boundMap.upper_bound('a' + i)->first << std::endl;
+	}
+
+	std::cout << std::endl;
+	// Equal range
+	ft::pair<ft::map<char,int>::iterator, ft::map<char,int>::iterator> equalRange;
+	for (size_t i = 0; i < 26; i++)
+	{
+		equalRange = boundMap.equal_range('a' + i);
+		if (equalRange.first != boundMap.end() && equalRange.second != boundMap.end())
+			std::cout << "Equal range lower bound: " << equalRange.first->first <<
+				" & upper bound: " << equalRange.second->first << std::endl;
+	}
 }
 
 int		main()
 {
 	// Turn on or off to check for leaks
-//	atexit(checkLeaks);
+	//atexit(checkLeaks);
 
 	TimeLog	time;
 
@@ -476,6 +702,18 @@ int		main()
 	// Map tests
 	mapTest_constructors();
 	time.calculateTime("Map constructors: ");
+	mapTest_iteratorFunctions();
+	time.calculateTime("Map iterator functions: ");
+	mapTest_iteratorOperators();
+	time.calculateTime("Map iterator operators: ");
+	mapTest_capacityFunctions();
+	time.calculateTime("Map capacity functions: ");
+	mapTest_elementFunctions();
+	time.calculateTime("Map element access functions: ");
+	mapTest_modifierFunctions();
+	time.calculateTime("Map modifier functions: ");
+	mapTest_operationFunctions();
+	time.calculateTime("Map operation functions: ");
 
 	// Total time
 	time.totalTime();

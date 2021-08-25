@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/27 14:26:21 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/25 11:15:57 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ namespace ft
 			}
 
 			// *a
-			reference	operator*()
+			reference	operator*() const
 			{
 				return (*this->_ptr);
 			}
 
 			// a->m
-			pointer		operator->()
+			pointer		operator->() const
 			{
 				return (&(*this->_ptr));
 			}
@@ -116,8 +116,8 @@ namespace ft
 			friend bool operator==(BidirectionalIterator< T1, T2*, T2& > const &lhs, BidirectionalIterator< T1, T3*, T3& > const &rhs);
 
 			// friend declaration for !=
-			template <class T1, class T2, class T3>
-			friend bool operator!=(BidirectionalIterator< T1, T2*, T2& > const &lhs, BidirectionalIterator< T1, T3*, T3& > const &rhs);
+	//		template <class T1, class T2, class T3>
+	//		friend bool operator!=(BidirectionalIterator< T1, T2*, T2& > const &lhs, BidirectionalIterator< T1, T3*, T3& > const &rhs);
 	};
 
 	// a == b

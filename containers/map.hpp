@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:31:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/23 08:20:25 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/25 13:59:43 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,6 @@
 # include "Pair.hpp"
 # include <memory>
 # include <cstddef>
-# include <iostream>
-# include <string>
-#define CRESET   "\033[0m"
-#define CRED     "\033[31m"      /* Red */
-#define CGREEN   "\033[32m"      /* Green */
-#define CYELLOW  "\033[33m"      /* Yellow */
-#define CBLUE    "\033[34m"      /* Blue */
 
 namespace ft
 {
@@ -52,7 +45,7 @@ namespace ft
 			typedef typename allocator_type::const_pointer			const_pointer;
 			typedef MapNode<value_type>								node;
 			typedef	NodeIterator<node, value_type>					iterator;
-			typedef	NodeIterator<const node, const T>				const_iterator;
+			typedef	NodeIterator<node, const value_type>			const_iterator;
 			typedef ReverseIterator<iterator>						reverse_iterator;
 			typedef ReverseIterator<const_iterator>					const_reverse_iterator;
 			typedef ptrdiff_t										difference_type;
@@ -121,14 +114,15 @@ namespace ft
 			}
 
 			// Destructor
-			~map()
+			virtual ~map()
 			{
-				//clear();
+				clear();
 			}
 
 			// Assignment operator
 			map	&operator=(const map &x)
 			{
+				this->_compare = x._compare;
 				clear();
 				insert(x.begin(), x.end());
 				return (*this);
@@ -158,7 +152,7 @@ namespace ft
 
 			const_iterator			end() const
 			{
-				return (const_iterator(&this->_lastSentinel));
+				return (const_iterator(const_cast<node*>(&this->_lastSentinel)));
 			}
 
 			// Rbegin
@@ -250,7 +244,7 @@ namespace ft
 			// Erase
 			void		erase(iterator position)
 			{
-				this->_root = _deleteNode(position->first, this->_root);
+				this->_root = _eraseNode(position->first, this->_root);
 				_updateSentinels();
 			}
 
@@ -258,8 +252,8 @@ namespace ft
 			{
 				size_type	oldSize = this->_size;
 
-				this->_root = _deleteNode(k, this->_root);
-				this->_updateSentinels();
+				this->_root = _eraseNode(k, this->_root);
+				_updateSentinels();
 				return (oldSize - this->_size);
 			}
 
@@ -272,8 +266,7 @@ namespace ft
 			// Clear
 			void		clear()
 			{
-				while (this->_size)
-					erase(this->_root->data.first);
+				_clearMap(this->_root);
 			}
 
 		///////////////
@@ -300,12 +293,77 @@ namespace ft
 			// Find
 			iterator		find(const key_type &k)
 			{
-				return (iterator(_findNode(k)));
+				node	*findNode = _findNode(k);
+
+				if (!findNode)
+					return (end());
+				return (iterator(findNode));
 			}
 
 			const_iterator	find(const key_type &k) const
 			{
-				return (const_iterator(_findNode(k)));
+				node	*findNode = _findNode(k);
+
+				if (!findNode)
+					return (end());
+				return (const_iterator(findNode));
+			}
+
+			// Count
+			size_type		count(const key_type &k) const
+			{
+				if (_findNode(k))
+					return (1);
+				return (0);
+			}
+
+			// Lower bound
+			iterator		lower_bound(const key_type &k)
+			{
+				iterator	findBound = begin();
+				
+				while (findBound != end() && this->_compare(findBound->first, k))
+					findBound++;
+				return (findBound);
+			}
+
+			const_iterator	lower_bound(const key_type &k) const
+			{
+				const_iterator	findBound = begin();
+				
+				while (findBound != end() && this->_compare(findBound->first, k))
+					findBound++;
+				return (findBound);
+			}
+
+			// Upper bound
+			iterator		upper_bound(const key_type &k)
+			{
+				iterator	findBound = begin();
+				
+				while (findBound != end() && !this->_compare(k, findBound->first))
+					findBound++;
+				return (findBound);
+			}
+
+			const_iterator	upper_bound(const key_type &k) const
+			{
+				const_iterator	findBound = begin();
+				
+				while (findBound != end() && !this->_compare(k, findBound->first))
+					findBound++;
+				return (findBound);
+			}
+
+			// Equal range
+			ft::pair<iterator, iterator>				equal_range(const key_type &k)
+			{
+				return (make_pair(lower_bound(k), upper_bound(k)));
+			}
+
+			ft::pair<const_iterator, const_iterator>	equal_range(const key_type &k) const
+			{
+				return (make_pair(lower_bound(k), upper_bound(k)));
 			}
 
 		///////////////
@@ -334,7 +392,7 @@ namespace ft
 			}
 
 			// Finds and returns the node in map
-			node	*_findNode(const key_type &k)
+			node	*_findNode(const key_type &k) const
 			{
 				node	*tmp = this->_root;
 
@@ -352,58 +410,23 @@ namespace ft
 					else
 						break ;
 				}
+				if (tmp->data.first != k)
+					return (0);
 				return (tmp);
 			}
 
-			// Deletes the node if possible
-			node	*_deleteNode(const key_type &k, node *current)
+			// Finds the node we have to delete if possible
+			node	*_eraseNode(const key_type &k, node *current)
 			{
 				if (!current)
 					return (current);
 				// Checks if key is on the left or right side of the tree
 				if (k < current->data.first)
-					current->left = _deleteNode(k, current->left);
+					current->left = _eraseNode(k, current->left);
 				else if (k > current->data.first)
-					current->right = _deleteNode(k, current->right);
+					current->right = _eraseNode(k, current->right);
 				else // This is the node we want to delete
-				{
-					// Checks if the node has one or no child
-					if (!current->left || !current->right)
-					{
-						node	*tmp = current->left ? current->left : current->right;
-
-						// No child
-						if (!current->left && !current->right)
-						{
-							tmp = current;
-							current = 0;
-							this->_size--;
-							this->_allocator.destroy(tmp);
-							this->_allocator.deallocate(tmp, 1);
-						}
-						else // One child
-						{
-							tmp->parent = current->parent;
-
-							node	*tmp2 = current;
-
-							current = tmp;
-							this->_size--;
-							this->_allocator.destroy(tmp2);
-							this->_allocator.deallocate(tmp2, 1);
-						}
-					}
-					else // We have two childs
-					{
-						node	*tmp = current->right;
-
-						while (tmp->left)
-							tmp = tmp->left;
-						_swapNodes(current, tmp);
-						ft::swap(current, tmp);
-						current->right = _deleteNode(tmp->data.first, current->right);
-					}
-				}
+					current = _deleteNode(current);
 				// Checks if the tree only had one node
 				if (!current)
 					return (current);
@@ -411,6 +434,49 @@ namespace ft
 				// Checks if we need rotation
 				if (_rotateNodeErase(current))
 					return (current->parent);
+				return (current);
+			}
+
+			// Deletes the node
+			node	*_deleteNode(node *current)
+			{
+				// Checks if the node has one or no child
+				if (!current->left || !current->right)
+				{
+					node	*tmp = current->left ? current->left : current->right;
+
+					// No child
+					if (!current->left && !current->right)
+					{
+						tmp = current;
+						this->_allocator.destroy(tmp);
+						this->_allocator.deallocate(tmp, 1);
+						current = 0;
+						this->_size--;
+					}
+					else // One child
+					{
+						tmp->parent = current->parent;
+
+						node	*tmp2 = current;
+
+						current = tmp;
+						this->_allocator.destroy(tmp2);
+						this->_allocator.deallocate(tmp2, 1);
+						this->_size--;
+					}
+				}
+				else // We have two childs
+				{
+					node	*tmp = current->right;
+
+					while (tmp->left)
+						tmp = tmp->left;
+					// Connects all the pointers to the correct nodes
+					_swapNodes(current, tmp);
+					ft::swap(current, tmp);
+					current->right = _eraseNode(tmp->data.first, current->right);
+				}
 				return (current);
 			}
 
@@ -523,7 +589,6 @@ namespace ft
 			// Swaps two nodes including all the links with their parent and childs
 			void	_swapNodes(node *first, node *second)
 			{
-				std::cout << "SWAPNODES" << std::endl;
 				if (first == second)
 					return ;
 				// Checks if first has a parent and connects the correct child with second
@@ -557,105 +622,19 @@ namespace ft
 				ft::swap(first->height, second->height);
 			}
 
-		public:
-			void	printshit()
+			// Wipes the entire map without rebalancing
+			void	_clearMap(node *current)
 			{
-				print_tree();
-			}
-
-			void	debug()
-			{
-				debugRecursive(this->_root);
-			}
-
-			void	debugRecursive(node	*root)
-			{
-				if (!root)
+				if (!current || !this->_size)
 					return ;
-				debugRecursive(root->left);
-				printdebug(root);
-				debugRecursive(root->right);
-			}
-
-			void	printdebug(node *node)
-			{
-				if (node->parent)
-					std::cout << "Key: " << node->data.first << " has parent key: "
-						<< node->parent->data.first << std::endl;
-				else
-					std::cout << "Key: " << node->data.first << " has no parent" << std::endl;
-			}
-
-		private:
-			void	print_node(std::string root_path)
-			{
-				node	*tmp = this->_root;
-
-				std::cout << ".";
-				if (!tmp)
-					return ;
-				for (int i = 0; root_path[i]; ++i){
-					if (root_path[i] == 'L'){
-						if (tmp->left == NULL)
-							return ;
-						tmp = tmp->left;
-					}
-					if (root_path[i] == 'R'){
-						if (tmp->right == NULL)
-							return ;
-						tmp = tmp->right;
-					}
-				}
-				if (tmp->data.first)
-				{
-					std::cout << tmp->height << CRED << tmp->data.first << CRESET;
-				}
-			}
-
-			void	print_tree()
-			{
-				std::string root_path;
-				int	layer = 0;
-				root_path = "";
-				int starting_tabs = 16;
-				int starting_gap = 16;
-				while (layer < 5)
-				{
-					root_path.clear();
-					int tmp_tabs = starting_tabs;
-					int tmp_gap = starting_gap;
-					for (int tmp_layer = layer; tmp_layer; --tmp_layer)
-					{
-						root_path.append("L");
-						tmp_gap = tmp_gap / 2;
-						tmp_tabs -= tmp_gap;
-					}
-					while (root_path.find('L') != std::string::npos)
-					{
-						if (root_path.find('R') == std::string::npos)
-							for (; tmp_tabs; --tmp_tabs)
-								std::cout << "   ";
-						else 
-							for (int tmp_gap2 = tmp_gap * 2; tmp_gap2; --tmp_gap2)
-								std::cout << "   ";
-						print_node(root_path);
-						size_t L_found = root_path.find_last_of('L');
-						root_path[L_found] = 'R';
-						++L_found;
-						for (;L_found != root_path.size(); ++L_found){
-							root_path[L_found] = 'L';
-						}
-					}
-					if (root_path.find('R') == std::string::npos)
-						for (; tmp_tabs; --tmp_tabs)
-							std::cout << "   ";
-					else 
-						for (int tmp_gap2 = tmp_gap * 2; tmp_gap2; --tmp_gap2)
-							std::cout << "   ";
-					print_node(root_path);
-					std::cout << std::endl << std::endl << std::endl;
-					layer++;
-				}
+				_clearMap(current->left);
+				_clearMap(current->right);
+				this->_allocator.destroy(current);
+				this->_allocator.deallocate(current, 1);
+				this->_size--;
+				if (current == this->_root)
+				   this->_root = 0;
+				_updateSentinels();
 			}
 	};
 }

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:55 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/19 13:43:27 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/25 13:59:32 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <memory>
 # include <cstddef>
 # include <stdexcept>
-# include <iostream> //todo: weg
 
 namespace ft
 {
@@ -83,7 +82,7 @@ namespace ft
 			}
 
 			// Destructor
-			~vector()
+			virtual ~vector()
 			{
 				clear();
 				this->_allocator.deallocate(this->_data, this->_capacity);

@@ -6,7 +6,7 @@
 #    By: rpet <marvin@codam.nl>                       +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/11/30 13:04:14 by rpet          #+#    #+#                  #
-#    Updated: 2021/08/19 14:29:47 by rpet          ########   odam.nl          #
+#    Updated: 2021/08/25 07:53:18 by rpet          ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ endif
 
 .PHONY: all clean fclean re debug test
 
-all: $(NAME) #$(STD_NAME)
+all: $(NAME) $(STD_NAME)
 
 $(NAME): $(SRC) $(INC)
 	$(CC) $(FLAGS) $(SRC) -I$(DIRCONTAINERS) -I$(DIRUTILS) -o $(NAME)
@@ -59,5 +59,5 @@ debug:
 test:
 	@make all
 	./$(NAME) > $(FT_OFILE)
-#	./$(STD_NAME) > $(STD_OFILE)
+	./$(STD_NAME) > $(STD_OFILE)
 	diff $(FT_OFILE) $(STD_OFILE)

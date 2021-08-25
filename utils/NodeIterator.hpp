@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/18 13:51:30 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/25 11:29:34 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ namespace ft
 	{
 		public:
 			typedef NodeIterator<Node, T>						iterator;
-			typedef NodeIterator<const Node, const T>			const_iterator;
+			typedef NodeIterator<Node, const T>			const_iterator;
 			typedef	BidirectionalIterator<Node, Node*, Node&> 	bidirectional_iterator;
 			typedef ptrdiff_t									difference_type;
 			typedef T*											pointer;
@@ -48,18 +48,18 @@ namespace ft
 				*this = src;
 			}
 
-			iterator	&operator=(iterator const &src)
+			NodeIterator	&operator=(NodeIterator const &src)
 			{
 				this->_ptr = src._ptr;
 				return (*this);
 			}
 
-			reference	operator*()
+			reference	operator*() const
 			{
 				return (this->_ptr->data);
 			}
 			
-			pointer		operator->()
+			pointer		operator->() const
 			{
 				return &(this->_ptr->data);
 			}
@@ -91,7 +91,7 @@ namespace ft
 				this->_ptr = this->_ptr->prevNode();
 				return (old);
 			}
-
+			
 			operator	const_iterator() const
 			{
 				return (const_iterator(this->_ptr));
