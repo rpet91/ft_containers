@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/22 13:58:38 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/25 14:05:52 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/26 07:46:48 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,9 @@ void	vectorTest_elementFunctions()
 	for (size_t i = 0; i < 15; i++)
 		vec.push_back(rand());
 	std::cout << "Operator[] (subscript):" << std::endl;
-	std::cout << "Vector[5]: " << vec[5] << " & Vector[1337]: " << vec[1337] << std::endl;
+	std::cout << "Vector[5]: " << vec[5] << std::endl;
+	if (1337 < vec.size())
+		std::cout << "Vector[1337]: " << vec[1337] << std::endl;
 	try
 	{
 		std::cout << "At(5): " << vec.at(5) << std::endl;

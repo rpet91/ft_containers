@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:17 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/25 11:14:19 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/26 07:32:14 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,7 +410,7 @@ namespace ft
 			// Merge
 			void	merge(list &x)
 			{
-				merge(x, ft::less<T>);
+				merge(x, ft::less<T>());
 			}
 
 			template <class Compare>
@@ -434,7 +434,7 @@ namespace ft
 			// Sort
 			void	sort()
 			{
-				sort(ft::less<T>);
+				sort(ft::less<T>());
 			}
 
 			template <class Compare>

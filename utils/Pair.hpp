@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/02 14:27:41 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/25 11:15:32 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/26 07:44:49 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ namespace ft
 
 		public:
 			// Default constructor
-			pair() : first(0), second(0)
+			pair() : first(T1()), second(T2())
 			{
 			}
 

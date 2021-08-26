@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 09:01:07 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/28 09:23:34 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/25 14:17:15 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,14 @@ namespace ft
 			{
 				return (const_iterator(this->_current));
 			}
+
+			// friend declaration for ==
+			template <class Iter1, class Iter2>
+			friend bool	operator==(const ReverseIterator<Iter1>& lhs, const ReverseIterator<Iter2>& rhs);
+			
+			// friend declaration for <
+			template <class Iter1, class Iter2>
+			friend bool	operator<(const ReverseIterator<Iter1>& lhs, const ReverseIterator<Iter2>& rhs);
 	};
 
 	template <class Iter1, class Iter2>

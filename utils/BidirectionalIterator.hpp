@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/25 11:15:57 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/25 14:20:19 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,6 @@ namespace ft
 			// friend declaration for ==
 			template <class T1, class T2, class T3>
 			friend bool operator==(BidirectionalIterator< T1, T2*, T2& > const &lhs, BidirectionalIterator< T1, T3*, T3& > const &rhs);
-
-			// friend declaration for !=
-	//		template <class T1, class T2, class T3>
-	//		friend bool operator!=(BidirectionalIterator< T1, T2*, T2& > const &lhs, BidirectionalIterator< T1, T3*, T3& > const &rhs);
 	};
 
 	// a == b

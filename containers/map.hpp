@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:31:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/25 13:59:43 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/26 07:41:28 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,16 +257,27 @@ namespace ft
 				return (oldSize - this->_size);
 			}
 
-			void		erase(iterator first, iterator last)
+			void	erase(iterator first, iterator last)
 			{
 				while (first != last)
 					erase(first++);
 			}
 
 			// Clear
-			void		clear()
+			void	clear()
 			{
 				_clearMap(this->_root);
+			}
+
+			// Swap
+			void	swap(map &other)
+			{
+				ft::swap(this->_root, other._root);
+				ft::swap(this->_allocator, other._allocator);
+				ft::swap(this->_compare, other._compare);
+				ft::swap(this->_size, other._size);
+				_updateSentinels();
+				other._updateSentinels();
 			}
 
 		///////////////
@@ -637,5 +648,66 @@ namespace ft
 				_updateSentinels();
 			}
 	};
+		///////////////////////////////////
+		// NON-MEMBER FUNCTION OVERLOADS //
+		///////////////////////////////////
+
+			// Relational operators
+			template <class Key, class T, class Compare, class Alloc>
+			bool operator==(const ft::map<Key,T,Compare,Alloc> &lhs, const ft::map<Key,T,Compare,Alloc> &rhs)
+			{
+				if (lhs.size() != rhs.size())
+					return (false);
+
+				typename ft::map<Key, T, Compare, Alloc>::const_iterator it_lhs = lhs.begin();
+				typename ft::map<Key, T, Compare, Alloc>::const_iterator it_rhs = rhs.begin();
+
+				while (it_lhs != lhs.end() && it_rhs != rhs.end())
+				{
+					if (*it_lhs != *it_rhs)
+						return (false);
+					it_lhs++;
+					it_rhs++;
+				}
+
+				return (true);
+			}
+			
+			template <class Key, class T, class Compare, class Alloc>
+			bool operator!=(const ft::map<Key,T,Compare,Alloc> &lhs, const ft::map<Key,T,Compare,Alloc> &rhs)
+			{
+				return !(lhs == rhs);
+			}
+			
+			template <class Key, class T, class Compare, class Alloc>
+			bool operator<(const ft::map<Key,T,Compare,Alloc> &lhs, const ft::map<Key,T,Compare,Alloc> &rhs)
+			{
+				return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+			}
+			
+			template <class Key, class T, class Compare, class Alloc>
+			bool operator<=(const ft::map<Key,T,Compare,Alloc> &lhs, const ft::map<Key,T,Compare,Alloc> &rhs)
+			{
+				return !(rhs < lhs);
+			}
+			
+			template <class Key, class T, class Compare, class Alloc>
+			bool operator>(const ft::map<Key,T,Compare,Alloc> &lhs, const ft::map<Key,T,Compare,Alloc> &rhs)
+			{
+				return (rhs < lhs);
+			}
+			
+			template <class Key, class T, class Compare, class Alloc>
+			bool operator>=(const ft::map<Key,T,Compare,Alloc> &lhs, const ft::map<Key,T,Compare,Alloc> &rhs)
+			{
+				return !(lhs < rhs);
+			}
+
+			// Swap
+			template <class Key, class T, class Compare, class Alloc>
+			void	swap(ft::map<Key,T,Compare,Alloc> &lhs, ft::map<Key,T,Compare,Alloc> &rhs)
+			{
+				lhs.swap(rhs);
+			}
 }
 #endif
