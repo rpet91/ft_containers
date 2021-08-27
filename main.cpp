@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/22 13:58:38 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/26 07:46:48 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/27 07:54:55 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,15 @@ void	printVectorCapacity(ft::vector<T> &vector)
 {
 	std::cout << "Current vector has a size of: " << vector.size() <<
 		" and a capacity of: " << vector.capacity() << std::endl;
+}
+
+template <typename T1, typename T2>
+void	printMap(ft::map<T1, T2> &map)
+{
+	std::cout << "Map has a size of: " << map.size() << std::endl;
+	for (typename ft::map<T1, T2>::iterator cur = map.begin(); cur != map.end(); cur++)
+		std::cout << "Map key content: " << cur->first << " & mapped content: " <<
+			cur->second << std::endl;
 }
 
 // VECTOR CONSTRUCTORS
@@ -346,8 +355,14 @@ void	vectorTest_modifierFunctions()
 	vec1.clear();
 
 	// Stress test
-	for (size_t i = 0; i < 5000000; i++)
-		vec1.push_back(i);
+	std::cout << "Performing the stress test.." << std::endl;
+	ft::vector<int>		stressVec;
+	ft::vector<int>::iterator	stressIt;
+	
+	for (size_t i = 0; i < 50000; i++)
+		stressVec.insert(stressVec.begin() + i, 1, i * 3);
+	printVector(stressVec);
+	stressVec.clear();
 	vec1.clear();
 }
 
@@ -474,12 +489,7 @@ void	mapTest_iteratorFunctions()
 	std::cout << "Reverse end: [" << rit->first << "]" << std::endl;
 	std::cout << "Const reverse end: [" << crit->first << "]" << std::endl;
 
-	it = map.begin();
-	while (it != map.end())
-	{
-		std::cout << "Map key content: " << it->first << std::endl;
-		it++;
-	}
+	printMap(map);
 }
 
 // MAP ITERATOR OPERATORS
@@ -566,12 +576,7 @@ void	mapTest_modifierFunctions()
 	}
 	// Insert a range in a new map
 	map2.insert(map.begin(), map.end());
-	it = map2.begin();
-	while (it != map2.end())
-	{
-		std::cout << "Map2 key content: " << it->first << std::endl;
-		it++;
-	}
+	printMap(map2);
 	it = map.begin();
 	it++;
 	it++;
@@ -584,23 +589,24 @@ void	mapTest_modifierFunctions()
 	map.erase(eraseKey);
 	// Tries to erase a non-existing key
 	map.erase('.');
-	it = map.begin();
-	while (it != map.end())
-	{
-		std::cout << "Map key content: " << it->first << std::endl;
-		it++;
-	}
+	printMap(map);
 	map.clear();
-	it = map.begin();
-	while (it != map.end())
-	{
-		std::cout << "Map key content: " << it->first << std::endl;
-		it++;
-	}
+	printMap(map);
 	// Stress test
 	for (size_t i = 0; i < 500000; i++)
 		stressMap.insert(ft::make_pair(i, rand()));
 	stressMap.clear();
+	for (size_t i = 0; i < 37; i++)
+		map.insert(ft::make_pair('a' + rand() % 26, rand()));
+	for (size_t i = 0; i < 10; i++)
+		map2.insert(ft::make_pair('a' + rand() % 26, rand()));
+	std::cout << "Before swap" << std::endl;
+	printMap(map);
+	printMap(map2);
+	map.swap(map2);
+	std::cout << "After swap" << std::endl;
+	printMap(map);
+	printMap(map2);
 }
 
 // MAP OPERATION FUNCTIONS
@@ -613,8 +619,7 @@ void	mapTest_operationFunctions()
 	
 	for (size_t i = 0; i < 15; i++)
 		map['a' + i] = rand();
-	for (ft::map<char, int>::iterator cur = map.begin(); cur != map.end(); cur++)
-		std::cout << "Map key content: " << cur->first << std::endl;
+	printMap(map);
 	// Find
 	it1 = map.find('h');
 	it2 = map.find('x');
@@ -647,8 +652,7 @@ void	mapTest_operationFunctions()
 	ft::map<char, int>	boundMap;
 	for (size_t i = 0; i < 25; i++)
 		boundMap['a' + rand() % 26] = rand();
-	for (ft::map<char, int>::iterator cur = boundMap.begin(); cur != boundMap.end(); cur++)
-		std::cout << "Bound map key content: " << cur->first << std::endl;
+	printMap(boundMap);
 	for (size_t i = 0; i < 26; i++)
 	{
 		if (boundMap.lower_bound('a' + i) != boundMap.end())
@@ -672,6 +676,41 @@ void	mapTest_operationFunctions()
 			std::cout << "Equal range lower bound: " << equalRange.first->first <<
 				" & upper bound: " << equalRange.second->first << std::endl;
 	}
+}
+
+// MAP NON-MEMBER FUNCTIONS
+void	mapTest_nonMemberFunctions()
+{
+	std::cout << "\t===== Non-member functions =====" << std::endl << std::endl;
+	ft::map<int, int>	m1, m2;
+
+	m1[3] = 4;
+	m2[4] = 3;
+	std::cout << "<  " << (m1 < m2) << std::endl;
+	std::cout << "<  " << (m2 < m1) << std::endl;
+	m2[1] = 5;
+	std::cout << "<  " << (m1 < m2) << std::endl;
+
+	m1[1] = 5;
+	m1[4] = 3;
+	m2[3] = 4;
+	std::cout << "Print map1" << std::endl;
+	printMap(m1);
+	std::cout << "Print map2" << std::endl;
+	printMap(m2);
+	std::cout << "== " << (m1 == m2) << std::endl;
+	std::cout << "!= " << (m1 != m2) << std::endl;
+	std::cout << "<  " << (m1 < m2) << std::endl;
+	std::cout << "<= " << (m1 <= m2) << std::endl;
+	std::cout << ">  " << (m1 > m2) << std::endl;
+	std::cout << ">= " << (m1 >= m2) << std::endl;
+	m2[3] = 3;
+	std::cout << "== " << (m1 == m2) << std::endl;
+	std::cout << "!= " << (m1 != m2) << std::endl;
+	std::cout << "<  " << (m1 < m2) << std::endl;
+	std::cout << "<= " << (m1 <= m2) << std::endl;
+	std::cout << ">  " << (m1 > m2) << std::endl;
+	std::cout << ">= " << (m1 >= m2) << std::endl;
 }
 
 int		main()
@@ -716,6 +755,8 @@ int		main()
 	time.calculateTime("Map modifier functions: ");
 	mapTest_operationFunctions();
 	time.calculateTime("Map operation functions: ");
+	mapTest_nonMemberFunctions();
+	time.calculateTime("Map non-member functions: ");
 
 	// Total time
 	time.totalTime();

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/03 09:59:37 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/25 14:02:10 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/26 08:53:59 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,17 @@ namespace ft
 				}
 				this->updateHeight();
 				rightNode->updateHeight();
+			}
+			
+			// Updates the all the node links to the new sentinels
+			void	updateSentinelLinks(MapNode *first, MapNode *last)
+			{
+				if (this->left)
+					this->left->updateSentinelLinks(first, last);
+				if (this->right)
+					this->right->updateSentinelLinks(first, last);
+				this->first = first;
+				this->last = last;
 			}
 	};
 }

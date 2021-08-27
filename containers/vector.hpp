@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:30:55 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/25 13:59:32 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/27 08:44:04 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ namespace ft
 		public:
 			// Default constructor
 			explicit vector(const allocator_type &alloc = allocator_type()) :
-				_allocator(alloc), _size(0), _capacity(0), _data(NULL)
+				_allocator(alloc), _size(0), _capacity(0), _data(0)
 			{
 			}
 
@@ -272,6 +272,7 @@ namespace ft
 			// Push back
 			void		push_back(const value_type &val)
 			{
+				_setCapacity(this->_size + 1);
 				_addElement(val, size());
 			}
 
@@ -293,25 +294,26 @@ namespace ft
 
 			void		insert(iterator position, size_type n, const value_type &val)
 			{
-				difference_type	insertPosition = ft::distance(begin(), position);
+				difference_type	insertPos = ft::distance(begin(), position);
 
+			//	std::cout << "InsertPos: " << insertPos << std::endl;
 				_setCapacity(this->_size + n);
-				_moveElementsForward(n, insertPosition);
+				_moveElementsForward(n, insertPos);
 				for (size_type i = 0; i < n; i++)
-					_addElement(val, insertPosition + i);
+					_addElement(val, insertPos + i);
 			}
 
 			template <class InputIterator>
 			void		insert(iterator position, InputIterator first, InputIterator last,
 										typename ft::iterator_traits<InputIterator>::iterator_category* = 0)
 			{
-				difference_type	insertPosition = ft::distance(begin(), position);
+				difference_type	insertPos = ft::distance(begin(), position);
 				difference_type n = ft::distance(first, last);
 
 				_setCapacity(this->_size + n);
-				_moveElementsForward(n, insertPosition);
+				_moveElementsForward(n, insertPos);
 				for (difference_type i = 0; i < n; i++)
-					_addElement(*(first + i), insertPosition + i);
+					_addElement(*(first + i), insertPos + i);
 			}
 
 			// Erase
@@ -371,7 +373,6 @@ namespace ft
 		private:
 			void	_addElement(const value_type &val, size_type position)
 			{
-				_setCapacity(this->_size + 1);
 				this->_allocator.construct(&this->_data[position], val);
 				this->_size++;
 			}

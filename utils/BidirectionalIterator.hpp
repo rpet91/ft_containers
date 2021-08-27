@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 12:55:49 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/25 14:20:19 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/26 14:15:32 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ namespace ft
 			{
 			}
 
-			BidirectionalIterator(T *ptr) : base_iterator(ptr)
+			BidirectionalIterator(pointer ptr) : base_iterator(ptr)
 			{
 			}
 

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/24 07:31:12 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/26 07:41:28 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/26 13:05:31 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,9 +222,8 @@ namespace ft
 				size_type	oldSize = this->_size;
 
 				this->_root = _insertNode(val, this->_root, 0);
-				if (this->_size == oldSize)
-					return (ft::make_pair(find(val.first), false));
-				return (ft::make_pair(find(val.first), true));
+				_updateSentinels();
+				return (ft::make_pair(find(val.first), (this->_size != oldSize)));
 			}
 
 			iterator	insert(iterator position, const value_type &val)
@@ -276,6 +275,10 @@ namespace ft
 				ft::swap(this->_allocator, other._allocator);
 				ft::swap(this->_compare, other._compare);
 				ft::swap(this->_size, other._size);
+				if (this->_root)
+					this->_root->updateSentinelLinks(&this->_firstSentinel, &this->_lastSentinel);
+				if (other._root)
+					other._root->updateSentinelLinks(&other._firstSentinel, &other._lastSentinel);
 				_updateSentinels();
 				other._updateSentinels();
 			}
@@ -522,7 +525,7 @@ namespace ft
 				newNode->last = &this->_lastSentinel;
 				newNode->parent = parent;
 				this->_size++;
-				_updateSentinels();
+			//	_updateSentinels();
 				return (newNode);
 			}
 
@@ -659,9 +662,10 @@ namespace ft
 				if (lhs.size() != rhs.size())
 					return (false);
 
-				typename ft::map<Key, T, Compare, Alloc>::const_iterator it_lhs = lhs.begin();
-				typename ft::map<Key, T, Compare, Alloc>::const_iterator it_rhs = rhs.begin();
-
+				typename ft::map<Key, T, Compare, Alloc>::const_iterator 	it_lhs, it_rhs;
+			   
+				it_lhs = lhs.begin();
+				it_rhs = rhs.begin();
 				while (it_lhs != lhs.end() && it_rhs != rhs.end())
 				{
 					if (*it_lhs != *it_rhs)
@@ -669,7 +673,6 @@ namespace ft
 					it_lhs++;
 					it_rhs++;
 				}
-
 				return (true);
 			}
 			
@@ -710,4 +713,5 @@ namespace ft
 				lhs.swap(rhs);
 			}
 }
+
 #endif

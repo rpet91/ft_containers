@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 13:27:09 by rpet          #+#    #+#                 */
-/*   Updated: 2021/07/28 09:13:53 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/26 14:13:47 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ namespace ft
 			}
 
 			// a + n
-			iterator				operator+(difference_type const &n) const
+			RandomAccessIterator	operator+(difference_type const &n) const
 			{
 				iterator	tmp = *this;
 
@@ -65,7 +65,7 @@ namespace ft
 			}
 			
 			// a - n
-			iterator				operator-(difference_type const &n) const
+			RandomAccessIterator	operator-(difference_type const &n) const
 			{
 				iterator	tmp = *this;
 
