@@ -6,13 +6,14 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 13:06:40 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/03 09:21:33 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/31 09:08:44 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TYPETRAITS_HPP
 # define TYPETRAITS_HPP
 # include <cstddef>
+# include <limits>
 
 namespace ft
 {

@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/23 13:18:56 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/26 14:10:53 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/31 09:08:37 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,16 @@ namespace ft
 			return (x < y);
 		}
 	};
-	
+
+	template < typename T >
+	struct is_integral
+	{
+		static const bool value;
+	};
+
+	template < typename T >
+	const bool is_integral<T>::value = std::numeric_limits<T>::is_integer;
+
 	template <typename T>
 	bool	isEqual(T const &first, T const &second)
 	{

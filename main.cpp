@@ -6,7 +6,7 @@
 /*   By: rpet <marvin@codam.nl>                       +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/22 13:58:38 by rpet          #+#    #+#                 */
-/*   Updated: 2021/08/27 07:54:55 by rpet          ########   odam.nl         */
+/*   Updated: 2021/08/31 09:04:44 by rpet          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include <cstdlib>
 #include <ctime>
 #include <cstddef>
-	#include <vector>
 #include <exception>
 #ifdef USE_STD
 	#include <map>
@@ -713,6 +712,44 @@ void	mapTest_nonMemberFunctions()
 	std::cout << ">= " << (m1 >= m2) << std::endl;
 }
 
+void	test_isIntegral()
+{
+	if (ft::is_integral<bool>::value)
+		std::cout << "Bool is an integral type" << std::endl;
+	if (ft::is_integral<char>::value)
+		std::cout << "Char is an integral type" << std::endl;
+	if (ft::is_integral<char16_t>::value)
+		std::cout << "Char16_t is an integral type" << std::endl;
+	if (ft::is_integral<char32_t>::value)
+		std::cout << "Char32_t is an integral type" << std::endl;
+	if (ft::is_integral<wchar_t>::value)
+		std::cout << "Wchar_t is an integral type" << std::endl;
+	if (ft::is_integral<signed char>::value)
+		std::cout << "Signed char is an integral type" << std::endl;
+	if (ft::is_integral<short int>::value)
+		std::cout << "Short int is an integral type" << std::endl;
+	if (ft::is_integral<int>::value)
+		std::cout << "Int is an integral type" << std::endl;
+	if (ft::is_integral<long int>::value)
+		std::cout << "Long int is an integral type" << std::endl;
+	if (ft::is_integral<unsigned char>::value)
+		std::cout << "Unsigned char is an integral type" << std::endl;
+	if (ft::is_integral<unsigned short int>::value)
+		std::cout << "Unsigned short int is an integral type" << std::endl;
+	if (ft::is_integral<unsigned int>::value)
+		std::cout << "Unsigned int is an integral type" << std::endl;
+	if (ft::is_integral<unsigned long int>::value)
+		std::cout << "Unsigned long int is an integral type" << std::endl;
+	if (ft::is_integral<float>::value)
+		std::cout << "Float is an integral type" << std::endl;
+	else
+		std::cout << "Float is not an integral type" << std::endl;
+	if (ft::is_integral<double>::value)
+		std::cout << "Double is an integral type" << std::endl;
+	else
+		std::cout << "Double is not an integral type" << std::endl;
+}
+
 int		main()
 {
 	// Turn on or off to check for leaks
@@ -757,6 +794,10 @@ int		main()
 	time.calculateTime("Map operation functions: ");
 	mapTest_nonMemberFunctions();
 	time.calculateTime("Map non-member functions: ");
+
+	// Is integral
+	test_isIntegral();
+	time.calculateTime("Is integral tests: ");
 
 	// Total time
 	time.totalTime();
